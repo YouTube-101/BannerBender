@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+}
+.titlebar {
+  background: blue;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  -webkit-app-region: drag;
+  margin-left: env(titlebar-area-x, 0);
+  width:       env(titlebar-area-width, 100%);
+  height:      env(titlebar-area-height, 50px);
+  box-sizing: border-box;
+}

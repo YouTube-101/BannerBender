@@ -1,0 +1,24 @@
+{
+  "name": "bannerbender",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . BannerBender --out=dist --overwrite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YouTube-101/BannerBender.git"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/YouTube-101/BannerBender/issues"
+  },
+  "homepage": "https://github.com/YouTube-101/BannerBender#readme",
+  "devDependencies": {
+    "electron": "^43.2.0",
+    "electron-packager": "^15.4.0"
+  }
+}
