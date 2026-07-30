@@ -70,7 +70,7 @@ function createLoading() {
     },
     backgroundColor: '#1e1e1e'
   });
-  win.setWindowButtonVisibility(false);
+  if (process.platform === 'darwin' && typeof win.setWindowButtonVisibility === "function") win.setWindowButtonVisibility(false);
   win.loadFile('loading.html');
   win.on('close', (e) => {
     win.hide();
@@ -93,7 +93,7 @@ function createLoading() {
         win.close();
         activeWindow = mainWin;
       }
-    }, 1);
+    }, 5000);
   });
 }
 let csvloaded = false;

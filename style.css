@@ -14,7 +14,7 @@
   --warn-bg:#fffaeb;
   --slot-height:64px;
 }
-*{box-sizing:border-box}
+*{box-sizing:border-box;line-height:1.2}
 body{
   margin:0;
   font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
