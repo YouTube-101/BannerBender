@@ -93,7 +93,7 @@ function createLoading() {
         win.close();
         activeWindow = mainWin;
       }
-    }, 5000);
+    }, 1);
   });
 }
 let csvloaded = false;
