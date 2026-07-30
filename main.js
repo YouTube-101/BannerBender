@@ -116,7 +116,7 @@ async function createSetupWindow() {
     },
     backgroundColor: '#1e1e1e'
   });
-  win.setWindowButtonPosition({ x: 18, y: 18 });
+  win.setWindowButtonPosition({ x: 19, y: 18 });
   win.loadFile('setup.html');
   //win.webContents.openDevTools();
   win.on('close', (e) => {
@@ -147,9 +147,9 @@ async function createMainWindow() {
     },
     backgroundColor: '#1e1e1e'
   });
-  win.setWindowButtonPosition({ x: 18, y: 18 });
+  win.setWindowButtonPosition({ x: 19, y: 18 });
 
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
 
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (isAllowedExternalUrl(url)) {
