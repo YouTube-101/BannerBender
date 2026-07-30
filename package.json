@@ -20,5 +20,30 @@
   "devDependencies": {
     "electron": "^43.2.0",
     "electron-packager": "^15.4.0"
+  },
+  "build": {
+    "appId": "com.ytube101.lastpotatos.bannerbender",
+    "productName": "BannerBender",
+    "asar": true,
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   }
 }
