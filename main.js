@@ -140,7 +140,7 @@ async function createMainWindow() {
     fullscreenable: false,
     show: false,
     webPreferences: {
-      sandbox: true,
+      sandbox: false,
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true
