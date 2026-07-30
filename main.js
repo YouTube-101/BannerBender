@@ -131,6 +131,11 @@ async function createMainWindow() {
     width: width,
     height: height,
     titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: '#0e1b3d',
+      symbolColor: '#ffffff',
+      height: 50
+    },
     autoHideMenuBar: true,
     fullscreenable: false,
     show: false,
@@ -143,9 +148,9 @@ async function createMainWindow() {
     backgroundColor: '#1e1e1e'
   });
   win.setWindowButtonPosition({ x: 18, y: 18 });
-  
+
   win.webContents.openDevTools();
-  
+
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (isAllowedExternalUrl(url)) {
       void shell.openExternal(url);

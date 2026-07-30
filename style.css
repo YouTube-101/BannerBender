@@ -29,16 +29,17 @@ button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visi
 header{
   background:#0e1b3d;
   color:white;
-  padding:4px 15px;
+  padding:4px 0px;
+  padding-left: calc(env(titlebar-area-x, 10px) + 5px);
+  padding-right: calc(100vw - env(titlebar-area-inset-right, calc(100vw - 15px)));
+  -webkit-app-region: drag;
+  width: 100%;
+  height: 50px;
   display:flex;
   gap:18px;
   align-items:center;
   justify-content:space-between;
   flex-wrap:wrap;
-  -webkit-app-region: drag;
-  margin-left: env(titlebar-area-x, 0);
-  width:       env(titlebar-area-width, 100%);
-  height:      env(titlebar-area-height, 50px);
   box-sizing: border-box;
 }
 header h1{font-size:20px;margin:0}
