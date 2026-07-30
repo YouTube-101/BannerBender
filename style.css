@@ -21,7 +21,7 @@ body{
   background:var(--bg);
   color:var(--text);
 }
-button,input,select{font:inherit}
+button,input,select{font:inherit;-webkit-app-region:no-drag}
 button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{
   outline:3px solid rgba(31,94,255,.22);
   outline-offset:2px;

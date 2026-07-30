@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . BannerBender --out=dist --overwrite"
+    "buildmacos": "electron-packager . BannerBender --platform=darwin --arch=x64 --out=dist --overwrite",
+    "buildwindows": "electron-packager . BannerBender --platform=win32 --arch=x64 --out=dist --overwrite"
   },
   "repository": {
     "type": "git",
