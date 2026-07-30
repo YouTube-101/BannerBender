@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
+     "start":"node start-electron.js",
     "buildmacos": "electron-packager . BannerBender --platform=darwin --arch=x64 --out=dist --overwrite",
     "buildwin": "electron-packager . BannerBender --platform=win32 --arch=x64 --out=dist --ignore=\"^/(dist|node_modules)\" --overwrite --asar"
   },
