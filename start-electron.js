@@ -6,15 +6,8 @@ const { spawn } = require("node:child_process");
 
 const pathFile = path.join(__dirname, ".electron-path");
 
-if (!fs.existsSync(pathFile)) {
-  console.error("Missing .electron-path file.");
-  console.error(
-    "Create it and put the full path to electron.exe inside."
-  );
-  process.exit(1);
-}
 
-const electronPath = fs.readFileSync(pathFile, "utf8").trim();
+const electronPath = !fs.existsSync(pathFile) ? "./node_modules/.bin/electron" : fs.readFileSync(pathFile, "utf8").trim();
 
 if (!electronPath || !fs.existsSync(electronPath)) {
   console.error("Electron was not found at:");
