@@ -24,7 +24,9 @@
         inputmode="numeric"
         maxlength="6"
         placeholder="Term code"
-        aria-label="Banner six digit term code"
+        aria-label="Banner six digit term code",
+        style="display: none;"
+        <!-- REMOVE THIS ELEMENT -->
       >
       <button class="btn" id="openBannerLoginBtn" type="button">Open Bannerweb</button>
       <button class="btn banner" id="sendBannerBtn" type="button" disabled>Send selected once</button>
@@ -36,14 +38,16 @@
   <section class="panel">
     <div class="panel-head"><strong>Courses</strong></div>
     <div class="panel-body">
+
+      <!-- REMOVE THESE ELEMENTS AS WELL! -->
       <input id="fileInput" type="file" accept=".csv,text/csv" hidden />
-      <div class="drop" id="dropZone">
+      <div class="drop" id="dropZone" style="display:none">
         <strong id="csvSourceLabel">Loading sabanci_courses.csv from GitHub…</strong>
         <span class="small">Click here or drop a file to use a different CSV.</span>
         <div class="csv-status loading" id="csvStatus">Connecting to the course-data file…</div>
       </div>
-      <div class="row" style="margin-top:8px">
-        <button class="btn" id="reloadCsvBtn" type="button">Reload GitHub CSV</button>
+      <div class="row" style="margin-top:8px" style="display:none">
+        <button class="btn" id="reloadCsvBtn" type="button" style="display:none">Reload GitHub CSV</button>
       </div>
 
       <div id="controls" style="display:none;margin-top:12px">

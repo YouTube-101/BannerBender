@@ -149,7 +149,7 @@ async function createMainWindow() {
   });
   win.setWindowButtonPosition({ x: 18, y: 18 });
 
-  //win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (isAllowedExternalUrl(url)) {
