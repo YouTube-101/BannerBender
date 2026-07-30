@@ -66,7 +66,7 @@ function createLoading() {
         win.close();
         activeWindow = mainWin;
       }
-    }, 1);
+    }, 1000);
   });
 }
 async function createSetupWindow() {
