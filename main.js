@@ -143,7 +143,9 @@ async function createMainWindow() {
     backgroundColor: '#1e1e1e'
   });
   win.setWindowButtonPosition({ x: 18, y: 18 });
-  //win.webContents.openDevTools();
+  
+  win.webContents.openDevTools();
+  
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (isAllowedExternalUrl(url)) {
       void shell.openExternal(url);
