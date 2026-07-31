@@ -547,6 +547,7 @@
   function parseMeeting(row) {
     const range = parseTimeRange(row.time || "");
     const days = parseDays(row.days || "");
+    const location = parseLocation(row.location || "");
 
     if (!range || !days.length) return null;
 
@@ -555,7 +556,7 @@
       end:range[1],
       days,
       timeText:row.time || "",
-      location:row.location || "",
+      location:location || "",
       type:row.meetingtype || "",
       instructor:row.instructors || ""
     };
@@ -593,6 +594,16 @@
     }
 
     return minutes[1] > minutes[0] ? minutes : null;
+  }
+
+  function parseLocation(value) {
+    const text = String(value || "").trim();
+    if (text.startsWith("Fac. of Engin. and Nat. Sci.")) return text.replace("Fac. of Engin. and Nat. Sci.", "FENS");
+    else if (text.startsWith("Sabancı Business School")) return text.replace("Sabancı Business School", "FMAN");
+    else if (text.startsWith("Fac.of Arts and Social Sci.")) return text.replace("Fac.of Arts and Social Sci.", "FASS");
+    else if (text.startsWith("University Center")) return text.replace("University Center", "UC");
+    else if (text.startsWith("Art and Research Center")) return text.replace("Art and Research Center", "SUSAM");
+    else if (text.startsWith("TPHI Building CLAS")) return text.replace("TPHI Building CLAS", "TPHI CLASS"); //what is this?
   }
 
   function parseDays(value) {
@@ -1043,10 +1054,10 @@
         } else {
           state.selected.delete(key);
         }
+        saveState();
+        renderAll();
       });
     });
-    saveState();
-    renderAll();
   }
 
   function renderSectionOption(section, compact = false) {
