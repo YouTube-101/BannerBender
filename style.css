@@ -387,7 +387,6 @@ input[type="search"]{
   grid-template-columns:72px repeat(5,minmax(150px,1fr));
   position:relative;
   --total-slots: 12;
-  --min-slot-height: 32px;
   --dynamic-slot-height: calc(100% / var(--total-slots));
   --slot-height: max(var(--dynamic-slot-height), var(--min-slot-height));
   height: calc(var(--total-slots) * var(--slot-height));
