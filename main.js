@@ -152,7 +152,7 @@ async function createMainWindow() {
   });
   if (process.platform === 'darwin' && typeof win.setWindowButtonPosition === "function") win.setWindowButtonPosition({ x: 19, y: 18 });
 
-  //win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (isAllowedExternalUrl(url)) {

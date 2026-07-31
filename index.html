@@ -26,19 +26,7 @@
   <section class="panel">
     <div class="panel-head"><strong>Courses</strong></div>
     <div class="panel-body">
-
-      <!-- REMOVE THESE ELEMENTS AS WELL! -->
-      <input id="fileInput" type="file" accept=".csv,text/csv" hidden />
-      <div class="drop" id="dropZone" style="display:none">
-        <strong id="csvSourceLabel">Loading sabanci_courses.csv from GitHub…</strong>
-        <span class="small">Click here or drop a file to use a different CSV.</span>
-        <div class="csv-status loading" id="csvStatus">Connecting to the course-data file…</div>
-      </div>
-      <div class="row" style="margin-top:8px" style="display:none">
-        <button class="btn" id="reloadCsvBtn" type="button" style="display:none">Reload GitHub CSV</button>
-      </div>
-
-      <div id="controls" style="display:none;margin-top:12px">
+      <div id="controls" style="display:none;">
         <input type="search" id="search" placeholder="Search course code, e.g. CS 204..." />
         <div class="filter-row">
           <select id="searchFieldFilter" class="btn">

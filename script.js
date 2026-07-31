@@ -23,11 +23,6 @@
   };
 
   const $ = id => document.getElementById(id);
-  const fileInput = $("fileInput");
-  const dropZone = $("dropZone");
-  const reloadCsvBtn = $("reloadCsvBtn");
-  const csvStatus = $("csvStatus");
-  const csvSourceLabel = $("csvSourceLabel");
   const controls = $("controls");
   const courseList = $("courseList");
   const scheduleWrap = $("scheduleWrap");
@@ -47,26 +42,6 @@
   const cancelBannerSendBtn = $("cancelBannerSendBtn");
   const confirmBannerSendBtn = $("confirmBannerSendBtn");
   let pendingBannerUrl = "";
-
-  dropZone.addEventListener("click", () => fileInput.click());
-  fileInput.addEventListener("change", event => loadFile(event.target.files[0]));
-
-  ["dragenter","dragover"].forEach(type => {
-    dropZone.addEventListener(type, event => {
-      event.preventDefault();
-      dropZone.classList.add("drag");
-    });
-  });
-
-  ["dragleave","drop"].forEach(type => {
-    dropZone.addEventListener(type, event => {
-      event.preventDefault();
-      dropZone.classList.remove("drag");
-    });
-  });
-
-  dropZone.addEventListener("drop", event => loadFile(event.dataTransfer.files[0]));
-  reloadCsvBtn.addEventListener("click", loadCSVFromGitHub);
 
   search.addEventListener("input", renderCourseList);
   searchFieldFilter.addEventListener("change", () => {
@@ -184,8 +159,8 @@
   }
 
   function setCSVStatus(message, kind = "") {
-    csvStatus.textContent = message;
-    csvStatus.className = `csv-status${kind ? " " + kind : ""}`;
+    console.log(message);
+    console.log("CSV status:", kind || "(no kind)");
   }
 
   function loadCSVText(csvText, sourceLabel) {
@@ -220,7 +195,7 @@
       populateFilters();
       renderAll();
 
-      csvSourceLabel.textContent = sourceLabel;
+      console.log(sourceLabel);
       setCSVStatus(
         `${state.courses.length} courses and ${state.sections.length} sections loaded.`,
         "ok"
@@ -235,8 +210,7 @@
   }
 
   async function loadCSVFromGitHub() {
-    reloadCsvBtn.disabled = true;
-    csvSourceLabel.textContent = "Loading sabanci_courses.csv from GitHub…";
+    console.log("Loading sabanci_courses.csv from GitHub…");
     setCSVStatus("Fetching the latest version…", "loading");
 
     try {
@@ -248,7 +222,7 @@
       loadCSVText(result.text, result.source);
     } catch (error) {
       console.error(error);
-      csvSourceLabel.textContent = "GitHub CSV could not be downloaded";
+      console.log("GitHub CSV could not be downloaded");
       setCSVStatus(
         `Could not download the course CSV: ${error.message} Manual upload still works.`,
         "error"
@@ -259,7 +233,6 @@
       // Wait for the next animation frame to ensure the UI updates before showing the window.
       await new Promise(resolve => requestAnimationFrame(resolve));
       await window.suDesktop.loadFinished();
-      reloadCsvBtn.disabled = false;
     }
   }
 
@@ -1281,21 +1254,12 @@
   }
 
   function resizeSchedule() {
-    const schedule = scheduleWrap.querySelector(".schedule");
-    if (!schedule) return;
-    // how to get this in float????
-    const height = schedule.getBoundingClientRect().height - 42; // subtract the height of the time header
-    const times = Array.from(schedule.querySelector(".time-col").children);
-    const heightPerSlot = times.length ? (height / times.length) : 64;
-    times.forEach(time => {
-      time.style.height = `${heightPerSlot}px`;
-    });
-    schedule.querySelectorAll(".day-col").forEach(dayCol => {
-      dayCol.style.setProperty("--slot-height", `${heightPerSlot}px`);
-      Array.from(dayCol.children).forEach(eventBlock => {
-        eventBlock.style.setProperty("--slot-height", `${heightPerSlot}px`);
-      });
-    });
+    // const schedule = scheduleWrap.querySelector(".schedule");
+    // if (!schedule) return;
+    // const height = schedule.parentElement.getBoundingClientRect().height - 42;
+    // const times = Array.from(schedule.querySelector(".time-col").children);
+    // const heightPerSlot = times.length ? (height / times.length) : 64;
+    // schedule.style.setProperty("--slot-height", `${heightPerSlot}px`);
   }
   window.addEventListener("resize", resizeSchedule);
 
@@ -1326,13 +1290,13 @@
     let html = `<div class="schedule">
       <div class="time-head">Time</div>
       ${DAYS.map(day => `<div class="day-head">${day.name}</div>`).join("")}
-      <div class="time-col" style="min-height:${gridHeight}px">
+      <div class="time-col">
         ${timeLabels()}
-        <div class="end-time-label">${formatMinutes(END_MIN)}</div>
+        <div class="time-label">${formatMinutes(END_MIN)}</div>
       </div>`;
 
     DAYS.forEach(day => {
-      html += `<div class="day-col" style="min-height:${gridHeight}px">`;
+      html += `<div class="day-col">`;
 
       chosen.forEach(section => {
         section.meetings.forEach((meeting, meetingIndex) => {
@@ -1359,12 +1323,12 @@
             data-section-key="${esc(section.key)}"
             tabindex="0"
             role="button"
-            style="top:calc(${top} * var(--slot-height) + 5px);height:calc(${height} * var(--slot-height) - 10px);background:${colorFor(`${section.subject}:${section.course}`)}"
+            style="--row:${top};--duration:${height};background:${colorFor(`${section.subject}:${section.course}`)}"
             title="${esc(`${section.subject} ${section.course}-${section.section} · ${formatMinutes(meeting.start)}–${formatMinutes(meeting.end)} · Click to open course`)}"
           >
             <strong>${esc(section.subject)} ${esc(section.course)}-${esc(section.section)}</strong>
-            ${esc(formatMinutes(meeting.start))}–${esc(formatMinutes(meeting.end))}
-            ${meeting.location ? `<br>${esc(meeting.location)}` : ""}
+            ${meeting.location ? `${esc(meeting.location)}` : ""}
+            <br>${esc(formatMinutes(meeting.start))}–${esc(formatMinutes(meeting.end))}
           </div>`;
         });
       });
@@ -1373,7 +1337,7 @@
     });
 
     html += `</div>`;
-    scheduleWrap.innerHTML = html;
+    scheduleWrap.innerHTML = '<div>'+html+'</div>';
 
     scheduleWrap.querySelectorAll(".event[data-course-key]").forEach(eventBlock => {
       const openMatchingCourse = () => {
@@ -1444,7 +1408,7 @@
       const next = Math.min(current + 60, END_MIN);
       const height = minutesToPixels(next - current);
 
-      html += `<div class="time-label" style="height:${height}px">${formatMinutes(current)}</div>`;
+      html += `<div class="time-label">${formatMinutes(current)}</div>`;
       current = next;
     }
 
@@ -1452,7 +1416,7 @@
   }
 
   function minutesToPixels(minutes) {
-    return (minutes / 60) * SLOT_HEIGHT;
+    return Math.ceil(minutes / 60) * SLOT_HEIGHT;
   }
   function minutesToSlots(minutes) {
     return Math.ceil(minutes / 60);
