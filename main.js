@@ -96,7 +96,9 @@ function createLoading() {
     }, 1);
   });
 }
+
 let csvloaded = false;
+
 async function createSetupWindow() {
   console.log('Creating setup window...');
   const win = new BrowserWindow({
@@ -124,6 +126,7 @@ async function createSetupWindow() {
   });
   return await new Promise((resolve) => { win.once('ready-to-show', () => { resolve(win) }) });
 }
+
 async function createMainWindow() {
   // set width and height to 100% of the screen size
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
@@ -149,7 +152,7 @@ async function createMainWindow() {
   });
   if (process.platform === 'darwin' && typeof win.setWindowButtonPosition === "function") win.setWindowButtonPosition({ x: 19, y: 18 });
 
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
 
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (isAllowedExternalUrl(url)) {
@@ -181,7 +184,6 @@ async function createMainWindow() {
   return win;
 }
 
-
 ipcMain.handle("courses:load-default", async () => {
   console.log("Trying to load CSV from:");
   console.log(COURSE_CSV_PATH);
@@ -207,6 +209,7 @@ ipcMain.handle("courses:load-default", async () => {
     );
   }
 });
+
 ipcMain.handle("loadfinished", async () => {
   csvloaded = true;
 });
