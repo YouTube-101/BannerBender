@@ -101,15 +101,21 @@
   });
 
   $("saveBtn").addEventListener("click", () => {
-    localStorage.setItem("suScheduleSelectionV2", JSON.stringify([...state.selected]));
-    alert("Selection saved in this browser.");
+    saveState();
   });
 
   $("loadBtn").addEventListener("click", () => {
+    loadState();
+  });
+  function saveState() {
+    localStorage.setItem("suScheduleSelectionV2", JSON.stringify([...state.selected]));
+  }
+  function loadState() {
     const saved = JSON.parse(localStorage.getItem("suScheduleSelectionV2") || "[]");
     normalizeExclusiveSelection(saved);
     renderAll();
-  });
+    return;
+  }
 
   function selectedCRNs() {
     return [...new Set(
@@ -228,6 +234,7 @@
         `${state.courses.length} courses and ${state.sections.length} sections loaded.`,
         "ok"
       );
+      loadState();
     } catch (error) {
       console.error(error);
       setCSVStatus(`CSV could not be parsed: ${error.message}`, "error");
@@ -258,8 +265,10 @@
       scheduleWrap.innerHTML =
         `<div class="empty">Could not load sabanci_courses.csv from GitHub. Choose a local CSV to continue.</div>`;
     } finally {
-      reloadCsvBtn.disabled = false;
+      // Wait for the next animation frame to ensure the UI updates before showing the window.
+      await new Promise(resolve => requestAnimationFrame(resolve));
       await window.suDesktop.loadFinished();
+      reloadCsvBtn.disabled = false;
     }
   }
 
