@@ -99,14 +99,6 @@
     bannerConfirmDialog.close();
     window.open(url, "_blank", "noopener");
   });
-
-  $("saveBtn").addEventListener("click", () => {
-    saveState();
-  });
-
-  $("loadBtn").addEventListener("click", () => {
-    loadState();
-  });
   function saveState() {
     localStorage.setItem("suScheduleSelectionV2", JSON.stringify([...state.selected]));
   }
@@ -224,7 +216,6 @@
       state.expandedCourses.clear();
       controls.style.display = "";
       selectedSummaryWrap.style.display = "";
-      ["saveBtn","loadBtn"].forEach(id => $(id).disabled = false);
 
       populateFilters();
       renderAll();
@@ -716,6 +707,7 @@
     if (!course) return;
 
     course.sections.forEach(section => state.selected.delete(section.key));
+    saveState();
     renderAll();
   }
 
@@ -1046,16 +1038,15 @@
     courseList.querySelectorAll("input[data-section-key]").forEach(checkbox => {
       checkbox.addEventListener("change", () => {
         const key = checkbox.dataset.sectionKey;
-
         if (checkbox.checked) {
           selectSectionExclusively(key);
         } else {
           state.selected.delete(key);
         }
-
-        renderAll();
       });
     });
+    saveState();
+    renderAll();
   }
 
   function renderSectionOption(section, compact = false) {
