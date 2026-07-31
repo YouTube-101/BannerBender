@@ -18,16 +18,6 @@
     <button class="btn" id="saveBtn" disabled>Save selection</button>
     <button class="btn" id="loadBtn" disabled>Load selection</button>
     <div class="banner-tools">
-      <!-- REMOVE THIS ELEMENT -->
-      <input
-        id="bannerTerm"
-        class="banner-term"
-        inputmode="numeric"
-        maxlength="6"
-        placeholder="Term code"
-        aria-label="Banner six digit term code",
-        style="display: none;"
-      >
       <button class="btn" id="openBannerLoginBtn" type="button">Open Bannerweb</button>
       <button class="btn banner" id="sendBannerBtn" type="button" disabled>Send selected once</button>
     </div>
@@ -74,7 +64,7 @@
     </div>
   </section>
 
-  <section class="panel">
+  <section class="panel" style="display: grid;grid-template-rows: max-content max-content auto;">
     <div class="panel-head row" style="justify-content:space-between">
       <strong>Weekly schedule</strong>
       <span class="small">Monday–Friday · 08:40–19:30</span>

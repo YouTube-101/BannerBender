@@ -370,12 +370,14 @@ input[type="search"]{
   color:var(--danger);
 }
 .selected-summary-empty{padding:12px 0;color:var(--muted);font-size:12px}
-.schedule-wrap{overflow:auto;padding:14px}
+.schedule-wrap{overflow:auto;padding:14px;}
 .schedule{
   min-width:850px;
   display:grid;
+  grid-template-rows: 42px auto;
   grid-template-columns:72px repeat(5,minmax(150px,1fr));
   position:relative;
+  height: 100%;
 }
 .day-head,.time-head{
   height:42px;
@@ -395,6 +397,7 @@ input[type="search"]{
   border-right:1px solid var(--line);
   background:#fbfcfe;
   z-index:3;
+  height: 100%;
 }
 .day-col{
   position:relative;
@@ -407,6 +410,7 @@ input[type="search"]{
       #e8edf3 calc(var(--slot-height) - 1px),
       #e8edf3 var(--slot-height)
     );
+  height: 100%;
 }
 .time-label{
   font-size:11px;

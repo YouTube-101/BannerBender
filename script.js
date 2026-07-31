@@ -14,6 +14,7 @@
   ];
 
   const state = {
+    term: null,
     sections: [],
     courses: [],
     selected: new Set(),
@@ -39,7 +40,6 @@
   const selectedSummaryWrap = $("selectedSummaryWrap");
   const selectedSummaryLabel = $("selectedSummaryLabel");
   const selectedSummaryList = $("selectedSummaryList");
-  const bannerTerm = $("bannerTerm");
   const openBannerLoginBtn = $("openBannerLoginBtn");
   const sendBannerBtn = $("sendBannerBtn");
   const bannerConfirmDialog = $("bannerConfirmDialog");
@@ -82,12 +82,6 @@
   });
   creditFilter.addEventListener("change", renderCourseList);
   fitFilter.addEventListener("change", renderCourseList);
-
-  bannerTerm.value = localStorage.getItem("suBannerTerm") || "";
-  bannerTerm.addEventListener("input", () => {
-    bannerTerm.value = bannerTerm.value.replace(/\D/g, "").slice(0, 6);
-    localStorage.setItem("suBannerTerm", bannerTerm.value);
-  });
 
   openBannerLoginBtn.addEventListener("click", () => {
     window.open(`${BANNER_BASE}/twbkwbis.P_SabanciLogin`, "_blank", "noopener");
@@ -165,12 +159,11 @@
   }
 
   function prepareBannerSend() {
-    const term = bannerTerm.value.trim();
+    const term = state.term;
     const crns = selectedCRNs();
 
     if (!/^\d{6}$/.test(term)) {
-      alert("Enter the six-digit Banner term code first.");
-      bannerTerm.focus();
+      alert("The term is not valid. Please check the CSV file.");
       return;
     }
 
@@ -200,6 +193,20 @@
   function loadCSVText(csvText, sourceLabel) {
     try {
       const rows = parseCSV(csvText);
+      const daterange = rows[0].daterange;
+      const currentyear = parseInt(daterange.split(",")[1].split("-")[0].trim());
+      if (daterange.startsWith("Aug") || daterange.startsWith("Sep") || daterange.startsWith("Oct")) {
+        state.term = String(currentyear) + "01";
+      }
+      else if (daterange.startsWith("Jan") || daterange.startsWith("Feb")) {
+        state.term = String(currentyear-1) + "02";
+      }
+      else if (daterange.startsWith("Jun") || daterange.startsWith("Jul")) {
+        state.term = String(currentyear-1) + "03";
+      }
+      else {
+        console.error("Could not determine the current semester from the CSV daterange. Check the CSV file format.");
+      }
       state.sections = groupRows(rows);
       state.courses = groupCourses(state.sections);
 
@@ -1262,6 +1269,25 @@
     });
   }
 
+  function resizeSchedule() {
+    const schedule = scheduleWrap.querySelector(".schedule");
+    if (!schedule) return;
+    // how to get this in float????
+    const height = schedule.getBoundingClientRect().height - 42; // subtract the height of the time header
+    const times = Array.from(schedule.querySelector(".time-col").children);
+    const heightPerSlot = times.length ? (height / times.length) : 64;
+    times.forEach(time => {
+      time.style.height = `${heightPerSlot}px`;
+    });
+    schedule.querySelectorAll(".day-col").forEach(dayCol => {
+      dayCol.style.setProperty("--slot-height", `${heightPerSlot}px`);
+      Array.from(dayCol.children).forEach(eventBlock => {
+        eventBlock.style.setProperty("--slot-height", `${heightPerSlot}px`);
+      });
+    });
+  }
+  window.addEventListener("resize", resizeSchedule);
+
   function renderSchedule() {
     const chosen = state.sections.filter(section =>
       state.selected.has(section.key)
@@ -1289,13 +1315,13 @@
     let html = `<div class="schedule">
       <div class="time-head">Time</div>
       ${DAYS.map(day => `<div class="day-head">${day.name}</div>`).join("")}
-      <div class="time-col" style="height:${gridHeight}px">
+      <div class="time-col" style="min-height:${gridHeight}px">
         ${timeLabels()}
         <div class="end-time-label">${formatMinutes(END_MIN)}</div>
       </div>`;
 
     DAYS.forEach(day => {
-      html += `<div class="day-col" style="height:${gridHeight}px">`;
+      html += `<div class="day-col" style="min-height:${gridHeight}px">`;
 
       chosen.forEach(section => {
         section.meetings.forEach((meeting, meetingIndex) => {
@@ -1306,11 +1332,8 @@
 
           if (visibleEnd <= START_MIN || visibleStart >= END_MIN) return;
 
-          const top = minutesToPixels(visibleStart - START_MIN);
-          const height = Math.max(
-            24,
-            minutesToPixels(visibleEnd - visibleStart)
-          );
+          const top = minutesToSlots(visibleStart - START_MIN);
+          const height = minutesToSlots(visibleEnd - visibleStart);
           const eventId = `${section.key}|${day.code}|${meetingIndex}`;
           const conflictClass = conflicts.eventIds.has(eventId)
             ? " conflict"
@@ -1322,15 +1345,15 @@
           html += `<div
             class="event${conflictClass}"
             data-course-key="${esc(parentCourseKey)}"
+            data-section-key="${esc(section.key)}"
             tabindex="0"
             role="button"
-            style="top:${top}px;height:${height}px;background:${colorFor(`${section.subject}:${section.course}`)}"
+            style="top:calc(${top} * var(--slot-height) + 5px);height:calc(${height} * var(--slot-height) - 10px);background:${colorFor(`${section.subject}:${section.course}`)}"
             title="${esc(`${section.subject} ${section.course}-${section.section} · ${formatMinutes(meeting.start)}–${formatMinutes(meeting.end)} · Click to open course`)}"
           >
             <strong>${esc(section.subject)} ${esc(section.course)}-${esc(section.section)}</strong>
             ${esc(formatMinutes(meeting.start))}–${esc(formatMinutes(meeting.end))}
             ${meeting.location ? `<br>${esc(meeting.location)}` : ""}
-            ${meeting.type ? `<br>${esc(meeting.type)}` : ""}
           </div>`;
         });
       });
@@ -1354,6 +1377,7 @@
         }
       });
     });
+    resizeSchedule();
   }
 
   function findConflicts(sections) {
@@ -1418,6 +1442,9 @@
 
   function minutesToPixels(minutes) {
     return (minutes / 60) * SLOT_HEIGHT;
+  }
+  function minutesToSlots(minutes) {
+    return Math.ceil(minutes / 60);
   }
 
   function formatMinutes(minutes) {
