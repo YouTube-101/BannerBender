@@ -33,7 +33,7 @@ header{
   /* macOS traffic light padding */
   padding-left: calc(env(titlebar-area-x, 10px) + 5px);
   /* Windows titlebar padding */
-  padding-right: calc(100vw - env(titlebar-area-inset-right, calc(100vw - 15px)));
+  padding-right: 15px;
   -webkit-app-region: drag;
   width: 100%;
   height: 50px;
@@ -47,7 +47,7 @@ header{
 @media (window-controls-overlay) {
   header {
     padding-left: 15px;
-    padding-right: calc(100vw - env(titlebar-area-inset-right, calc(100vw - 15px)));
+    padding-right: calc(100vw - env(titlebar-area-x, calc(100vw - 15px)));
   }
 }
 header h1{font-size:20px;margin:0}
