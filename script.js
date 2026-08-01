@@ -230,8 +230,6 @@
       scheduleWrap.innerHTML =
         `<div class="empty">Could not load sabanci_courses.csv from GitHub. Choose a local CSV to continue.</div>`;
     } finally {
-      // Wait for the next animation frame to ensure the UI updates before showing the window.
-      await new Promise(resolve => requestAnimationFrame(resolve));
       await window.suDesktop.loadFinished();
     }
   }

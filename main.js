@@ -2,7 +2,12 @@ const fs = require("fs");
 const fsp = require("fs/promises");
 const path = require("path");
 
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 const { app, BrowserWindow, ipcMain, screen, shell } = require('electron');
+
+app.commandLine.appendSwitch('enable-gpu-rasterization');
+app.commandLine.appendSwitch('enable-zero-copy');
 
 const COURSE_CSV_PATH = path.join(__dirname, "sabanci_courses.csv");
 
@@ -72,28 +77,17 @@ function createLoading() {
   });
   if (process.platform === 'darwin' && typeof win.setWindowButtonVisibility === "function") win.setWindowButtonVisibility(false);
   win.loadFile(path.join(__dirname, 'loading.html'));
-  win.on('close', (e) => {
-    win.hide();
-  });
-  win.once('ready-to-show', () => {
+  win.once('ready-to-show', async () => {
     win.show();
     if (!fs.existsSync(saveData)) {
       fs.writeFileSync(saveData, JSON.stringify({}));
     }
-    setTimeout(async () => {
-      if (getSaveData('setupComplete') === 'true' || true) {
-        const mainWin = await createMainWindow();
-        mainWin.show();
-        win.close();
-        activeWindow = mainWin;
-      }
-      else {
-        const mainWin = await createSetupWindow();
-        mainWin.show();
-        win.close();
-        activeWindow = mainWin;
-      }
-    }, 1);
+    const mainWin = await createMainWindow();
+    activeWindow = mainWin;
+    win.close();
+    mainWin.maximize();
+    mainWin.focus();
+    await mainWin.webContents.executeJavaScript(`window.requestAnimationFrame(() => { document.body.classList.remove('invisible'); });`);
   });
 }
 
@@ -132,6 +126,7 @@ async function createMainWindow() {
   const win = new BrowserWindow({
     width: 1600,
     height: 900,
+    disableAutoHideCursor: true,
     titleBarStyle: 'hidden',
     titleBarOverlay: {
       color: '#0e1b3d',
@@ -148,11 +143,11 @@ async function createMainWindow() {
       contextIsolation: true,
       zoomToPageWidth: true
     },
-    backgroundColor: '#1e1e1e'
+    backgroundColor: '#f5f7fb'
   });
   if (process.platform === 'darwin' && typeof win.setWindowButtonPosition === "function") win.setWindowButtonPosition({ x: 19, y: 18 });
 
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
 
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (isAllowedExternalUrl(url)) {
@@ -175,13 +170,9 @@ async function createMainWindow() {
   win.on('close', (e) => {
     win.hide();
   });
-  win.loadFile(path.join(__dirname,'index.html'));
+  win.loadFile(path.join(__dirname, 'index.html'));
 
-  await new Promise((resolve) => { win.once('ready-to-show', () => { resolve() }) });
-  while (!csvloaded) {
-    await new Promise((resolve) => { setTimeout(resolve, 1) });
-  }
-  await win.maximize();
+  while (!csvloaded) await delay(1);
   return win;
 }
 

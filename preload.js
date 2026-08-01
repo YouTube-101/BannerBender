@@ -12,7 +12,7 @@ contextBridge.exposeInMainWorld("suDesktop", {
     const wco = navigator.windowControlsOverlay.getTitlebarAreaRect();
     if (process.platform == "win32") document.documentElement.style.setProperty("--title-padding-right", (window.innerWidth - wco.width + 5)+"px");
     else if (process.platform == "darwin") document.documentElement.style.setProperty("--title-padding-left", (wco.x-5)+"px");
-    document.querySelector("header").classList.remove("invisible");
+    else document.documentElement.style.setProperty("--title-padding-right", (window.innerWidth - wco.width + 5)+"px");
   }
 });
 
