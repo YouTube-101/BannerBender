@@ -71,7 +71,7 @@ function createLoading() {
     backgroundColor: '#1e1e1e'
   });
   if (process.platform === 'darwin' && typeof win.setWindowButtonVisibility === "function") win.setWindowButtonVisibility(false);
-  win.loadFile('loading.html');
+  win.loadFile(path.join(__dirname, 'loading.html'));
   win.on('close', (e) => {
     win.hide();
   });
@@ -129,10 +129,9 @@ async function createSetupWindow() {
 
 async function createMainWindow() {
   // set width and height to 100% of the screen size
-  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   const win = new BrowserWindow({
-    width: width,
-    height: height,
+    width: 1600,
+    height: 900,
     titleBarStyle: 'hidden',
     titleBarOverlay: {
       color: '#0e1b3d',
@@ -146,13 +145,14 @@ async function createMainWindow() {
       sandbox: false,
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
-      contextIsolation: true
+      contextIsolation: true,
+      zoomToPageWidth: true
     },
     backgroundColor: '#1e1e1e'
   });
   if (process.platform === 'darwin' && typeof win.setWindowButtonPosition === "function") win.setWindowButtonPosition({ x: 19, y: 18 });
 
-  //win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (isAllowedExternalUrl(url)) {
@@ -175,12 +175,13 @@ async function createMainWindow() {
   win.on('close', (e) => {
     win.hide();
   });
-  win.loadFile('index.html');
+  win.loadFile(path.join(__dirname,'index.html'));
 
   await new Promise((resolve) => { win.once('ready-to-show', () => { resolve() }) });
   while (!csvloaded) {
     await new Promise((resolve) => { setTimeout(resolve, 1) });
   }
+  await win.maximize();
   return win;
 }
 

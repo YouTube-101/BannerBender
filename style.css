@@ -13,6 +13,8 @@
   --warn:#b54708;
   --warn-bg:#fffaeb;
   --min-slot-height: 48px;
+  --title-padding-left: 15px;
+  --title-padding-right: 15px;
 }
 *{box-sizing:border-box;line-height:1.2}
 body{
@@ -30,10 +32,8 @@ header{
   background:#0e1b3d;
   color:white;
   padding:4px 0px;
-  /* macOS traffic light padding */
-  padding-left: calc(env(titlebar-area-x, 10px) + 5px);
-  /* Windows titlebar padding */
-  padding-right: 15px;
+  padding-left: var(--title-padding-left);
+  padding-right: var(--title-padding-right);
   -webkit-app-region: drag;
   width: 100%;
   height: 50px;
@@ -44,11 +44,8 @@ header{
   flex-wrap:wrap;
   box-sizing: border-box;
 }
-@media (window-controls-overlay) {
-  header {
-    padding-left: 15px;
-    padding-right: calc(100vw - env(titlebar-area-x, calc(100vw - 15px)));
-  }
+header.invisible > *{
+  display: none;
 }
 header h1{font-size:20px;margin:0}
 header p{margin:3px 0 0;color:#cbd5e1;font-size:13px}
