@@ -33,13 +33,11 @@ function applyMainWindowInteractivity() {
 
 function lockMainWindow(reason) {
   mainWindowLocks.add(reason);
-  console.log(mainWindowLocks);
   applyMainWindowInteractivity();
 }
 
 function unlockMainWindow(reason) {
   mainWindowLocks.delete(reason);
-  console.log(mainWindowLocks);
   applyMainWindowInteractivity();
 }
 
@@ -210,15 +208,8 @@ async function createMainWindow() {
 }
 
 ipcMain.handle("courses:load-default", async () => {
-  console.log("Trying to load CSV from:");
-  console.log(COURSE_CSV_PATH);
-
   try {
     const text = await fsp.readFile(COURSE_CSV_PATH, "utf8");
-
-    console.log("CSV loaded successfully.");
-    console.log("CSV characters:", text.length);
-
     if (!text.trim()) {
       throw new Error("The local CSV file is empty.");
     }
