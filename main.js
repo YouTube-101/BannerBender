@@ -24,7 +24,6 @@ let mainWindowDisabled = false;
 const mainWindowLocks = new Set();
 
 function applyMainWindowInteractivity() {
-  console.log("Applying main window interactivity. Locks:", mainWindowLocks);
   if (!mainWindow || mainWindow.isDestroyed()) return;
   const isLocked = mainWindowLocks.size > 0;
   if (mainWindowDisabled === isLocked) return;
@@ -33,14 +32,12 @@ function applyMainWindowInteractivity() {
 }
 
 function lockMainWindow(reason) {
-  console.log(`Locking main window due to: ${reason}`);
   mainWindowLocks.add(reason);
   console.log(mainWindowLocks);
   applyMainWindowInteractivity();
 }
 
 function unlockMainWindow(reason) {
-  console.log(`Unlocking main window for: ${reason}`);
   mainWindowLocks.delete(reason);
   console.log(mainWindowLocks);
   applyMainWindowInteractivity();
@@ -154,7 +151,6 @@ async function createSetupWindow(parent) {
 async function createMainWindow() {
   // set width and height to 100% of the screen size
   if (mainWindow) {
-    console.log("MAIN WINDOW ALREADY EXISTS");
     applyMainWindowInteractivity();
     if (!isMainWindowLocked()) mainWindow.focus();
     return;
