@@ -22,3 +22,9 @@ contextBridge.exposeInMainWorld("suDesktop", {
 window.addEventListener("DOMContentLoaded", () => {
   document.documentElement.classList.add("platform-"+process.platform);
 });
+
+
+// window.addEventListener("unload") is deprecated.
+window.addEventListener("beforeunload", () => {
+  document.body.classList.add("invisible");
+});

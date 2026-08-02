@@ -19,11 +19,13 @@
 *{box-sizing:border-box;line-height:1.2}
 body{
   margin:0;
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  font-family:Nexa,Roboto,Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
   background:var(--bg);
   color:var(--text);
+  user-select: none;
 }
 button,input,select{font:inherit;-webkit-app-region:no-drag}
+input {user-select: text;}
 button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{
   outline:3px solid rgba(31,94,255,.22);
   outline-offset:2px;
@@ -147,6 +149,7 @@ input[type="search"]{
   padding:10px 12px;
   border:1px solid var(--line);
   border-radius:9px;
+  height: 43px;
 }
 .filter-row{
   display:grid;
