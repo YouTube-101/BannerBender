@@ -17,6 +17,13 @@ contextBridge.exposeInMainWorld("suDesktop", {
       document.documentElement.style.setProperty("--title-padding-left", (wco.x + 5)+"px");
       document.documentElement.style.setProperty("--title-padding-right", (window.innerWidth - wco.width + 5)+"px");
     }
+  },
+  onMessageFromMain: (channel, callback) => {
+    const subscription = (_event, value) => callback(value);
+    ipcRenderer.on(channel, subscription);
+    return () => {
+      ipcRenderer.removeListener(channel, subscription);
+    };
   }
 });
 
@@ -28,4 +35,8 @@ window.addEventListener("DOMContentLoaded", () => {
 // window.addEventListener("unload") is deprecated.
 window.addEventListener("beforeunload", () => {
   document.body.classList.add("invisible");
+});
+
+ipcRenderer.on("login-information", async (e, loginInfo) => {
+  
 });

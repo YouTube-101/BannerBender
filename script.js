@@ -6,11 +6,11 @@
   const END_MIN = 19 * 60 + 30;
   const SLOT_HEIGHT = 64;
   const DAYS = [
-    {name:"Monday", code:"M"},
-    {name:"Tuesday", code:"T"},
-    {name:"Wednesday", code:"W"},
-    {name:"Thursday", code:"R"},
-    {name:"Friday", code:"F"}
+    { name: "Monday", code: "M" },
+    { name: "Tuesday", code: "T" },
+    { name: "Wednesday", code: "W" },
+    { name: "Thursday", code: "R" },
+    { name: "Friday", code: "F" }
   ];
 
   const state = {
@@ -46,9 +46,9 @@
   search.addEventListener("input", renderCourseList);
   searchFieldFilter.addEventListener("change", () => {
     const placeholders = {
-      coursecode:"Search course code, e.g. CS 204...",
-      instructor:"Search instructor name...",
-      crn:"Search CRN..."
+      coursecode: "Search course code, e.g. CS 204...",
+      instructor: "Search instructor name...",
+      crn: "Search CRN..."
     };
 
     search.placeholder =
@@ -172,10 +172,10 @@
         state.term = String(currentyear) + "01";
       }
       else if (daterange.startsWith("Jan") || daterange.startsWith("Feb")) {
-        state.term = String(currentyear-1) + "02";
+        state.term = String(currentyear - 1) + "02";
       }
       else if (daterange.startsWith("Jun") || daterange.startsWith("Jul")) {
-        state.term = String(currentyear-1) + "03";
+        state.term = String(currentyear - 1) + "03";
       }
       else {
         console.error("Could not determine the current semester from the CSV daterange. Check the CSV file format.");
@@ -325,23 +325,23 @@
       .replace(/[^a-z0-9]/g, "");
 
     const aliases = {
-      crn:"crn",
-      subject:"subject",
-      course:"course",
-      coursenumber:"course",
-      section:"section",
-      title:"title",
-      credits:"credits",
-      meetingtype:"meetingtype",
-      type:"meetingtype",
-      time:"time",
-      days:"days",
-      location:"location",
-      where:"location",
-      daterange:"daterange",
-      scheduletype:"scheduletype",
-      instructors:"instructors",
-      instructor:"instructors"
+      crn: "crn",
+      subject: "subject",
+      course: "course",
+      coursenumber: "course",
+      section: "section",
+      title: "title",
+      credits: "credits",
+      meetingtype: "meetingtype",
+      type: "meetingtype",
+      time: "time",
+      days: "days",
+      location: "location",
+      where: "location",
+      daterange: "daterange",
+      scheduletype: "scheduletype",
+      instructors: "instructors",
+      instructor: "instructors"
     };
 
     return aliases[normalized] || normalized;
@@ -386,13 +386,13 @@
     return [...map.values()]
       .map(group => ({
         ...group,
-        instructors:[...group.instructors]
+        instructors: [...group.instructors]
       }))
       .sort((first, second) =>
         `${first.subject} ${first.course} ${first.section}`.localeCompare(
           `${second.subject} ${second.course} ${second.section}`,
           undefined,
-          {numeric:true}
+          { numeric: true }
         )
       );
   }
@@ -444,10 +444,10 @@
       if (!map.has(key)) {
         map.set(key, {
           key,
-          subject:normalizedSubject || section.subject,
-          course:normalizedCourse || section.course,
-          title:"",
-          sections:[]
+          subject: normalizedSubject || section.subject,
+          course: normalizedCourse || section.course,
+          title: "",
+          sections: []
         });
       }
 
@@ -462,7 +462,7 @@
             String(first.section).localeCompare(
               String(second.section),
               undefined,
-              {numeric:true}
+              { numeric: true }
             )
           );
 
@@ -478,7 +478,7 @@
             return String(first.section).localeCompare(
               String(second.section),
               undefined,
-              {numeric:true}
+              { numeric: true }
             );
           });
 
@@ -496,21 +496,21 @@
 
         return {
           ...course,
-          course:preferredSection
+          course: preferredSection
             ? canonicalCourseNumber(preferredSection)
             : course.course,
-          title:preferredTitle,
-          credits:creditSource?.credits || "",
+          title: preferredTitle,
+          credits: creditSource?.credits || "",
           mainSections,
           auxiliarySections,
-          sections:[...mainSections, ...auxiliarySections]
+          sections: [...mainSections, ...auxiliarySections]
         };
       })
       .sort((first, second) =>
         `${first.subject} ${first.course}`.localeCompare(
           `${second.subject} ${second.course}`,
           undefined,
-          {numeric:true}
+          { numeric: true }
         )
       );
   }
@@ -523,13 +523,13 @@
     if (!range || !days.length) return null;
 
     return {
-      start:range[0],
-      end:range[1],
+      start: range[0],
+      end: range[1],
       days,
-      timeText:row.time || "",
-      location:location || "",
-      type:row.meetingtype || "",
-      instructor:row.instructors || ""
+      timeText: row.time || "",
+      location: location || "",
+      type: row.meetingtype || "",
+      instructor: row.instructors || ""
     };
   }
 
@@ -582,24 +582,24 @@
     if (!text || /tba|arranged/i.test(text)) return [];
 
     const words = {
-      monday:"M",
-      mon:"M",
-      pazartesi:"M",
-      tuesday:"T",
-      tue:"T",
-      sali:"T",
-      "salı":"T",
-      wednesday:"W",
-      wed:"W",
-      carsamba:"W",
-      "çarşamba":"W",
-      thursday:"R",
-      thu:"R",
-      persembe:"R",
-      "perşembe":"R",
-      friday:"F",
-      fri:"F",
-      cuma:"F"
+      monday: "M",
+      mon: "M",
+      pazartesi: "M",
+      tuesday: "T",
+      tue: "T",
+      sali: "T",
+      "salı": "T",
+      wednesday: "W",
+      wed: "W",
+      carsamba: "W",
+      "çarşamba": "W",
+      thursday: "R",
+      thu: "R",
+      persembe: "R",
+      "perşembe": "R",
+      friday: "F",
+      fri: "F",
+      cuma: "F"
     };
 
     const lower = text.toLowerCase();
@@ -710,7 +710,7 @@
 
       if (details) {
         details.open = true;
-        details.scrollIntoView({behavior:"smooth", block:"center"});
+        details.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     });
   }
@@ -735,24 +735,24 @@
 
     if (fittingCount > 0) {
       return {
-        kind:"ok",
+        kind: "ok",
         fittingCount,
-        total:sections.length
+        total: sections.length
       };
     }
 
     if (unknownCount > 0) {
       return {
-        kind:"unknown",
-        fittingCount:0,
-        total:sections.length
+        kind: "unknown",
+        fittingCount: 0,
+        total: sections.length
       };
     }
 
     return {
-      kind:"bad",
-      fittingCount:0,
-      total:sections.length
+      kind: "bad",
+      fittingCount: 0,
+      total: sections.length
     };
   }
 
@@ -762,7 +762,7 @@
     const lectureResult = categoryFeasibility(course.mainSections);
     if (lectureResult) {
       categories.push({
-        label:"lecture",
+        label: "lecture",
         ...lectureResult
       });
     }
@@ -787,7 +787,7 @@
       ["tutorial", tutorials]
     ].forEach(([label, sections]) => {
       const result = categoryFeasibility(sections);
-      if (result) categories.push({label, ...result});
+      if (result) categories.push({ label, ...result });
     });
 
     return categories;
@@ -830,11 +830,11 @@
 
   function categoryDisplayName(category) {
     const labels = {
-      lecture:"Lecture sections",
-      discussion:"Discussion sections",
-      recitation:"Recitation sections",
-      lab:"Lab sections",
-      tutorial:"Tutorial sections"
+      lecture: "Lecture sections",
+      discussion: "Discussion sections",
+      recitation: "Recitation sections",
+      lab: "Lab sections",
+      tutorial: "Tutorial sections"
     };
 
     return labels[category] || "Sections";
@@ -846,7 +846,7 @@
     return order
       .map(category => ({
         category,
-        sections:course.sections.filter(
+        sections: course.sections.filter(
           section => sectionCategory(section) === category
         )
       }))
@@ -899,12 +899,12 @@
           : courseCredit === Number(credit));
 
       const searchValues = {
-        coursecode:[
+        coursecode: [
           `${course.subject || ""} ${course.course || ""}`,
           `${course.subject || ""}${course.course || ""}`
         ],
-        instructor:course.sections.flatMap(section => section.instructors || []),
-        crn:course.sections.map(section => section.crn || "")
+        instructor: course.sections.flatMap(section => section.instructors || []),
+        crn: course.sections.map(section => section.crn || "")
       };
 
       const searchable = (searchValues[searchField] || [])
@@ -963,8 +963,8 @@
             <div class="course-name">${esc(course.title)}</div>
             <div>
               ${selectedCount
-                ? `<span class="badge selected">${selectedCount} selected</span>`
-                : ""}
+          ? `<span class="badge selected">${selectedCount} selected</span>`
+          : ""}
               
             </div>
           </div>
@@ -987,15 +987,15 @@
               </div>
               <div class="${group.category === "lecture" ? "" : "auxiliary-options"}">
                 ${group.sections.map(section =>
-                  renderSectionOption(section, group.category !== "lecture")
-                ).join("")}
+            renderSectionOption(section, group.category !== "lecture")
+          ).join("")}
               </div>
             </div>
           `).join("")}
 
           ${!categoryGroups.length
-            ? `<div class="selected-summary-empty">No selectable sections found.</div>`
-            : ""}
+          ? `<div class="selected-summary-empty">No selectable sections found.</div>`
+          : ""}
         </div>
       </details>`;
     }).join("");
@@ -1037,10 +1037,10 @@
     const auxiliary = isLabOrRecitation(section);
     const meetings = section.meetings.length
       ? section.meetings.map(meeting =>
-          `${meeting.days.join("")} ${formatMinutes(meeting.start)}–${formatMinutes(meeting.end)}` +
-          `${meeting.location ? " · " + meeting.location : ""}` +
-          `${meeting.type ? " · " + meeting.type : ""}`
-        ).join("<br>")
+        `${meeting.days.join("")} ${formatMinutes(meeting.start)}–${formatMinutes(meeting.end)}` +
+        `${meeting.location ? " · " + meeting.location : ""}` +
+        `${meeting.type ? " · " + meeting.type : ""}`
+      ).join("<br>")
       : "Time not announced";
 
     let optionClass = "section-option" + (compact ? " compact" : "");
@@ -1073,8 +1073,8 @@
         </span>
 
         ${fit.detail
-          ? `<div class="fit-detail ${fit.kind}">${esc(fit.detail)}</div>`
-          : ""}
+        ? `<div class="fit-detail ${fit.kind}">${esc(fit.detail)}</div>`
+        : ""}
       </span>
     </label>`;
   }
@@ -1090,9 +1090,9 @@
   function evaluateSectionFit(section) {
     if (!section.meetings.length) {
       return {
-        kind:"unknown",
-        label:"Fit unknown",
-        detail:"No meeting time is available."
+        kind: "unknown",
+        label: "Fit unknown",
+        detail: "No meeting time is available."
       };
     }
 
@@ -1112,24 +1112,24 @@
         .join(", ");
 
       return {
-        kind:"bad",
-        label:"Does not fit",
-        detail:`Conflicts with ${names}.`
+        kind: "bad",
+        label: "Does not fit",
+        detail: `Conflicts with ${names}.`
       };
     }
 
     if (outsideGrid) {
       return {
-        kind:"unknown",
-        label:"Outside grid",
-        detail:"Part of this section is outside 08:40–19:30."
+        kind: "unknown",
+        label: "Outside grid",
+        detail: "Part of this section is outside 08:40–19:30."
       };
     }
 
     return {
-      kind:"ok",
-      label:"Fits",
-      detail:"No conflict with the currently selected program."
+      kind: "ok",
+      label: "Fits",
+      detail: "No conflict with the currently selected program."
     };
   }
 
@@ -1164,11 +1164,11 @@
 
       if (!uniqueCourses.has(courseKey)) {
         uniqueCourses.set(courseKey, {
-          subject:section.subject,
-          course:section.course,
-          title:section.title,
-          credits:numericCredits(section.credits),
-          sections:new Set()
+          subject: section.subject,
+          course: section.course,
+          title: section.title,
+          credits: numericCredits(section.credits),
+          sections: new Set()
         });
       }
 
@@ -1184,7 +1184,7 @@
       `${first.subject} ${first.course}`.localeCompare(
         `${second.subject} ${second.course}`,
         undefined,
-        {numeric:true}
+        { numeric: true }
       )
     );
 
@@ -1211,7 +1211,7 @@
     selectedSummaryList.innerHTML =
       courses.map(course => {
         const sections = [...course.sections].sort((first, second) =>
-          first.localeCompare(second, undefined, {numeric:true})
+          first.localeCompare(second, undefined, { numeric: true })
         );
 
         const courseKey = `${course.subject}:${course.course}`;
@@ -1221,8 +1221,8 @@
             <div class="selected-summary-code">${esc(course.subject)} ${esc(course.course)}</div>
             <div class="selected-summary-name">${esc(course.title)}</div>
             ${sections.length
-              ? `<div class="selected-summary-note">Section${sections.length > 1 ? "s" : ""}: ${esc(sections.join(", "))}</div>`
-              : ""}
+            ? `<div class="selected-summary-note">Section${sections.length > 1 ? "s" : ""}: ${esc(sections.join(", "))}</div>`
+            : ""}
           </div>
           <div class="selected-summary-actions">
             <div class="selected-summary-credit">${esc(formatCredits(course.credits))} credits</div>
@@ -1238,8 +1238,8 @@
       }).join("") +
       (excludedCount
         ? `<div class="selected-summary-note" style="padding:8px 0">` +
-          `${excludedCount} selected discussion/lab/recitation/tutorial section(s) excluded from the course count and credit total.` +
-          `</div>`
+        `${excludedCount} selected discussion/lab/recitation/tutorial section(s) excluded from the course count and credit total.` +
+        `</div>`
         : "");
 
     selectedSummaryList.querySelectorAll("[data-remove-course]").forEach(button => {
@@ -1335,7 +1335,7 @@
     });
 
     html += `</div>`;
-    scheduleWrap.innerHTML = '<div>'+html+'</div>';
+    scheduleWrap.innerHTML = '<div>' + html + '</div>';
 
     scheduleWrap.querySelectorAll(".event[data-course-key]").forEach(eventBlock => {
       const openMatchingCourse = () => {
@@ -1366,7 +1366,7 @@
             events.push({
               section,
               meeting,
-              id:`${section.key}|${day.code}|${meetingIndex}`
+              id: `${section.key}|${day.code}|${meetingIndex}`
             });
           }
         });
@@ -1395,7 +1395,7 @@
       }
     });
 
-    return {eventIds, sectionKeys};
+    return { eventIds, sectionKeys };
   }
 
   function timeLabels() {
@@ -1438,12 +1438,53 @@
 
   function esc(value) {
     return String(value ?? "").replace(/[&<>"']/g, character => ({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#39;"
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
     })[character]);
   }
+  
+  window.suDesktop.onMessageFromMain("session-attempts", (data) => {
+    console.log(Object.keys(data.attempts).length);
+    const attemptsDiv = document.querySelector("#attemptsdiv");
+    if (attemptsDiv) {
+      const container = attemptsDiv.querySelector("#attemptscontainer");
+      attemptsDiv.style.display = "block";
+      if (container) {
+        const elements = container.querySelectorAll("div");
+        for (const el of elements) {
+          if (!data.attempts[el.className.split("-")[1]] && !el.classList.contains("disappearing")) {
+            el.classList.add("disappearing");
+            el.style.animation = "attemptdisappear 0.3s cubic-bezier(1, 0, 1, 1) forwards";
+            setTimeout(() => {
+              container.removeChild(el);
+            }, 300);
+          }
+        }
+        for (const attempt in data.attempts) {
+          const status = data.attempts[attempt].status;
+          let symbol = status == "pending" ? "⛶" : status == "accepted" ? "✔" : status == "busy" ? "⛝" : "?";
+          let attemptDiv = container.querySelector(`.attempt-${attempt}`);
+          if (!attemptDiv) {
+            attemptDiv = document.createElement("div");
+            attemptDiv.classList.add(`attempt-${attempt}`);
+            container.appendChild(attemptDiv);
+            attemptDiv.innerText = attempt;
+            if (attempt > 99) attemptDiv.style.fontSize = "12px";
+            if (status != "pending") {
+              attemptDiv.style.animation = "attemptappear 0.3s cubic-bezier(0, 1, 1, 1) forwards";
+            }
+          }
+          else if (status != "pending") {
+            attemptDiv.style.animation = "none";
+          }
+          attemptDiv.style.backgroundColor = status == "pending" ? "var(--brand)" : status == "accepted" ? "#00a000" : status == "busy" ? "#ff8100" : status == "error" ? "red" : "gray";
+        }
+      }
+    }
+  });
+
   loadCSVFromGitHub();
 })();

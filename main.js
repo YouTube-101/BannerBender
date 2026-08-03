@@ -139,7 +139,7 @@ async function createSetupWindow(parent) {
   });
   if (process.platform === 'darwin' && typeof win.setWindowButtonPosition === "function") win.setWindowButtonPosition({ x: 19, y: 18 });
   win.loadFile('setup.html');
-  //win.webContents.openDevTools();
+  win.webContents.openDevTools();
   win.on("close", (e) => {
     unlockMainWindow("setup");
   });
@@ -228,6 +228,14 @@ ipcMain.handle("courses:load-default", async () => {
 
 ipcMain.handle("loadfinished", async () => {
   csvloaded = true;
+});
+
+ipcMain.handle("signIn", async (event, form) => {
+  if (!activeWindow) return;
+  if (activeWindow && activeWindow !== mainWindow && !activeWindow.isDestroyed()) {
+    activeWindow.close();
+  }
+  createLoading({ signin: form });
 });
 
 ipcMain.handle("openAsGuest", async () => {

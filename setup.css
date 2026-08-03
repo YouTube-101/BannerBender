@@ -15,7 +15,7 @@
   --title-padding-left: 15px;
   --title-padding-right: 15px;
 }
-*{box-sizing:border-box;line-height:1.2}
+*{box-sizing:border-box;line-height:1.2;margin:0}
 body{
   margin:0;
   font-family:Nexa,Roboto,Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
@@ -84,4 +84,61 @@ input[type="checkbox"] {
     width: 100%;
     height: 2px;
     background-color: var(--text);
+}
+#attemptsdiv {
+  --back: var(--bg);
+  --fore: var(--line);
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: max-content;
+  background: repeating-linear-gradient(45deg, var(--back) 0px, var(--back) 9px,var(--fore) 10px, var(--fore) 19px, var(--back) 20px);
+  background-position-x: 1px;
+  background-attachment: fixed;
+  animation: backgroundscroll 0.7s linear infinite;
+}
+#attemptsdiv > div {
+  background: linear-gradient(90deg, var(--back) 0px, transparent 50px, transparent calc(100% - 15px), var(--back) calc(100% - 5px));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-left: 50px;
+  padding-right: 10px;
+}
+@keyframes backgroundscroll {
+  0% {
+    background-position-x: calc(0.70710678118*40px);
+  }
+  100% {
+    background-position-x: 0px;
+  }
+}
+#attemptscontainer {
+  display:flex;
+  gap:5px;
+}
+#attemptscontainer > div {
+  border:1px solid var(--line);
+  border-radius: 15px;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  color: white;
+  transition: background-color 0.3s ease-in-out;
+  animation: attemptappear 0.3s cubic-bezier(0, 1, 1, 1) forwards, attemptpending 1s ease-in-out infinite;
+  align-items: center;
+  justify-content: center;
+}
+@keyframes attemptappear {
+  from {transform: scale(0);margin-right: -35px;}
+  to {transform: scale(1);margin-left: 0px;}
+}
+@keyframes attemptpending {
+  0% {opacity: 1;}
+  50% {opacity: 0.5;}
+  100% {opacity: 1;}
+}
+@keyframes attemptdisappear {
+  from {transform: scale(1) translateX(0px);margin-right: 0px;}
+  to {transform: scale(0) translateX(-70px);margin-right: -35px;}
 }
