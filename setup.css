@@ -129,6 +129,14 @@ input[type="checkbox"] {
   align-items: center;
   justify-content: center;
 }
+#loginerror {
+  width: 100%;
+  background-color: var(--danger-bg);
+  text-align: center;
+  display: none;
+  color: var(--danger);
+  padding: 10px;
+}
 @keyframes attemptappear {
   from {transform: scale(0);margin-right: -35px;}
   to {transform: scale(1);margin-left: 0px;}

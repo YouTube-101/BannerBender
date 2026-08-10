@@ -17,6 +17,7 @@ async function encrypt(raw) {
 }
 async function decrypt(soup) {
     if (!safeStorage.isAsyncEncryptionAvailable()) return {s:false,e:"UNSUPPORTED"};
-    return await safeStorage.decryptStringAsync(soup).then(e => {return {s: true, d: e}}).catch(e => {return {s: false, e: e}});
+    if (soup.type !== "Buffer") return {s:false,e:"INVALIDTYPE"};
+    return await safeStorage.decryptStringAsync(Buffer.from(soup.data)).then(e => {return {s: true, ...e}}).catch(e => {return {s: false, e: e}});
 }
 module.exports = {get,set,del,encrypt,decrypt};

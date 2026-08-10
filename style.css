@@ -1,3 +1,4 @@
+@charset "UTF-8";
 :root{
   --bg:#f5f7fb;
   --panel:#ffffff;
@@ -102,6 +103,32 @@ main{
   gap:7px;
   flex-wrap:wrap;
   height: 39.2px;
+}
+.usermenu {
+  height: 48px;
+  margin-top: -4px;
+  padding: 0px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding-left: 10px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #172033;
+  background: linear-gradient(270deg, white 0px,white 46px, #f59e0b 76px);
+  border-color: #f59e0b;
+}
+.usermenu > div {
+  height: 46px;
+  width: 46px;
+  background-size: cover;
+  background-position: top center;
+  border-radius: 7px;
+}
+.usermenu > span:nth-child(2) {
+  font-size: 32px;
+  margin-top: -2px;
+  width: 15px;
 }
 .banner-term{
   width:92px;
@@ -233,7 +260,7 @@ input[type="search"]{
   font-size:11px;
   font-weight:700;
 }
-.expand-label::after{content:"â–¾";transition:transform .15s ease}
+.expand-label::after{content:"▾";transition:transform .15s ease}
 .course-group[open] .expand-label::after{transform:rotate(180deg)}
 .section-list{
   border-top:1px solid #e8edf3;

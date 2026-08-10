@@ -6,10 +6,6 @@ const {
 } = require("electron");
 
 contextBridge.exposeInMainWorld("suDesktop", {
-  openAsGuest: () => ipcRenderer.invoke("openAsGuest"),
-  signIn: async (form) => {
-    return await ipcRenderer.invoke("signIn", form);
-  },
   onMessageFromMain: (channel, callback) => {
     const subscription = (_event, value) => callback(value);
     ipcRenderer.on(channel, subscription);

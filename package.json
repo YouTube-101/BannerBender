@@ -53,6 +53,8 @@
     }
   },
   "dependencies": {
-    "electron-store": "^11.0.2"
+    "cheerio": "^1.2.0",
+    "electron-store": "^11.0.2",
+    "tough-cookie": "^6.0.2"
   }
 }

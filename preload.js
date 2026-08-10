@@ -38,5 +38,5 @@ window.addEventListener("beforeunload", () => {
 });
 
 ipcRenderer.on("login-information", async (e, loginInfo) => {
-  
+  document.querySelector(".banner-tools").innerHTML = '';
 });

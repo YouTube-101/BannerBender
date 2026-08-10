@@ -1,15 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loading...</title>
     <link rel="stylesheet" href="fonts.css" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://suis.sabanciuniv.edu 'unsafe-inline';">
+    <style>
+        body {
+            margin: 0;
+            background-color: white;
+            user-select: none;
+        }
+
+        body>div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: opacity 0.5s;
+        }
+        * {
+            font-family:Nexa,Roboto,Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+            line-height: 1.2;
+            margin: 0;
+        }
+    </style>
 </head>
-<body style="margin:0;background-color: white;user-select: none;">
-    <div style="display: flex;flex-direction: column;justify-content: center;align-items: center;height: 100vh;width: 100vw;">
-        <h1 style="font-family:Nexa,Roboto,Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;">Loading...</h1>
+
+<body>
+    <div id="genericloading">
+        <h1>Loading...</h1>
     </div>
+    <div id="loginloading" style="opacity: 0;flex-direction: row;gap: 20px;justify-content: flex-start;padding: 0px 40px;width: calc(100vw - 80px);">
+        <div style="width: 100px;height: 100px;border: 10px solid #ccc;border-radius: 50%;background-size: cover;background-position: top center;"></div>
+        <div style="display: flex;flex-direction: column;align-items: flex-start;justify-content: center; text-align: left;">
+            <h4>Welcome back</h4>
+            <h1>User</h1>
+            <span>Grabbing your courses...</span>
+        </div>
+    </div>
+    <script>
+        const genericLoading = document.getElementById("genericloading");
+        const loginLoading = document.getElementById("loginloading");
+
+        window.suDesktop.onMessageFromMain("login-information", (data) => {
+            genericLoading.style.opacity = 0;
+            loginLoading.style.opacity = 1;
+            console.log(data);
+            if (data.user) {
+                if (data.user.name) loginLoading.querySelector("h1").textContent = data.user.name;
+                if (data.user.image) loginLoading.querySelector("div").style.backgroundImage = `url(${data.user.image})`;
+            }
+            loginLoading.querySelector("span").textContent = data.process;
+        });
+    </script>
 </body>
+
 </html>

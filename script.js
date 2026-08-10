@@ -25,6 +25,8 @@
   const $ = id => document.getElementById(id);
   const controls = $("controls");
   const courseList = $("courseList");
+  const signinbutton = $("signinbutton");
+  const usermenubutton = $("usermenubutton");
   const scheduleWrap = $("scheduleWrap");
   const searchFieldFilter = $("searchFieldFilter");
   const creditFilter = $("creditFilter");
@@ -35,12 +37,11 @@
   const selectedSummaryWrap = $("selectedSummaryWrap");
   const selectedSummaryLabel = $("selectedSummaryLabel");
   const selectedSummaryList = $("selectedSummaryList");
-  const openBannerLoginBtn = $("openBannerLoginBtn");
-  const sendBannerBtn = $("sendBannerBtn");
   const bannerConfirmDialog = $("bannerConfirmDialog");
   const bannerCrnPreview = $("bannerCrnPreview");
   const cancelBannerSendBtn = $("cancelBannerSendBtn");
   const confirmBannerSendBtn = $("confirmBannerSendBtn");
+  let registeredSchedule = [];
   let pendingBannerUrl = "";
 
   search.addEventListener("input", renderCourseList);
@@ -58,11 +59,10 @@
   creditFilter.addEventListener("change", renderCourseList);
   fitFilter.addEventListener("change", renderCourseList);
 
-  openBannerLoginBtn.addEventListener("click", () => {
-    window.open(`${BANNER_BASE}/twbkwbis.P_SabanciLogin`, "_blank", "noopener");
+  signinbutton.addEventListener("click", () => {
+    window.suDesktop.requestSignIn();
   });
 
-  sendBannerBtn.addEventListener("click", prepareBannerSend);
   cancelBannerSendBtn.addEventListener("click", () => {
     pendingBannerUrl = "";
     bannerConfirmDialog.close();
@@ -152,10 +152,10 @@
 
   function updateBannerSendButton() {
     const count = selectedCRNs().length;
-    sendBannerBtn.disabled = count === 0;
-    sendBannerBtn.textContent = count
-      ? `Send ${count} CRN${count === 1 ? "" : "s"} once`
-      : "Send selected once";
+    // sendBannerBtn.disabled = count === 0;
+    // sendBannerBtn.textContent = count
+    //   ? `Send ${count} CRN${count === 1 ? "" : "s"} once`
+    //   : "Send selected once";
   }
 
   function setCSVStatus(message, kind = "") {
@@ -1445,7 +1445,7 @@
       "'": "&#39;"
     })[character]);
   }
-  
+
   window.suDesktop.onMessageFromMain("session-attempts", (data) => {
     console.log(Object.keys(data.attempts).length);
     const attemptsDiv = document.querySelector("#attemptsdiv");
@@ -1483,6 +1483,21 @@
           attemptDiv.style.backgroundColor = status == "pending" ? "var(--brand)" : status == "accepted" ? "#00a000" : status == "busy" ? "#ff8100" : status == "error" ? "red" : "gray";
         }
       }
+    }
+  });
+
+  window.suDesktop.onMessageFromMain("login-details", (data) => {
+    console.log(data);
+    if (data.signedin && data.status === "active") {
+      usermenubutton.querySelector("span").textContent = data.user.name;
+      usermenubutton.querySelector("div").style.backgroundImage = `url(${data.user.image})`;
+      registeredSchedule = data.user.schedule;
+      usermenubutton.style.display = "flex";
+      signinbutton.style.display = "none";
+    }
+    else {
+      signinbutton.style.display = "block";
+      usermenubutton.style.display = "none";
     }
   });
 

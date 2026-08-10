@@ -32,8 +32,10 @@ function applyMainWindowInteractivity() {
 }
 
 function lockMainWindow(reason) {
-  mainWindowLocks.add(reason);
-  applyMainWindowInteractivity();
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindowLocks.add(reason);
+    applyMainWindowInteractivity();
+  }
 }
 
 function unlockMainWindow(reason) {
@@ -65,7 +67,7 @@ let activeWindow = null;
 function createLoading(force = false) {
   if (!force || !force.guest) lockMainWindow("loading");
   const win = new BrowserWindow({
-    width: 500,
+    width: 550,
     height: 300,
     titleBarStyle: 'hidden',
     frame: false,
@@ -76,19 +78,21 @@ function createLoading(force = false) {
     modal: force ? (force.parent ? force.parent : false) : false,
     webPreferences: {
       sandbox: false,
+      preload: path.join(__dirname, 'loadingpreload.js'),
       nodeIntegration: true,
       contextIsolation: true
     },
     backgroundColor: '#1e1e1e'
   });
   if (process.platform === 'darwin' && typeof win.setWindowButtonVisibility === "function") win.setWindowButtonVisibility(false);
-  win.loadFile(path.join(__dirname, 'loading.html'));
-  win.once("close", () => {
-    unlockMainWindow("loading");
-  });
   win.once('ready-to-show', async () => {
     win.show();
+    await win.webContents.executeJavaScript(`window.requestAnimationFrame(() => { document.body.classList.remove('invisible'); });`);
     if (force.signinrequested) force = { parent: force.parent };
+    if (force.signinprocess) {
+      await banner.getInformation(true);
+      if ((await banner.getSessionDetails()).signedIn) force.signedIn = true;
+    }
     const possiblesessions = force ? force : await banner.initInterface();
     if (possiblesessions.signedIn || possiblesessions.guest) {
       const mainWin = await createMainWindow();
@@ -112,6 +116,15 @@ function createLoading(force = false) {
       await setup.webContents.executeJavaScript(`window.requestAnimationFrame(() => { document.body.classList.remove('invisible'); LoadPage('login') });`);
     }
   });
+  win.loadFile(path.join(__dirname, 'loading.html'));
+  win.once("close", () => {
+    unlockMainWindow("loading");
+  });
+  win.webContents.on('before-input-event', (event, input) => {
+    if (input.key === 'F5' || (input.control && input.key.toLowerCase() === 'r') || (input.meta && input.key.toLowerCase() === 'r')) {
+      event.preventDefault();
+    }
+  });
 }
 
 let csvloaded = false;
@@ -122,10 +135,11 @@ async function createSetupWindow(parent) {
     width: 500,
     height: 700,
     titleBarStyle: 'hidden',
-    frame: false,
+    //frame: false,
     fullscreenable: false,
     maximizable: false,
     minimizable: false,
+    type: 'panel',
     show: false,
     resizable: false,
     modal: parent,
@@ -139,9 +153,13 @@ async function createSetupWindow(parent) {
   });
   if (process.platform === 'darwin' && typeof win.setWindowButtonPosition === "function") win.setWindowButtonPosition({ x: 19, y: 18 });
   win.loadFile('setup.html');
-  win.webContents.openDevTools();
   win.on("close", (e) => {
     unlockMainWindow("setup");
+  });
+  win.webContents.on('before-input-event', (event, input) => {
+    if (input.key === 'F5' || (input.control && input.key.toLowerCase() === 'r') || (input.meta && input.key.toLowerCase() === 'r')) {
+      event.preventDefault();
+    }
   });
   return await new Promise((resolve) => { win.once('ready-to-show', () => { resolve(win) }) });
 }
@@ -179,7 +197,7 @@ async function createMainWindow() {
   applyMainWindowInteractivity();
   if (process.platform === 'darwin' && typeof win.setWindowButtonPosition === "function") win.setWindowButtonPosition({ x: 19, y: 18 });
 
-  //win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (isAllowedExternalUrl(url)) {
@@ -204,6 +222,26 @@ async function createMainWindow() {
   });
   win.loadFile(path.join(__dirname, 'index.html'));
   while (!csvloaded) await delay(1);
+  await new Promise(async (resolve) => {
+    const bannerSession = await banner.getSessionDetails();
+    if (bannerSession.signedIn) {
+      if (bannerSession.user.pfp) {
+        await win.webContents.executeJavaScript(`new Promise((resolve, reject) => {
+          const img = new Image();
+
+          img.onload = () => resolve();
+          img.onerror = (err) => reject(new Error('Failed to load background image'));
+
+          img.src = "${bannerSession.user.pfp}";
+          if (img.complete) {
+            resolve();
+          }
+        });`);
+      }
+      win.webContents.send("login-details", { status: "active", signedin: true, process: null, user: { name: bannerSession.user.name, image: bannerSession.user.pfp, schedule: bannerSession.user.actualschedule } });
+    }
+    resolve();
+  });
   return win;
 }
 
@@ -232,10 +270,32 @@ ipcMain.handle("loadfinished", async () => {
 
 ipcMain.handle("signIn", async (event, form) => {
   if (!activeWindow) return;
-  if (activeWindow && activeWindow !== mainWindow && !activeWindow.isDestroyed()) {
-    activeWindow.close();
+  const currentSession = await banner.getSessionDetails();
+  if (!currentSession.sessionExists) {
+    console.log("No session exists, creating a new one...");
+    if (form.rushing) {
+      setTimeout(async () => {
+
+      }, 20);
+      return { s: false, w: true, d: "SESSIONGRABBING" };
+    }
+    else {
+      const result = await banner.getBannerSession();
+      if (!result.s) {
+        result.w = false;
+        return result;
+      }
+    }
   }
-  createLoading({ signin: form });
+  const result = await banner.signIn(form);
+
+  if (result.w) {
+    if (activeWindow && activeWindow !== mainWindow && !activeWindow.isDestroyed()) {
+      activeWindow.close();
+    }
+    createLoading({ signinprocess: true });
+  }
+  else return result;
 });
 
 ipcMain.handle("openAsGuest", async () => {

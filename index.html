@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://suis.sabanciuniv.edu data: 'unsafe-inline'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'" />
 <title>BannerBender</title>
 <link rel="stylesheet" href="style.css" />
 <link rel="stylesheet" href="fonts.css" />
@@ -20,9 +20,8 @@
       <div id="attemptsdiv" style="display:none;">
         <div><p>Session attempts:</p><div id="attemptscontainer"></div></div>
       </div>
-      <button class="btn banner" onclick="window.suDesktop.requestSignIn()">Sign in</button>
-      <button class="btn" id="openBannerLoginBtn" type="button" style="display:none;">Open Bannerweb</button>
-      <button class="btn banner" id="sendBannerBtn" type="button" disabled style="display:none;">Send selected once</button>
+      <button id="signinbutton" class="btn banner">Sign in</button>
+      <button id="usermenubutton" class="btn usermenu"><span></span><span>▾</span><div></div></button>
     </div>
   </div>
 </header>
