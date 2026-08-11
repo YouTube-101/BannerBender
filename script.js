@@ -154,6 +154,41 @@
       how: "The app checks for previous degree evaluation requests during the last semester and if there are any, it reads the results from those requests. If there are no previous requests, the app can submit a new degree evaluation request on your behalf and reads the results from that request. If an evaluation form submission is required, the app will request your explicit consent and you will always be shown the form summary before submission."
     },
   ]
+  const networkSettings = [
+    {
+      type: "header",
+      head: "Banner Contact Settings",
+      label: "These settings are for how the app contacts Banner.",
+    },
+    {
+      type: "checkbox",
+      default: true,
+      id: "AutoSessionRetry",
+      head: "Brute Force Session Allocation",
+      label: "Permit this app to send a login request every 1 second and use the session keys from a successful retry. In basic terms, it repeatedly tries to get to the login screen during \"System is busy or out of registration hours\" moments.",
+    },
+    {
+      type: "checkbox",
+      default: false,
+      id: "RequestDelay",
+      head: "Wait Before Request",
+      label: "Wait for a short time before sending a request to Banner. This is to prevent Banner from thinking that the app is a bot.",
+    },
+    {
+      type: "checkbox",
+      default: false,
+      id: "RequestNavigate",
+      head: "Navigate Before Request",
+      label: "Simulate user navigation before sending the final request to Banner. This is to prevent Banner from thinking that the app is a bot.",
+    },
+    {
+      type: "checkbox",
+      default: true,
+      id: "EfficientForms",
+      head: "Omit Unnecessary Fields in Forms",
+      label: "In registration submission forms, Banner usually fills out unnecessary fields with default values. This setting allows the app to omit those unnecessary fields and only fill out the required fields. This is slightly faster and more efficient. However, turning this off tries to prevent Banner from thinking that the app is a bot by simulating user behavior.",
+    }
+  ]
 
   $("settings").loadSetting = (index) => {
     Array.from($("settings").querySelector(".sidebar").children).forEach(button => {
@@ -162,8 +197,8 @@
     $("settings").querySelector(".sidebar").children[index].classList.add("active");
     $("settings").querySelector(".settings").innerHTML = '';
     console.log("Loading settings for index:", index);
-    if (index === 0) {
-      privacySettings.forEach(setting => {
+    if (index === 0 || index === 1) {
+      (index === 0 ? privacySettings : networkSettings).forEach(setting => {
         if (setting.type === "header") {
           const header = document.createElement("div");
           header.innerHTML = `<h3>${setting.head}</h3><p>${setting.label}</p>`;
@@ -175,7 +210,7 @@
           <div>
             <span></span>
             <span></span>
-            <div class="explanationboxes">
+            ${setting.why || setting.how ? `<div class="explanationboxes">
               <div class="explanation">
                 <div>
                   <span></span>
@@ -190,17 +225,19 @@
                 </div>
                 <button class="btn">Learn more</button>
               </div>
-            </div>
+            </div>`: ''}
           </div>
-          <input type="checkbox" id="bannerPrivacy${setting.id}" ${(setting.forced ? 'disabled checked' : '')}>`;
+          <input type="checkbox" id="bannerPrivacy${setting.id}" ${(setting.forced ? 'disabled checked' : setting.default ? 'checked' : '')}>`;
           switchLabel.classList.add("settingsSwitch");
           switchLabel.setAttribute("for", `bannerPrivacy${setting.id}`);
           switchLabel.children[0].children[0].textContent = setting.head;
           switchLabel.children[0].children[1].textContent = setting.label;
-          switchLabel.children[0].children[2].children[0].children[0].children[0].textContent = "Why do you need this?";
-          switchLabel.children[0].children[2].children[0].children[0].children[1].textContent = setting.why || "No explanation provided.";
-          switchLabel.children[0].children[2].children[1].children[0].children[0].textContent = "How do you access this information?";
-          switchLabel.children[0].children[2].children[1].children[0].children[1].textContent = setting.how || "No explanation provided.";
+          if (setting.why || setting.how) {
+            switchLabel.children[0].children[2].children[0].children[0].children[0].textContent = "Why do you need this?";
+            switchLabel.children[0].children[2].children[0].children[0].children[1].textContent = setting.why || "No explanation provided.";
+            switchLabel.children[0].children[2].children[1].children[0].children[0].textContent = "How do you access this information?";
+            switchLabel.children[0].children[2].children[1].children[0].children[1].textContent = setting.how || "No explanation provided.";
+          }
           $("settings").querySelector(".settings").appendChild(switchLabel);
         }
       });
