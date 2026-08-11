@@ -27,6 +27,7 @@
   const courseList = $("courseList");
   const signinbutton = $("signinbutton");
   const usermenubutton = $("usermenubutton");
+  const settingsbutton = $("settingsbutton");
   const scheduleWrap = $("scheduleWrap");
   const searchFieldFilter = $("searchFieldFilter");
   const creditFilter = $("creditFilter");
@@ -61,6 +62,187 @@
 
   signinbutton.addEventListener("click", () => {
     window.suDesktop.requestSignIn();
+  });
+
+  const privacySettings = [
+    {
+      type: "header",
+      head: "Required Access",
+      label: "These settings are required for the app to function properly."
+    },
+    {
+      type: "checkbox",
+      forced: true,
+      id: "Courses",
+      head: "Registered Course Read Access",
+      label: "Permit this app to read your registered courses from Banner.",
+      why: "To show your registered courses on the schedule view and to prevent any duplicate entries during registration.",
+      how: "During registration times, the app goes to the registration form page and reads the registered course numbers from that page. During non-registration times, the app goes to the detailed schedule page and reads the registered course numbers from that page."
+    },
+    {
+      type: "checkbox",
+      forced: true,
+      id: "BaseName",
+      head: "Basic Name Access",
+      label: "Permit this app to read your name from the registration page on Banner.",
+      why: "Just to make sure the app is being used by you and not someone else. This is a security measure to prevent accidental use by someone else.",
+      how: "On registration page and detailed schedule page, Banner shows the user's name on the top right corner of the page. The app effortlessly reads the name from that location. Please note that Banner returns the name with initials for middle names."
+    },
+    {
+      type: "header",
+      head: "Visual Access",
+      label: "These settings are optional and only benefits your user experience. Does not affect the app's core functionality."
+    },
+    {
+      type: "checkbox",
+      default: true,
+      id: "Image",
+      head: "Image Access",
+      label: "Permit this app to access your profile image from Banner.",
+      why: "Just to show your profile image on the top right corner of the window. This is purely cosmetic and does not affect the app's core functionality.",
+      how: "The app goes to the view my photo page under Personal Information section on Banner and gets the image from that page."
+    },
+    {
+      type: "checkbox",
+      default: true,
+      id: "FullName",
+      head: "Full Name Access",
+      label: "Permit this app to access your full name from Banner.\nThis permission is not necessary and this access won't be needed if your full name is only 2 words. This only matters to you if you have multiple words in your name.",
+      why: "Unlike basic name access, this permission is needed to display your full name without abbreviations on the top right corner of the window. This is purely cosmetic and does not affect the app's core functionality.",
+      how: "Banner does not provide your full name on most pages other than some personal information pages. The app goes to Student > Financial Aid > My Award Information > Payment Information page and reads the full name from that page. Yes, it does load your tuition information in order to get your full name. However, the app does not read any tuition information and only reads your full name from that page."
+    },
+    {
+      type: "header",
+      head: "Advanced Access",
+      label: "This app also features quality of life improvements that require additional access to your Banner account. These are optional and you are in control with what you would grant access to."
+    },
+    {
+      type: "checkbox",
+      id: "MajorsMinors",
+      head: "Program Access",
+      label: "Permit this app to access your majors and minors along with admit term from Banner.",
+      why: "To display whether a course you are looking at is required or a certain type of elective for your program. This is purely for giving you more information regarding your progress in your program and does not affect the app's core functionality.",
+      how: "The app goes to Student > Student Records > General Student Information page and reads your majors and minors along with admit term from that page."
+    },
+    {
+      type: "checkbox",
+      id: "FinalGrades",
+      head: "Final Grades Access",
+      label: "Permit this app to access your final grades of all terms from Banner.",
+      why: "To display whether a course you are looking can be registered to or not due to pre-requisites and other requirements.",
+      how: "The app goes to Student > Student Records > Final Grades page and loads the final grades of each term and reads the final grades from that page."
+    },
+    {
+      type: "header",
+      head: "Dangerous Access",
+      label: "These settings are for essential quality of life features that require write access. These settings WILL make changes on your behalf and WILL submit forms on your behalf. Regardless of given access, this app will always request your explicit consent before submitting any forms."
+    },
+    {
+      type: "checkbox",
+      id: "Registration",
+      head: "Registration Editing Access",
+      label: "Permit this app to submit registration changes on your behalf.",
+      why: "To allow you to submit registration forms directly from this app without having to go to Banner and typing all of your course numbers on a form. This is purely for your convenience.",
+      how: "The app creates a registration/add-drop form request that's specifically made for your courses and submits that form on your behalf. The app then reads the response from Banner and shows you the result of your registration request. The form submission will not be made without your explicit consent and you will always be shown the form summary before submission. You can choose how efficient/replicative you want the form submission to be. For that, please refer to Network settings."
+    },
+    {
+      type: "checkbox",
+      id: "DegreeEvaluation",
+      head: "Degree Evaluation Access",
+      label: "Permit this app to submit degree evaluation requests on your behalf.",
+      why: "A combinational alternative to program access and final grades access. For displaying pre-requisites and program requirement information on the course you are looking at. This permission is not necessary if you have already granted program access and final grades access. However, you can achieve a similar result by granting those two permissions instead of this one.",
+      how: "The app checks for previous degree evaluation requests during the last semester and if there are any, it reads the results from those requests. If there are no previous requests, the app can submit a new degree evaluation request on your behalf and reads the results from that request. If an evaluation form submission is required, the app will request your explicit consent and you will always be shown the form summary before submission."
+    },
+  ]
+
+  $("settings").loadSetting = (index) => {
+    Array.from($("settings").querySelector(".sidebar").children).forEach(button => {
+      button.classList.remove("active");
+    });
+    $("settings").querySelector(".sidebar").children[index].classList.add("active");
+    $("settings").querySelector(".settings").innerHTML = '';
+    console.log("Loading settings for index:", index);
+    if (index === 0) {
+      privacySettings.forEach(setting => {
+        if (setting.type === "header") {
+          const header = document.createElement("div");
+          header.innerHTML = `<h3>${setting.head}</h3><p>${setting.label}</p>`;
+          $("settings").querySelector(".settings").appendChild(header);
+        }
+        else {
+          const switchLabel = document.createElement("label");
+          switchLabel.innerHTML = `
+          <div>
+            <span></span>
+            <span></span>
+            <div class="explanationboxes">
+              <div class="explanation">
+                <div>
+                  <span></span>
+                  <span></span>
+                </div>
+                <button class="btn">Learn more</button>
+              </div>
+              <div class="explanation">
+                <div>
+                  <span></span>
+                  <span></span>
+                </div>
+                <button class="btn">Learn more</button>
+              </div>
+            </div>
+          </div>
+          <input type="checkbox" id="bannerPrivacy${setting.id}" ${(setting.forced ? 'disabled checked' : '')}>`;
+          switchLabel.classList.add("settingsSwitch");
+          switchLabel.setAttribute("for", `bannerPrivacy${setting.id}`);
+          switchLabel.children[0].children[0].textContent = setting.head;
+          switchLabel.children[0].children[1].textContent = setting.label;
+          switchLabel.children[0].children[2].children[0].children[0].children[0].textContent = "Why do you need this?";
+          switchLabel.children[0].children[2].children[0].children[0].children[1].textContent = setting.why || "No explanation provided.";
+          switchLabel.children[0].children[2].children[1].children[0].children[0].textContent = "How do you access this information?";
+          switchLabel.children[0].children[2].children[1].children[0].children[1].textContent = setting.how || "No explanation provided.";
+          $("settings").querySelector(".settings").appendChild(switchLabel);
+        }
+      });
+    }
+  }
+  Array.from($("settings").querySelector(".sidebar").children).forEach((button, index) => {
+    button.addEventListener("click", event => {
+      $("settings").loadSetting(index);
+    });
+  });
+  $("settings").initialize = () => {
+    $("settings").loadSetting(0);
+  }
+
+  document.querySelectorAll(".modal").forEach(dialog => {
+    dialog.show = async () => {
+      dialog.style.display = "flex";
+      dialog.style.animation = "modalBG 0.2s cubic-bezier(0, 1, 1, 1) forwards";
+      dialog.children[0].style.animation = "modalAppear 0.2s cubic-bezier(0, 1, 1, 1) forwards";
+      if (dialog.initialize) {
+        dialog.initialize();
+      }
+    }
+    dialog.hide = () => {
+      dialog.style.animation = "modalBGDisappear 0.2s cubic-bezier(1, 0, 1, 1) forwards";
+      dialog.children[0].style.animation = "modalDisppear 0.2s cubic-bezier(1, 0, 1, 1) forwards";
+      setTimeout(() => {
+        dialog.style.display = "none";
+      }, 200);
+    }
+    dialog.addEventListener("click", event => {
+      if (event.target === dialog) {
+        dialog.hide();
+      }
+    });
+    dialog.querySelector(".close").addEventListener("click", () => {
+      dialog.hide();
+    });
+  });
+
+  settingsbutton.addEventListener("click", () => {
+    $("settings").show();
   });
 
   cancelBannerSendBtn.addEventListener("click", () => {

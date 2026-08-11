@@ -143,6 +143,29 @@ function cookieExists(cookieName) {
     });
 }
 
+function deleteCookie(cookieName) {
+    return new Promise((resolve, reject) => {
+        cookieJar.getCookies(domain + (testenvironment ? "dolly" : "prod") + "/", (err, cookies) => {
+            if (err) {
+                reject(err);
+            } else {
+                const cookie = cookies.find(c => c.key === cookieName);
+                if (cookie) {
+                    cookieJar.removeCookie(cookie.domain, cookie.path, cookie.key, (err) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                } else {
+                    resolve(cookie !== undefined);
+                }
+            }
+        });
+    });
+}
+
 async function initInterface() {
     await initCookieJar();
     const sessionExists = await cookieExists("__gpi") && await cookieExists("__sli");
@@ -260,6 +283,7 @@ async function getInformation(displayStatus = false) {
     }
     catch (error) {
         console.error("Error while getting user information:", error);
+        await resetCookies();
         return;
     }
 }
