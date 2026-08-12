@@ -66,7 +66,8 @@ main{
   overflow:hidden;
 }
 .panel-head{padding:14px 16px;border-bottom:1px solid var(--line)}
-.panel-body{padding:14px 16px}
+.panel-body{padding:14px 16px;height: calc(100vh - 130px);}
+#controls{height:100%;display: grid;grid-template-rows: max-content max-content max-content max-content auto;}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .drop{
   border:2px dashed #9fb4dd;
@@ -202,10 +203,10 @@ input[type="search"]{
 .badge.aux{background:#f4ebff;color:#6941c6}
 .badge.selected{background:#eaf1ff;color:#1747bf}
 .course-list{
-  max-height: 76vh;
   overflow:auto;
   border-top:1px solid var(--line);
   margin:12px -16px -14px;
+  height: 100%;
 }
 .course-group{
   border-bottom:1px solid #edf0f4;
@@ -335,8 +336,12 @@ input[type="search"]{
 .fit-detail.bad{color:var(--danger)}
 .fit-detail.ok{color:var(--ok)}
 .fit-detail.unknown{color:var(--warn)}
-.conflict-note{
-  display:none;
+.conflict-note {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 200px;
+}
+.conflict-note > div{
   background:var(--danger-bg);
   color:#912018;
   border:1px solid #fecdca;

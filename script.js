@@ -1252,23 +1252,22 @@
 
   function renderSectionOption(section, compact = false) {
     const checked = state.selected.has(section.key);
-    const fit = evaluateSectionFit(section);
+    const issue = findIssue(section);
     const auxiliary = isLabOrRecitation(section);
     const meetings = section.meetings.length
       ? section.meetings.map(meeting =>
-        `${meeting.days.join("")} ${formatMinutes(meeting.start)}–${formatMinutes(meeting.end)}` +
-        `${meeting.location ? " · " + meeting.location : ""}` +
-        `${meeting.type ? " · " + meeting.type : ""}`
+        `${meeting.days.map(d => d === "M" ? "Monday" : d === "T" ? "Tuesday" : d === "W" ? "Wednesday" : d === "R" ? "Thursday" : d === "F" ? "Friday" : d === "S" ? "Saturday" : d).join("")} · ${formatMinutes(meeting.start)}–${formatMinutes(meeting.end)}` +
+        `${meeting.location ? " · " + meeting.location : ""}`
       ).join("<br>")
-      : "Time not announced";
+      : section.bypass ? "No lectures will be conducted" : "Time not announced";
 
     let optionClass = "section-option" + (compact ? " compact" : "");
     if (checked) optionClass += " selected-section";
-    if (fit.kind === "bad") optionClass += " conflicting-section";
+    if (issue && issue.kind === "bad") optionClass += " conflicting-section";
 
     const fitLabel = checked
-      ? (fit.kind === "bad" ? "Selected · conflict" : "Selected")
-      : fit.label;
+      ? (issue && issue.kind === "bad" ? "Selected · "+issue.label : "Selected")
+      : issue ? issue.label : "";
 
     return `<label class="${optionClass}">
       <input
@@ -1283,16 +1282,16 @@
             ${auxiliary ? `<span class="badge aux">${esc(auxiliaryLabel(section))}</span>` : ""}
             <span class="badge">CRN ${esc(section.crn || "—")}</span>
           </span>
-          <span class="fit-status ${fit.kind}">${esc(fitLabel)}</span>
+          <span class="fit-status ${issue?issue.kind:"ok"}">${esc(fitLabel)}</span>
         </span>
 
         <span class="section-meta">
           ${meetings}
-          ${section.instructors.length ? `<br>${esc(section.instructors.join(", "))}` : ""}
+          ${section.instructors.length ? `<br>${esc(section.instructors.map(s => s.replaceAll(" (P)","").trim()).join(", "))}` : ""}
         </span>
 
-        ${fit.detail
-        ? `<div class="fit-detail ${fit.kind}">${esc(fit.detail)}</div>`
+        ${(issue && issue.detail)
+        ? `<div class="fit-detail ${issue.kind}">${esc(issue.detail)}</div>`
         : ""}
       </span>
     </label>`;
@@ -1480,6 +1479,13 @@
   }
   window.addEventListener("resize", resizeSchedule);
 
+  function createWarning(text) {
+    const warning = document.createElement("div");
+    warning.textContent = text;
+    conflictNote.classList.add("conflict-note");
+    conflictNote.appendChild(warning);
+  }
+
   function renderSchedule() {
     const chosen = state.sections.filter(section =>
       state.selected.has(section.key)
@@ -1492,14 +1498,16 @@
       conflictNote.className = "conflict-note";
       return;
     }
-
+    conflictNote.innerHTML = '';
+    conflictNote.className = "conflict-note";
     if (conflicts.sectionKeys.size) {
-      conflictNote.className = "conflict-note show";
-      conflictNote.textContent =
-        `${conflicts.sectionKeys.size} selected section(s) are involved in a time conflict. ` +
-        `Conflicting blocks are outlined in red.`;
-    } else {
-      conflictNote.className = "conflict-note";
+      createWarning(`${conflicts.sectionKeys.size} selected section(s) are involved in a time conflict. ` +
+                    `Conflicting blocks are outlined in red.`);
+    }
+
+    const otherIssues = findIssues(chosen);
+    if (otherIssues.length) {
+      otherIssues.map(x => x.section.subject + " " + x.section.course + "-" + x.section.section + ": " + x.header).forEach(x => createWarning(x));
     }
 
     const gridHeight = minutesToPixels(END_MIN - START_MIN);
@@ -1571,7 +1579,72 @@
     });
     resizeSchedule();
   }
+  function findIssue(section, notimeconflicts) {
+    if (section.subject === "MATH" && section.course === "101" && section.section === "X") section.bypass = true;
+    if (section.subject === "IF" && section.course === "100" && section.section === "X") section.bypass = true;
+    if (section.bypass) {
+      return {
+        kind: "bad",
+        label: "Unavailable",
+        detail: "This section is only for students who passed the exam to be exempt from this course.",
+        header: "The section you selected is only available for students who are exempt from this course and registration for that section will be done by Foundations Development Directorate."
+      }
+    }
 
+    const samesection = ["SPS 101","SPS 102","SPS 303","ECON 201"];
+    if (samesection.includes(section.subject + " " + section.course.substring(0,3))) {
+      const parentCourse = courseForSection(section);
+      const selected = selectedCRNs()
+      if (parentCourse.mainSections.map(x => x.crn).includes(section.crn)) {
+        // This is the main section, check if the user has selected any aux
+        const chosenAux = parentCourse.auxiliarySections.find(x => selected.includes(x.crn));
+        if (chosenAux) {
+          if (!chosenAux.section.startsWith(section.section)) {
+            const lastLetter = chosenAux.course.substring(chosenAux.course.length - 1);
+            return {
+              kind: "bad",
+              label: "Section Restricted",
+              detail: "Section not available when" + (lastLetter==="L"?" lab":lastLetter==="R"?" recitation":lastLetter==="D"?" discussion":"") + " section " + chosenAux.section + " is selected.",
+              header: (lastLetter==="L"?"Lab":lastLetter==="R"?"Recitation":lastLetter==="D"?"Discussion":"Corequisite") + " section " + chosenAux.section + " is not compatible with this section."
+            }
+          }
+        }
+      }
+      else {
+        // This is not the main section, check if the user has selected any mains
+        const chosenMain = parentCourse.mainSections.find(x => selected.includes(x.crn));
+        if (chosenMain) {
+          if (!section.section.startsWith(chosenMain.section)) {
+            return {
+              kind: "bad",
+              label: "Section Restricted",
+              detail: "Section not available when lecture section " + chosenMain.section + " is selected.",
+              header: "Lecture section " + chosenMain.section + " is not compatible with this section."
+            }
+          }
+        }
+      }
+    }
+
+    if (notimeconflicts) return null;
+    const fit = evaluateSectionFit(section);
+    if (fit.kind === "bad" || fit.kind === "unknown") {
+      return {
+        kind: fit.kind,
+        label: fit.label,
+        detail: fit.detail
+      }
+    }
+    return null;
+  }
+  function findIssues(sections) {
+    const issues = [];
+    sections.forEach(section => {
+      const issue = findIssue(section, true);
+      if (issue) issues.push({section: section, ...issue});
+    })
+    return issues;
+  }
   function findConflicts(sections) {
     const eventIds = new Set();
     const sectionKeys = new Set();
