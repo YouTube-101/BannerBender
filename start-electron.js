@@ -15,7 +15,9 @@ if (!electronPath || !fs.existsSync(electronPath)) {
   process.exit(1);
 }
 
-const electronProcess = spawn(electronPath, ["."], {
+const customArgs = process.argv.slice(2);
+
+const electronProcess = spawn(electronPath, [".", ...customArgs], {
   cwd: __dirname,
   stdio: "inherit"
 });

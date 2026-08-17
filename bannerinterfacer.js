@@ -102,6 +102,20 @@ async function requestToBanner(URL, method = "GET", body = null, extraHeaders = 
     obj.dom = $;
     return obj;
 };
+
+async function requestToPublicBanner(URL, method = "GET", body = null) {
+    const fetchRes = await fetch(domain + (testenvironment ? "dolly" : "prod") + "/" + URL, {
+        "headers": method !== "GET" ? { "content-type": "application/x-www-form-urlencoded" } : {},
+        "redirect": 'manual',
+        "method": method,
+        "body": body
+    });
+    const obj = { s: fetchRes.status, dom: null };
+    const html = await fetchRes.text();
+    obj.dom = cheerio.load(html);
+    return obj;
+}
+
 function broadcastToAllWindows(channel, data) {
     const allWindows = BrowserWindow.getAllWindows();
     allWindows.forEach((window) => {
@@ -396,4 +410,8 @@ async function resetCookies() {
     bannerSession.signedIn = false;
 }
 
-module.exports = { initInterface, getBannerSession, signIn, getSessionDetails, resetCookies, getInformation };
+function getCurrentTerm() {
+    return thisterm;
+}
+
+module.exports = { initInterface, getBannerSession, signIn, getSessionDetails, resetCookies, getInformation, requestToPublicBanner, getCurrentTerm };

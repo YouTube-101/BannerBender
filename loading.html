@@ -26,16 +26,87 @@
             top: 0;
             left: 0;
             transition: opacity 0.5s;
+            overflow: hidden;
         }
         * {
             font-family:Nexa,Roboto,Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
             line-height: 1.2;
             margin: 0;
         }
+        #loadingbg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            max-width: 100vw;
+            max-height: 100vh;
+            height: 100vh;
+            width: 100vw;
+            opacity: 0.1;
+            --size: 50px;
+            --time: 10s;
+            --angle: 30deg;
+            --uptime: 4s;
+        }
+        #loadingbg > div {
+            background-image: url("loadingbg.svg");
+            background-size: var(--size);
+            background-position: center;
+            background-repeat: repeat;
+            min-height: var(--size);
+            width: calc(100% + (100% * cos(var(--angle))));
+        }
+        #loadingbg > div:nth-child(odd) {
+            animation: bgscrollleft var(--time) linear infinite, bgscrollup var(--uptime) linear infinite;
+        }
+        #loadingbg > div:nth-child(even) {
+            animation: bgscrollright var(--time) linear infinite, bgscrollup var(--uptime) linear infinite;
+        }
+        @keyframes bgscrollleft {
+            0% {
+                background-position: 0px center;
+            }
+            100% {
+                background-position: var(--size) center;
+            }
+        }
+        @keyframes bgscrollright {
+            0% {
+                background-position: var(--size) center;
+            }
+            100% {
+                background-position: 0px center;
+            }
+        }
+        @keyframes bgscrollup {
+            0% {
+                transform: rotate(var(--angle)) translateY(0px);
+            }
+            100% {
+                transform: rotate(var(--angle)) translateY(calc(var(--size) * -2 * (cos(var(--angle)))));
+            }
+        }
     </style>
 </head>
 
 <body>
+    <div id="loadingbg">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
     <div id="genericloading">
         <h1>Loading...</h1>
     </div>
@@ -47,9 +118,15 @@
             <span>Grabbing your courses...</span>
         </div>
     </div>
+    <div id="scraperloading" style="opacity: 0;">
+        <h1>Scraping...</h1>
+        <span>Starting...</span>
+        <div style="position:absolute; bottom: 0px; left: 0px; width: 0%; height: 15px; background-color: #007bff;"></div>
+    </div>
     <script>
         const genericLoading = document.getElementById("genericloading");
         const loginLoading = document.getElementById("loginloading");
+        const scraperLoading = document.getElementById("scraperloading");
 
         window.suDesktop.onMessageFromMain("login-information", (data) => {
             genericLoading.style.opacity = 0;
@@ -60,6 +137,14 @@
                 if (data.user.image) loginLoading.querySelector("div").style.backgroundImage = `url(${data.user.image})`;
             }
             loginLoading.querySelector("span").textContent = data.process;
+        });
+
+        window.suDesktop.onMessageFromMain("scraper-information", (data) => {
+            genericLoading.style.opacity = 0;
+            scraperLoading.style.opacity = 1;
+            if (data.h) scraperLoading.querySelector("h1").textContent = data.h;
+            if (data.t) scraperLoading.querySelector("span").textContent = data.t;
+            if (data.p !== undefined) scraperLoading.querySelector("div").style.width = (data.p*100) + "%";
         });
     </script>
 </body>

@@ -3,6 +3,7 @@ const fsp = require("fs/promises");
 const path = require("path");
 const save = require("./save.js");
 const banner = require("./bannerinterfacer.js");
+const scraper = require("./coursescraper.js");
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -84,10 +85,22 @@ function createLoading(force = false) {
     },
     backgroundColor: '#1e1e1e'
   });
+  const startWithScraping = process.argv.includes("scrape");
+  const showOnlyBG = (process.argv.includes("pause") && false);
   if (process.platform === 'darwin' && typeof win.setWindowButtonVisibility === "function") win.setWindowButtonVisibility(false);
   win.once('ready-to-show', async () => {
     win.show();
     await win.webContents.executeJavaScript(`window.requestAnimationFrame(() => { document.body.classList.remove('invisible'); });`);
+    if (startWithScraping) {
+      win.webContents.send("scraper-information", { h: "Starting scraper...", t: "Initializing..." });
+      await scraper.generateCSV();
+      win.close();
+      return;
+    }
+    if (showOnlyBG) {
+      win.webContents.openDevTools();
+      return;
+    }
     if (force.signinrequested) force = { parent: force.parent };
     if (force.signinprocess) {
       await banner.getInformation(true);
@@ -296,6 +309,11 @@ ipcMain.handle("signIn", async (event, form) => {
     createLoading({ signinprocess: true });
   }
   else return result;
+});
+
+
+ipcMain.handle("scrapeCourses", async (event, form) => {
+  await scraper.generateCSV();
 });
 
 ipcMain.handle("openAsGuest", async () => {

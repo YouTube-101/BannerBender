@@ -7,6 +7,7 @@ const {
 
 contextBridge.exposeInMainWorld("suDesktop", {
   loadCourseCsv: () => ipcRenderer.invoke("courses:load-default"),
+  scrapeCourses: () => ipcRenderer.invoke("scrapeCourses"),
   requestSignIn: () => ipcRenderer.invoke("requestSignIn"),
   loadFinished: async () => {
     await ipcRenderer.invoke("loadfinished");
