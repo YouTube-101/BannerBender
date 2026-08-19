@@ -1070,7 +1070,6 @@
   }
 
   async function loadCSVFromGitHub() {
-    const result = await window.suDesktop.loadCourseCsv();
     if (localStorage.getItem("registeredMajors")) {
       const json = JSON.parse(localStorage.getItem("registeredMajors"));
       registeredMajors.level = json.level;
@@ -1088,6 +1087,8 @@
         if (!window.suDesktop?.loadCourseCsv) {
           throw new Error("Electron desktop bridge is unavailable.");
         }
+
+        const result = await window.suDesktop.loadCourseCsv();
         loadCSVText(result.text, result.source);
       } catch (error) {
         console.error(error);
