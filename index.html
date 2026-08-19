@@ -8,6 +8,10 @@
 <link rel="stylesheet" href="style.css" />
 <link rel="stylesheet" href="fonts.css" />
 <script defer src="script.js"></script>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<meta id="version" name="suchedule-version" content="2026.08.19.1" />
 </head>
 <body class="invisible">
 <header>
@@ -29,6 +33,16 @@
   <section class="panel">
     <div class="panel-head"><strong>Courses</strong></div>
     <div class="panel-body">
+      <input id="fileInput" type="file" accept=".csv,text/csv" hidden />
+      <div class="drop" id="dropZone" style="display:none">
+        <strong id="csvSourceLabel">Loading sabanci_courses.csv from GitHub…</strong>
+        <span class="small">Click here or drop a file to use a different CSV.</span>
+        <div class="csv-status loading" id="csvStatus">Connecting to the course-data file…</div>
+      </div>
+      <div class="row" style="margin-top:8px;display:none;">
+        <button class="btn" id="reloadCsvBtn" type="button">Reload GitHub CSV</button>
+      </div>
+
       <div id="controls" style="display:none;">
         <input type="search" id="search" placeholder="Search course code, e.g. CS 204..." />
         <div class="filter-row">
@@ -72,21 +86,16 @@
   </section>
 </main>
 
-<dialog id="bannerConfirmDialog" class="banner-dialog">
-  <div class="banner-dialog-body">
-    <h2>Send selected CRNs to Bannerweb?</h2>
+<dialog id="updateDialog" class="update-dialog">
+  <div class="update-dialog-body">
+    <h2>New version available</h2>
     <p>
-      This opens the official Bannerweb registration endpoint once in a new tab.
-      You must already be logged into Bannerweb in this browser.
+      A newer version of SU Course Schedule Builder has been published.
+      Reload once to switch to the newest files.
     </p>
-    <div id="bannerCrnPreview" class="banner-crns"></div>
-    <div class="banner-warning">
-      This site cannot read Bannerweb's result, current registered courses, or registration errors.
-      It sends additions only and does not automatically drop existing courses.
-    </div>
-    <div class="row" style="justify-content:flex-end;margin-top:16px">
-      <button class="btn" id="cancelBannerSendBtn" type="button">Cancel</button>
-      <button class="btn banner" id="confirmBannerSendBtn" type="button">Open once in Bannerweb</button>
+    <div class="update-dialog-actions">
+      <button class="btn" id="updateLaterBtn" type="button">Later</button>
+      <button class="btn primary" id="updateNowBtn" type="button">Update now</button>
     </div>
   </div>
 </dialog>
@@ -110,5 +119,111 @@
     </div>
   </div>
 </dialog>
+<script>
+(() => {
+  "use strict";
+
+  const PAGE_VERSION = document.getElementById("version").getAttribute("content");
+  const UPDATE_ATTEMPT_KEY = "sucheduleUpdateAttemptedVersion";
+  const UPDATE_LATER_KEY = "sucheduleUpdateLaterVersion";
+
+  async function clearOldAppCaches() {
+    try {
+      if ("caches" in window) {
+        const names = await caches.keys();
+        await Promise.all(names.map(name => caches.delete(name)));
+      }
+    } catch (error) {
+      console.warn("Could not clear browser caches.", error);
+    }
+
+    try {
+      if ("serviceWorker" in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map(registration => registration.unregister()));
+      }
+    } catch (error) {
+      console.warn("Could not unregister service workers.", error);
+    }
+  }
+
+  async function forceNewestVersion(latestVersion) {
+    // Remember this update attempt so a deliberately mismatched test version
+    // cannot trap the user in an endless popup/reload loop.
+    sessionStorage.setItem(UPDATE_ATTEMPT_KEY, latestVersion);
+    sessionStorage.removeItem(UPDATE_LATER_KEY);
+
+    await clearOldAppCaches();
+
+    const url = new URL(window.location.href);
+    url.searchParams.set("appVersion", latestVersion || Date.now().toString());
+    url.searchParams.set("refresh", Date.now().toString());
+
+    window.location.replace(url.toString());
+  }
+
+  async function checkForNewVersion() {
+    try {
+      const response = await fetch(
+        `version.json?check=${Date.now()}`,
+        {cache:"no-store"}
+      );
+
+      if (!response.ok) return;
+
+      const data = await response.json();
+      const latestVersion = String(data.version || "").trim();
+
+      if (!latestVersion || latestVersion === PAGE_VERSION) {
+        sessionStorage.removeItem(UPDATE_ATTEMPT_KEY);
+        sessionStorage.removeItem(UPDATE_LATER_KEY);
+        return;
+      }
+
+      // Do not repeatedly show the same version after the user already
+      // clicked Update Now during this browser session.
+      if (sessionStorage.getItem(UPDATE_ATTEMPT_KEY) === latestVersion) {
+        return;
+      }
+
+      // "Later" suppresses only this exact version for this tab/session.
+      if (sessionStorage.getItem(UPDATE_LATER_KEY) === latestVersion) {
+        return;
+      }
+
+      const dialog = document.getElementById("updateDialog");
+      const updateButton = document.getElementById("updateNowBtn");
+      const laterButton = document.getElementById("updateLaterBtn");
+
+      if (!dialog || !updateButton || !laterButton) return;
+
+      updateButton.onclick = () => forceNewestVersion(latestVersion);
+
+      laterButton.onclick = () => {
+        sessionStorage.setItem(UPDATE_LATER_KEY, latestVersion);
+        dialog.close();
+      };
+
+      if (typeof dialog.showModal === "function") {
+        dialog.showModal();
+      } else {
+        const shouldUpdate = confirm(
+          "A newer version is available. Reload now?"
+        );
+
+        if (shouldUpdate) {
+          forceNewestVersion(latestVersion);
+        } else {
+          sessionStorage.setItem(UPDATE_LATER_KEY, latestVersion);
+        }
+      }
+    } catch (error) {
+      console.warn("Version check failed.", error);
+    }
+  }
+
+  window.addEventListener("DOMContentLoaded", checkForNewVersion);
+})();
+</script>
 </body>
 </html>

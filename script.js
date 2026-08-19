@@ -1,7 +1,10 @@
 (() => {
   "use strict";
 
-  const BANNER_BASE = "https://suis.sabanciuniv.edu/prod";
+  const CSV_URL = "./scrapeResults/courses.csv";
+  const SAVE_SLOTS_KEY = "suScheduleNamedSlotsV2";
+  const PREVIOUS_SAVE_SLOTS_KEY = "suScheduleSaveSlotsV1";
+  const LEGACY_SAVE_KEY = "suScheduleSelectionV2";
   const START_MIN = 8 * 60 + 40;
   const END_MIN = 21 * 60 + 30;
   const SLOT_HEIGHT = 64;
@@ -24,6 +27,11 @@
   };
 
   const $ = id => document.getElementById(id);
+  const fileInput = $("fileInput");
+  const dropZone = $("dropZone");
+  const reloadCsvBtn = $("reloadCsvBtn");
+  const csvStatus = $("csvStatus");
+  const csvSourceLabel = $("csvSourceLabel");
   const controls = $("controls");
   const courseList = $("courseList");
   const signinbutton = $("signinbutton");
@@ -39,10 +47,12 @@
   const selectedSummaryWrap = $("selectedSummaryWrap");
   const selectedSummaryLabel = $("selectedSummaryLabel");
   const selectedSummaryList = $("selectedSummaryList");
-  const bannerConfirmDialog = $("bannerConfirmDialog");
-  const bannerCrnPreview = $("bannerCrnPreview");
-  const cancelBannerSendBtn = $("cancelBannerSendBtn");
-  const confirmBannerSendBtn = $("confirmBannerSendBtn");
+  const saveSlotSelect = $("saveSlotSelect");
+  const renameSlotInput = $("renameSlotInput");
+  const addSaveSlotBtn = $("addSaveSlotBtn");
+  const renameSaveSlotBtn = $("renameSaveSlotBtn");
+  const deleteSaveBtn = $("deleteSaveBtn");
+  const saveStatus = $("saveStatus");
   let registeredSchedule = [];
   let pendingBannerUrl = "";
   const registeredMajors = {
@@ -53,12 +63,31 @@
     admits: {}
   };
 
+  dropZone.addEventListener("click", () => fileInput.click());
+  fileInput.addEventListener("change", event => loadFile(event.target.files[0]));
+
+  ["dragenter", "dragover"].forEach(type => {
+    dropZone.addEventListener(type, event => {
+      event.preventDefault();
+      dropZone.classList.add("drag");
+    });
+  });
+
+  ["dragleave", "drop"].forEach(type => {
+    dropZone.addEventListener(type, event => {
+      event.preventDefault();
+      dropZone.classList.remove("drag");
+    });
+  });
+
+  dropZone.addEventListener("drop", event => loadFile(event.dataTransfer.files[0]));
+  reloadCsvBtn.addEventListener("click", loadCSVFromGitHub);
+
   search.addEventListener("input", renderCourseList);
   searchFieldFilter.addEventListener("change", () => {
     const placeholders = {
       coursecode: "Search course code, e.g. CS 204...",
-      instructor: "Search instructor name...",
-      crn: "Search CRN..."
+      instructor: "Search instructor name..."
     };
 
     search.placeholder =
@@ -97,7 +126,14 @@
 
   async function loadMajorData() {
     Object.keys(majorRequirements).forEach(key => delete majorRequirements[key]);
-    const majorDataText = await window.suDesktop.getMajor(registeredMajors.level, registeredMajors.major);
+    const majorDataText = await (async () => {
+      if (window.suDesktop) return await window.suDesktop.getMajor(registeredMajors.level, registeredMajors.major);
+      else {
+        const filePath = registeredMajors.level === "MN" ? `scrapeResults/Minors/${registeredMajors.major}.csv` : `scrapeResults/${registeredMajors.level}Majors/${registeredMajors.major}.csv`;
+        const raw = await fetch(filePath, { cache: "no-store", method: "GET" });
+        return await raw.text();
+      }
+    })();
     if (!majorDataText) return null;
     const primaryAdmit = registeredMajors.admits[registeredMajors.major] || state.term;
     majorRequirements[registeredMajors.major] = parseMajor(parseCSV(majorDataText), primaryAdmit);
@@ -239,7 +275,7 @@
     }
   ]
 
-  $("settings").loadSetting = (index) => {
+  $("settings").loadSetting = async (index) => {
     Array.from($("settings").querySelector(".sidebar").children).forEach(button => {
       button.classList.remove("active");
     });
@@ -301,7 +337,29 @@
       setMajors.level = registeredMajors.level;
       setMajors.major = registeredMajors.major;
       setMajors.double = registeredMajors.double;
-      const allMajors = window.suDesktop.getAllMajors();
+      let allMajors = {
+        UG: [],
+        MX: [],
+        PD: [],
+        DM: [],
+        MN: []
+      };
+      if (window.suDesktop) {
+        allMajors = window.suDesktop.getAllMajors();
+      }
+      else {
+        const majorText = await fetch("scrapeResults/majorNames.csv", { cache: "no-store", method: "GET" });
+        const majorNames = await majorText.text()
+        majorNames.split("\n").filter(x => x.trim() !== "").forEach(x => {
+          const idx = x.indexOf(",");
+          const line = { k: x.substring(0, idx), n: x.substring(idx + 1).replaceAll("\"", "") };
+          if (line.k.endsWith("-MINOR") && !allMajors.MN.includes(line)) allMajors.MN.push(line);
+          else if (line.k.endsWith("-DM") && !allMajors.DM.includes(line)) allMajors.DM.push(line);
+          else if (line.k.startsWith("PHD") && !allMajors.PD.includes(line)) allMajors.PD.push(line);
+          else if (line.k.startsWith("M") && !allMajors.MX.includes(line)) allMajors.MX.push(line);
+          else if (line.k.startsWith("B") && !allMajors.UG.includes(line)) allMajors.UG.push(line);
+        });
+      }
       // sort by name alphabetically
       allMajors.UG.sort((a, b) => a.n > b.n);
       allMajors.MX.sort((a, b) => a.n > b.n);
@@ -523,7 +581,7 @@
     });
   });
   $("settings").initialize = () => {
-    $("settings").loadSetting(0);
+    $("settings").loadSetting(window.suDesktop ? 0 : 2);
   }
 
   document.querySelectorAll(".modal").forEach(dialog => {
@@ -605,105 +663,359 @@
     return dialog;
   }
 
-
-  cancelBannerSendBtn.addEventListener("click", () => {
-    pendingBannerUrl = "";
-    bannerConfirmDialog.close();
-  });
-  confirmBannerSendBtn.addEventListener("click", () => {
-    if (!pendingBannerUrl) return;
-    const url = pendingBannerUrl;
-    pendingBannerUrl = "";
-    bannerConfirmDialog.close();
-    window.open(url, "_blank", "noopener");
-  });
-  function saveState() {
-    localStorage.setItem("suScheduleSelectionV2", JSON.stringify([...state.selected]));
-  }
-  function loadState() {
-    const saved = JSON.parse(localStorage.getItem("suScheduleSelectionV2") || "[]");
-    normalizeExclusiveSelection(saved);
-    renderAll();
-    return;
+  function sanitizeSlotName(value, fallback = "Untitled schedule") {
+    const name = String(value || "").trim().replace(/\s+/g, " ");
+    return (name || fallback).slice(0, 60);
   }
 
-  function selectedCRNs() {
-    return [...new Set(
-      state.sections
-        .filter(section => state.selected.has(section.key))
-        .map(section => String(section.crn || "").trim())
-        .filter(crn => /^\d+$/.test(crn))
-    )];
+  function makeSlotId() {
+    if (window.crypto && typeof window.crypto.randomUUID === "function") {
+      return window.crypto.randomUUID();
+    }
+
+    return `slot-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
   }
 
-  function buildBannerAddUrl(term, crns) {
-    const params = new URLSearchParams();
-    params.append("term_in", term);
+  function normalizeStoredSlot(value, index = 0) {
+    if (!value || typeof value !== "object") return null;
+    if (!Array.isArray(value.selected)) return null;
 
-    [
-      ["RSTS_IN", "DUMMY"],
-      ["assoc_term_in", "DUMMY"],
-      ["CRN_IN", "DUMMY"],
-      ["start_date_in", "DUMMY"],
-      ["end_date_in", "DUMMY"],
-      ["SUBJ", "DUMMY"],
-      ["CRSE", "DUMMY"],
-      ["SEC", "DUMMY"],
-      ["LEVL", "DUMMY"],
-      ["CRED", "DUMMY"],
-      ["GMOD", "DUMMY"],
-      ["TITLE", "DUMMY"],
-      ["MESG", "DUMMY"],
-      ["REG_BTN", "DUMMY"],
-      ["MESG", "DUMMY"]
-    ].forEach(([name, value]) => params.append(name, value));
+    return {
+      id: String(value.id || makeSlotId()),
+      name: sanitizeSlotName(value.name, `Schedule ${index + 1}`),
+      selected: value.selected,
+      savedAt: value.savedAt || ""
+    };
+  }
 
-    crns.forEach(crn => {
-      params.append("RSTS_IN", "RW");
-      params.append("CRN_IN", crn);
-      params.append("assoc_term_in", "");
-      params.append("start_date_in", "");
-      params.append("end_date_in", "");
+  function writeSaveSlots(slots) {
+    localStorage.setItem(SAVE_SLOTS_KEY, JSON.stringify(slots));
+  }
+
+  function readSaveSlots() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(SAVE_SLOTS_KEY) || "[]");
+      if (!Array.isArray(parsed)) return [];
+
+      const normalized = parsed
+        .map((slot, index) => normalizeStoredSlot(slot, index))
+        .filter(Boolean);
+
+      // Keep IDs/names normalized.
+      if (JSON.stringify(parsed) !== JSON.stringify(normalized)) {
+        writeSaveSlots(normalized);
+      }
+
+      return normalized;
+    } catch (error) {
+      console.warn("Could not read schedule save slots.", error);
+      return [];
+    }
+  }
+
+  function migrateOldSaveDataOnce() {
+    if (localStorage.getItem(SAVE_SLOTS_KEY) !== null) return;
+
+    let migrated = [];
+
+    try {
+      const previousRaw = localStorage.getItem(PREVIOUS_SAVE_SLOTS_KEY);
+
+      if (previousRaw !== null) {
+        const previous = JSON.parse(previousRaw);
+
+        if (Array.isArray(previous)) {
+          migrated = previous
+            .map((slot, index) => normalizeStoredSlot(slot, index))
+            .filter(Boolean);
+        } else if (previous && typeof previous === "object") {
+          migrated = Object.keys(previous)
+            .map(Number)
+            .filter(Number.isInteger)
+            .filter(key => key > 0)
+            .sort((a, b) => a - b)
+            .map((key, index) => {
+              const slot = normalizeStoredSlot(previous[String(key)], index);
+              if (!slot) return null;
+              slot.name = sanitizeSlotName(slot.name, `Schedule ${key}`);
+              return slot;
+            })
+            .filter(Boolean);
+        }
+      }
+
+      if (!migrated.length) {
+        const legacy = JSON.parse(localStorage.getItem(LEGACY_SAVE_KEY) || "[]");
+        if (Array.isArray(legacy) && legacy.length) {
+          migrated = [{
+            id: makeSlotId(),
+            name: "Imported schedule",
+            selected: legacy,
+            savedAt: new Date().toISOString()
+          }];
+        }
+      }
+    } catch (error) {
+      console.warn("Could not migrate old save data.", error);
+      migrated = [];
+    }
+
+    writeSaveSlots(migrated);
+
+    // Old keys are removed so deleted slots cannot reappear.
+    localStorage.removeItem(PREVIOUS_SAVE_SLOTS_KEY);
+    localStorage.removeItem(LEGACY_SAVE_KEY);
+  }
+
+  function currentSlotId() {
+    return saveSlotSelect.value || "";
+  }
+
+  function currentSlot(slots = readSaveSlots()) {
+    const id = currentSlotId();
+    return slots.find(slot => slot.id === id) || null;
+  }
+
+  function setSaveStatus(message) {
+    saveStatus.textContent = message;
+    window.clearTimeout(setSaveStatus.timeoutId);
+
+    if (message) {
+      setSaveStatus.timeoutId = window.setTimeout(() => {
+        saveStatus.textContent = "";
+      }, 2200);
+    }
+  }
+
+  function savedSelectionCreditText(selectedKeys) {
+    if (!Array.isArray(selectedKeys) || !selectedKeys.length) {
+      return "0 credits";
+    }
+
+    // Before the CSV finishes loading we cannot map stored section keys
+    // back to course credits yet. refreshSaveSlotUI() runs again after load.
+    if (!state.sections.length) {
+      return "credits loading…";
+    }
+
+    const selectedSet = new Set(selectedKeys);
+    const uniqueCourses = new Map();
+
+    state.sections.forEach(section => {
+      if (!selectedSet.has(section.key) || isLabOrRecitation(section)) return;
+
+      const courseKey = `${section.subject}:${canonicalCourseNumber(section)}`;
+
+      if (!uniqueCourses.has(courseKey)) {
+        uniqueCourses.set(courseKey, numericCredits(section.credits));
+      } else if (uniqueCourses.get(courseKey) === null) {
+        uniqueCourses.set(courseKey, numericCredits(section.credits));
+      }
     });
 
-    params.append("regs_row", "0");
-    params.append("wait_row", "0");
-    params.append("add_row", String(crns.length));
-    params.append("REG_BTN", "Submit Changes");
+    const credits = [...uniqueCourses.values()];
+    const knownTotal = credits.reduce(
+      (sum, value) => sum + (value ?? 0),
+      0
+    );
+    const unknownCount = credits.filter(value => value === null).length;
 
-    return `${BANNER_BASE}/su_registration.p_su_register?${params.toString()}`;
+    return (
+      `${formatCredits(knownTotal)} credits` +
+      (unknownCount ? ` + ${unknownCount} unknown` : "")
+    );
   }
 
-  function prepareBannerSend() {
-    const term = state.term;
-    const crns = selectedCRNs();
+  function refreshSaveSlotUI(preferredId = currentSlotId()) {
+    const slots = readSaveSlots();
 
-    if (!/^\d{6}$/.test(term)) {
-      alert("The term is not valid. Please check the CSV file.");
+    if (!slots.length) {
+      saveSlotSelect.innerHTML =
+        `<option value="">No save slots</option>`;
+
+      saveSlotSelect.value = "";
+
+      renameSlotInput.value = "";
+      renameSlotInput.hidden = true;
+      renameSlotInput.disabled = true;
+
+      updateSaveSlotButtons();
       return;
     }
 
-    if (!crns.length) {
-      alert("Select at least one section with a valid CRN first.");
-      return;
+    saveSlotSelect.innerHTML = slots.map(slot => {
+      const status = savedSelectionCreditText(slot.selected);
+
+      return `<option value="${esc(slot.id)}">${esc(slot.name)} · ${esc(status)}</option>`;
+    }).join("");
+
+    const requestedExists = slots.some(slot => slot.id === preferredId);
+    saveSlotSelect.value = requestedExists ? preferredId : slots[0].id;
+
+    const selected = currentSlot(slots);
+
+    renameSlotInput.hidden = true;
+    renameSlotInput.disabled = false;
+    renameSlotInput.value = selected?.name || "";
+
+    updateSaveSlotButtons();
+  }
+  function loadSlotIntoSchedule(slot, showStatus = true) {
+    if (!slot || !state.sections.length) return;
+
+    normalizeExclusiveSelection(slot.selected);
+    renderAll();
+
+    if (showStatus) {
+      setSaveStatus(`Loaded ${slot.name}`);
+    }
+  }
+  function updateSaveSlotButtons() {
+    const slots = readSaveSlots();
+    const slot = currentSlot(slots);
+    const hasSlot = Boolean(slot);
+
+    saveSlotSelect.disabled = !slots.length;
+    renameSlotInput.disabled = !hasSlot;
+    renameSaveSlotBtn.disabled = !hasSlot;
+    deleteSaveBtn.disabled = !hasSlot;
+
+    addSaveSlotBtn.disabled = false;
+  }
+
+  function ensureActiveSlotForAutosave() {
+    let slots = readSaveSlots();
+    let slot = currentSlot(slots);
+
+    if (slot) return { slots, slot };
+
+    slot = {
+      id: makeSlotId(),
+      name: `Schedule ${slots.length + 1}`,
+      selected: [],
+      savedAt: ""
+    };
+
+    slots.push(slot);
+    writeSaveSlots(slots);
+    refreshSaveSlotUI(slot.id);
+
+    return { slots, slot };
+  }
+
+  function autosaveCurrentSelection() {
+    const { slots, slot } = ensureActiveSlotForAutosave();
+
+    slot.selected = [...state.selected];
+    slot.savedAt = new Date().toISOString();
+
+    writeSaveSlots(slots);
+    refreshSaveSlotUI(slot.id);
+    setSaveStatus("Autosaved");
+  }
+
+  saveSlotSelect.addEventListener("change", event => {
+    event.preventDefault();
+
+    const slot = currentSlot();
+
+    renameSlotInput.hidden = true;
+    renameSlotInput.value = slot?.name || "";
+
+    updateSaveSlotButtons();
+
+    if (slot) {
+      loadSlotIntoSchedule(slot);
+    }
+  });
+
+  addSaveSlotBtn.addEventListener("click", event => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const slots = readSaveSlots();
+
+    const defaultName =
+      `Schedule ${slots.length + 1}`;
+
+    const entered = prompt(
+      "Name the new schedule:",
+      defaultName
+    );
+
+    if (entered === null) return;
+
+    const name = sanitizeSlotName(
+      entered,
+      defaultName
+    );
+
+    const slot = {
+      id: makeSlotId(),
+      name,
+      selected: [],
+      savedAt: ""
+    };
+
+    slots.push(slot);
+    writeSaveSlots(slots);
+
+    refreshSaveSlotUI(slot.id);
+
+    if (state.sections.length) {
+      state.selected.clear();
+      renderAll();
     }
 
-    pendingBannerUrl = buildBannerAddUrl(term, crns);
-    bannerCrnPreview.textContent = crns.join(", ");
-    bannerConfirmDialog.showModal();
-  }
+    setSaveStatus("Slot created");
+  });
 
-  function updateBannerSendButton() {
-    const count = selectedCRNs().length;
-    // sendBannerBtn.disabled = count === 0;
-    // sendBannerBtn.textContent = count
-    //   ? `Send ${count} CRN${count === 1 ? "" : "s"} once`
-    //   : "Send selected once";
-  }
+  deleteSaveBtn.addEventListener("click", event => {
+    // Explicitly block every default browser action.
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+
+    const deletedId = currentSlotId();
+    if (!deletedId) return false;
+
+    const slots = readSaveSlots();
+    const deletedIndex = slots.findIndex(slot => slot.id === deletedId);
+    if (deletedIndex === -1) return false;
+
+    const deletedName = slots[deletedIndex].name;
+
+    // Remove the exact save by immutable ID.
+    const remaining = slots.filter(slot => slot.id !== deletedId);
+    writeSaveSlots(remaining);
+
+    const nextSlot =
+      remaining[Math.min(deletedIndex, remaining.length - 1)] ||
+      remaining[remaining.length - 1] ||
+      null;
+
+    refreshSaveSlotUI(nextSlot?.id || "");
+
+    if (state.sections.length) {
+      if (nextSlot) {
+        loadSlotIntoSchedule(nextSlot, false);
+      } else {
+        state.selected.clear();
+        renderAll();
+      }
+    }
+
+    setSaveStatus(`Deleted ${deletedName}`);
+
+    return false;
+  });
+
+  migrateOldSaveDataOnce();
+  refreshSaveSlotUI();
 
   function setCSVStatus(message, kind = "") {
-    console.log(message);
-    console.log("CSV status:", kind || "(no kind)");
+    csvStatus.textContent = message;
+    csvStatus.className = `csv-status${kind ? " " + kind : ""}`;
   }
 
   function loadCSVText(csvText, sourceLabel) {
@@ -734,16 +1046,21 @@
       state.expandedCourses.clear();
       controls.style.display = "";
       selectedSummaryWrap.style.display = "";
-
       populateFilters();
+      refreshSaveSlotUI();
+
+      const activeSlot = currentSlot();
+      if (activeSlot) {
+        normalizeExclusiveSelection(activeSlot.selected);
+      }
+
       renderAll();
 
-      console.log(sourceLabel);
+      csvSourceLabel.textContent = sourceLabel;
       setCSVStatus(
         `${state.courses.length} courses and ${state.sections.length} sections loaded.`,
         "ok"
       );
-      loadState();
     } catch (error) {
       console.error(error);
       setCSVStatus(`CSV could not be parsed: ${error.message}`, "error");
@@ -753,38 +1070,73 @@
   }
 
   async function loadCSVFromGitHub() {
-    window.suDesktop.reloadTitlebar();
-    await window.suDesktop.loadCourseCsv();
-    console.log("Loading sabanci_courses.csv from GitHub…");
-    setCSVStatus("Fetching the latest version…", "loading");
+    if (window.suDesktop) {
+      document.querySelector("header").children[0].children[0].style.display = "none";
+      window.suDesktop.reloadTitlebar();
+      setCSVStatus("Fetching the latest version…", "loading");
+      try {
+        if (!window.suDesktop?.loadCourseCsv) {
+          throw new Error("Electron desktop bridge is unavailable.");
+        }
 
-    try {
-      if (!window.suDesktop?.loadCourseCsv) {
-        throw new Error("Electron desktop bridge is unavailable.");
+        const result = await window.suDesktop.loadCourseCsv();
+        if (localStorage.getItem("registeredMajors")) {
+          const json = JSON.parse(localStorage.getItem("registeredMajors"));
+          registeredMajors.level = json.level;
+          registeredMajors.major = json.major;
+          registeredMajors.double = json.double;
+          registeredMajors.minors = json.minors;
+          registeredMajors.admits = json.admits || {};
+          await loadMajorData();
+        }
+        loadCSVText(result.text, result.source);
+      } catch (error) {
+        console.error(error);
+        console.log("GitHub CSV could not be downloaded");
+        setCSVStatus(
+          `Could not download the course CSV: ${error.message} Manual upload still works.`,
+          "error"
+        );
+        scheduleWrap.innerHTML =
+          `<div class="empty">Could not load sabanci_courses.csv from GitHub. Choose a local CSV to continue.</div>`;
+      } finally {
+        await window.suDesktop.loadFinished();
       }
+    }
+    else {
+      signinbutton.style.display = "none";
+      signinbutton.disabled = true;
+      const settingsmenu = document.querySelector("#settings").querySelector(".sidebar").children;
+      settingsmenu[0].style.display = "none";
+      settingsmenu[1].style.display = "none";
+      reloadCsvBtn.disabled = true;
+      csvSourceLabel.textContent = "Loading sabanci_courses.csv from GitHub…";
+      setCSVStatus("Fetching the latest version…", "loading");
+      try {
+        const separator = CSV_URL.includes("?") ? "&" : "?";
+        const response = await fetch(
+          `${CSV_URL}${separator}cacheBust=${Date.now()}`,
+          { cache: "no-store" }
+        );
 
-      const result = await window.suDesktop.loadCourseCsv();
-      if (localStorage.getItem("registeredMajors")) {
-        const json = JSON.parse(localStorage.getItem("registeredMajors"));
-        registeredMajors.level = json.level;
-        registeredMajors.major = json.major;
-        registeredMajors.double = json.double;
-        registeredMajors.minors = json.minors;
-        registeredMajors.admits = json.admits || {};
-        await loadMajorData();
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const csvText = await response.text();
+        loadCSVText(csvText, "Using sabanci_courses.csv from GitHub");
+      } catch (error) {
+        console.error(error);
+        csvSourceLabel.textContent = "GitHub CSV was not found";
+        setCSVStatus(
+          "Place sabanci_courses.csv beside index.html, then press Reload GitHub CSV. Manual upload still works.",
+          "error"
+        );
+        scheduleWrap.innerHTML =
+          `<div class="empty">Could not load sabanci_courses.csv from the website repository.</div>`;
+      } finally {
+        reloadCsvBtn.disabled = false;
       }
-      loadCSVText(result.text, result.source);
-    } catch (error) {
-      console.error(error);
-      console.log("GitHub CSV could not be downloaded");
-      setCSVStatus(
-        `Could not download the course CSV: ${error.message} Manual upload still works.`,
-        "error"
-      );
-      scheduleWrap.innerHTML =
-        `<div class="empty">Could not load sabanci_courses.csv from GitHub. Choose a local CSV to continue.</div>`;
-    } finally {
-      await window.suDesktop.loadFinished();
     }
   }
 
@@ -1268,13 +1620,12 @@
     if (!course) return;
 
     course.sections.forEach(section => state.selected.delete(section.key));
-    saveState();
+    autosaveCurrentSelection();
     renderAll();
   }
 
   function openCourseInList(courseKey) {
     const course = state.courses.find(item => item.key === courseKey);
-
     if (!course) return;
 
     search.value = "";
@@ -1299,7 +1650,6 @@
     renderCourseList();
     renderSelectedSummary();
     renderSchedule();
-    updateBannerSendButton();
   }
 
   function auxiliaryKind(section) {
@@ -1388,6 +1738,7 @@
     if (hasUnknown && hasGood) return "partial";
     return "nofit";
   }
+
   function renderCourseMajorRequirementSummary(course) {
     if (registeredMajors.level === null) {
       return "";
@@ -1532,8 +1883,7 @@
           `${course.subject || ""} ${course.course || ""}`,
           `${course.subject || ""}${course.course || ""}`
         ],
-        instructor: course.sections.flatMap(section => section.instructors || []),
-        crn: course.sections.map(section => section.crn || "")
+        instructor: course.sections.flatMap(section => section.instructors || [])
       };
 
       const searchable = (searchValues[searchField] || [])
@@ -1649,12 +1999,14 @@
     courseList.querySelectorAll("input[data-section-key]").forEach(checkbox => {
       checkbox.addEventListener("change", () => {
         const key = checkbox.dataset.sectionKey;
+
         if (checkbox.checked) {
           selectSectionExclusively(key);
         } else {
           state.selected.delete(key);
         }
-        saveState();
+
+        autosaveCurrentSelection();
         renderAll();
       });
     });
@@ -1690,7 +2042,6 @@
           <span>
             <span class="section-title">Section ${esc(section.section || "?")}</span>
             ${auxiliary ? `<span class="badge aux">${esc(auxiliaryLabel(section))}</span>` : ""}
-            <span class="badge">CRN ${esc(section.crn || "—")}</span>
           </span>
           <span class="fit-status ${issue ? issue.kind : "ok"}">${esc(fitLabel)}</span>
         </span>
@@ -1700,13 +2051,20 @@
           ${section.instructors.length ? `<br>${esc(section.instructors.map(s => s.replaceAll(" (P)", "").trim()).join(", "))}` : ""}
         </span>
 
-        ${(issue && issue.detail)
+        ${issue && issue.detail
         ? `<div class="fit-detail ${issue.kind}">${esc(issue.detail)}</div>`
         : ""}
       </span>
     </label>`;
   }
-
+  function selectedCRNs() {
+    return [...new Set(
+      state.sections
+        .filter(section => state.selected.has(section.key))
+        .map(section => String(section.crn || "").trim())
+        .filter(crn => /^\d+$/.test(crn))
+    )];
+  }
   function auxiliaryLabel(section) {
     const kind = auxiliaryKind(section);
     if (kind === "lab") return "Lab";
@@ -2157,8 +2515,75 @@
       "'": "&#39;"
     })[character]);
   }
+  function commitInlineRename() {
+    const slots = readSaveSlots();
+    const slot = currentSlot(slots);
 
-  window.suDesktop.onMessageFromMain("session-attempts", (data) => {
+    if (!slot) {
+      renameSlotInput.hidden = true;
+      return;
+    }
+
+    const newName = sanitizeSlotName(
+      renameSlotInput.value,
+      slot.name
+    );
+
+    slot.name = newName;
+
+    writeSaveSlots(slots);
+
+    refreshSaveSlotUI(slot.id);
+
+    setSaveStatus("Renamed");
+  }
+  renameSaveSlotBtn.addEventListener(
+    "click",
+    event => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const slot = currentSlot();
+
+      if (!slot) return;
+
+      renameSlotInput.value = slot.name;
+      renameSlotInput.hidden = false;
+      renameSlotInput.disabled = false;
+
+      renameSlotInput.focus();
+      renameSlotInput.select();
+    }
+  );
+  renameSlotInput.addEventListener(
+    "keydown",
+    event => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        event.stopPropagation();
+
+        commitInlineRename();
+
+        return;
+      }
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+
+        renameSlotInput.hidden = true;
+      }
+    }
+  );
+  renameSlotInput.addEventListener(
+    "blur",
+    () => {
+      if (!renameSlotInput.hidden) {
+        commitInlineRename();
+      }
+    }
+  );
+  window.suDesktop?.onMessageFromMain("session-attempts", (data) => {
     console.log(Object.keys(data.attempts).length);
     const attemptsDiv = document.querySelector("#attemptsdiv");
     if (attemptsDiv) {
@@ -2197,8 +2622,7 @@
       }
     }
   });
-
-  window.suDesktop.onMessageFromMain("login-details", (data) => {
+  window.suDesktop?.onMessageFromMain("login-details", (data) => {
     console.log(data);
     if (data.signedin && data.status === "active") {
       usermenubutton.querySelector("span").textContent = data.user.name;
@@ -2212,6 +2636,5 @@
       usermenubutton.style.display = "none";
     }
   });
-
   loadCSVFromGitHub();
 })();

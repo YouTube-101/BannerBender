@@ -13,9 +13,9 @@ function getTopLeftCell(filePath) {
 
   // 2. Convert to string
   const textChunk = buffer.toString('utf8', 0, bytesRead);
-  
+
   const match = textChunk.match(/^"([^"]*)"|^([^,\n\r]*)/);
-  
+
   let text = "";
   if (match) text = match[1] !== undefined ? match[1] : match[2];
   let prefix = "";
@@ -26,10 +26,10 @@ function getTopLeftCell(filePath) {
   else if (text.includes("Prev. Name:")) prefix = "Prev. Name:";
   if (prefix !== "") {
     const idx = text.indexOf(prefix);
-    const nextIndex = text.substring(idx+15).indexOf(")")
-    text = (text.substring(0,idx-1) + text.substring(nextIndex+idx+17)).trim();
+    const nextIndex = text.substring(idx + 15).indexOf(")")
+    text = (text.substring(0, idx - 1) + text.substring(nextIndex + idx + 17)).trim();
   }
-  text = text.replaceAll("&amp;","&").replaceAll("  ", " ");
+  text = text.replaceAll("&amp;", "&").replaceAll("  ", " ");
   if (text.endsWith("-")) text = text.substring(0, text.length - 1).trim();
   return text;
 }
@@ -38,7 +38,7 @@ contextBridge.exposeInMainWorld("suDesktop", {
   loadCourseCsv: () => ipcRenderer.invoke("courses:load-default"),
   scrapeCourses: () => ipcRenderer.invoke("scrapeCourses"),
   requestSignIn: () => ipcRenderer.invoke("requestSignIn"),
-  reloadTitlebar:() => {
+  reloadTitlebar: () => {
     const wco = navigator.windowControlsOverlay.getTitlebarAreaRect();
     if (process.platform == "win32") document.documentElement.style.setProperty("--title-padding-right", (window.innerWidth - wco.width + 5) + "px");
     else if (process.platform == "darwin") document.documentElement.style.setProperty("--title-padding-left", (wco.x - 5) + "px");
@@ -72,12 +72,21 @@ contextBridge.exposeInMainWorld("suDesktop", {
   },
   getAllMajors: () => {
     const obj = {
-      UG: fs.readdirSync("scrapeResults/UGMajors").filter(x => x.endsWith(".csv")).map(x => ({k:x.substring(0, x.length - 4),n:getTopLeftCell("scrapeResults/UGMajors/"+x)})),
-      MX: fs.readdirSync("scrapeResults/MXMajors").filter(x => x.endsWith(".csv")).map(x => ({k:x.substring(0, x.length - 4),n:getTopLeftCell("scrapeResults/MXMajors/"+x)})),
-      PD: fs.readdirSync("scrapeResults/PDMajors").filter(x => x.endsWith(".csv")).map(x => ({k:x.substring(0, x.length - 4),n:getTopLeftCell("scrapeResults/PDMajors/"+x)})),
-      DM: fs.readdirSync("scrapeResults/DMMajors").filter(x => x.endsWith(".csv")).map(x => ({k:x.substring(0, x.length - 4),n:getTopLeftCell("scrapeResults/DMMajors/"+x)})),
-      MN: fs.readdirSync("scrapeResults/Minors").filter(x => x.endsWith(".csv")).map(x => ({k:x.substring(0, x.length - 4),n:getTopLeftCell("scrapeResults/Minors/"+x)})),
+      UG: [],
+      MX: [],
+      PD: [],
+      DM: [],
+      MN: [],
     }
+    const majorNames = fs.readFileSync("scrapeResults/majorNames.csv", "utf8").split("\n").filter(x => x.trim() !== "").forEach(x => {
+      const idx = x.indexOf(",");
+      const line = { k: x.substring(0, idx), n: x.substring(idx + 1).replaceAll("\"", "") };
+      if (line.k.endsWith("-MINOR") && !obj.MN.includes(line)) obj.MN.push(line);
+      else if (line.k.endsWith("-DM") && !obj.DM.includes(line)) obj.DM.push(line);
+      else if (line.k.startsWith("PHD") && !obj.PD.includes(line)) obj.PD.push(line);
+      else if (line.k.startsWith("M") && !obj.MX.includes(line)) obj.MX.push(line);
+      else if (line.k.startsWith("B") && !obj.UG.includes(line)) obj.UG.push(line);
+    });
     return obj;
   }
 });

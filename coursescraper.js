@@ -120,8 +120,6 @@ function parseGeneralRequirements(text) {
 async function generateCSV() {
   const thisterm = banner.getCurrentTerm();
   if (true) {
-
-
     const listOfSubjects = await banner.requestToPublicBanner("bwckgens.p_proc_term_date", "POST", "p_calling_proc=bwckschd.p_disp_dyn_sched&p_term=" + thisterm);
     let $ = listOfSubjects.dom;
     const subjects = [];
@@ -520,14 +518,19 @@ async function generateCSV() {
     const parsed = frame.split("\n").map(line => line.replaceAll("<option value=\"", "").replaceAll("</option>", "").trim().split("\">")).map(arr => ({ code: arr[0], name: arr[1].substring(arr[1].indexOf(" - ") + 3).trim() }));
     return parsed;
   })();
+  const majorNames = [];
   degreeForm.forEach(line => {
     if (line.code.endsWith("-MINOR") && !allMinors.includes(line)) allMinors.push(line);
     else if (line.code.endsWith("-DM") && !doubleMajors.includes(line)) doubleMajors.push(line);
     else if (line.code.startsWith("PHD") && !allPHDMajors.includes(line)) allPHDMajors.push(line);
     else if (line.code.startsWith("M") && !allMasterMajors.includes(line)) allMasterMajors.push(line);
     else if (line.code.startsWith("B") && !allMajors.includes(line)) allMajors.push(line);
+    else return;
     // else ... yes, there's a HIST 191 as a major code for some reason. Ignore it.
+    majorNames.push(line.code + ",\"" + line.name + "\"");
   });
+  fs.writeFileSync("scrapeResults/majorNames.csv", majorNames.join("\n"));
+
   async function getMajorDetails(major, level = "UG") {
     const majordata = {
       terms: {},
@@ -579,7 +582,6 @@ async function generateCSV() {
           });
         }
         try {
-
           if ($(".t_mezuniyet")) {
             majordata.terms[termToCheck].totalRequired = {};
             majordata.terms[termToCheck].requirements = {};

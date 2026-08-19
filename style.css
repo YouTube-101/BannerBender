@@ -100,6 +100,47 @@ main{
 .btn.banner{background:#f59e0b;color:#172033;border-color:#f59e0b;font-weight:800}
 .btn.close::before{content:"✕"}
 .btn.close{background: #f50b3c;color: #ffffff;border-color: #9a0000;font-size: 30px;padding: 0px;width: 39px;height: 39px;font-weight:800;margin-right: -10px;}
+.save-tools{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-left:auto;
+}
+.save-slot{
+  min-width:155px;
+  padding:9px 10px;
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:9px;
+  background:rgba(255,255,255,.1);
+  color:white;
+}
+.save-slot option{
+  color:#172033;
+  background:#fff;
+}
+.save-name-input{
+  width:180px;
+  padding:9px 10px;
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:9px;
+  background:rgba(255,255,255,.1);
+  color:white;
+}
+.rename-slot-input {
+  width: 180px;
+}
+
+.rename-slot-input[hidden] {
+  display: none !important;
+}
+.save-name-input::placeholder{color:#cbd5e1}
+.save-status{
+  color:#cbd5e1;
+  font-size:12px;
+  white-space:nowrap;
+}
 .banner-tools{
   display:flex;
   align-items: flex-start;
@@ -739,4 +780,33 @@ button.active {
 }
 .explanation > div > span:first-child {
   font-weight: 800;
+}
+.update-dialog{
+  border:0;
+  border-radius:14px;
+  padding:0;
+  width:min(470px,calc(100vw - 32px));
+  box-shadow:0 22px 70px rgba(0,0,0,.28);
+}
+.update-dialog::backdrop{
+  background:rgba(15,23,42,.62);
+}
+.update-dialog-body{
+  padding:20px;
+}
+.update-dialog h2{
+  margin:0 0 8px;
+  font-size:19px;
+}
+.update-dialog p{
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.55;
+}
+.update-dialog-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:16px;
 }
