@@ -74,13 +74,16 @@
 
   const majorRequirements = {};
 
-  function parseMajor(csvRows) {
+  function parseMajor(csvRows, admit) {
     // get the last key of the object here
+
     const result = {};
     const requirements = {};
     csvRows.forEach(row => {
       const firstCol = row[Object.keys(row)[Object.keys(row).length - 1]];
       delete row[Object.keys(row)[Object.keys(row).length - 1]];
+      if (row[admit] === undefined) return;
+      else row = row[admit];
       if (firstCol.includes(":")) {
         Object.keys(row).forEach(key => {
           if (row[key] === "") delete row[key];
@@ -96,17 +99,16 @@
   async function loadMajorData() {
     const majorDataText = await window.suDesktop.getMajor(registeredMajors.level, registeredMajors.major);
     if (!majorDataText) return null;
-    const majorData = parseMajor(parseCSV(majorDataText));
     const primaryAdmit = registeredMajors.admits[registeredMajors.major] || state.term;
-    Object.keys(majorData.result).forEach(key => {
-      if (majorData.result[key][primaryAdmit] === "") delete majorData.result[key];
-      else majorData.result[key] = majorData.result[key][primaryAdmit];
-    });
-    Object.keys(majorData.requirements).forEach(key => {
-      if (majorData.requirements[key][primaryAdmit] === "") delete majorData.requirements[key];
-      majorData.requirements[key] = majorData.requirements[key][primaryAdmit];
-    });
-    majorRequirements[registeredMajors.major] = majorData;
+    majorRequirements[registeredMajors.major] = parseMajor(parseCSV(majorDataText), primaryAdmit);
+    if (registeredMajors.double && registeredMajors.double !== "none") {
+      const doubleAdmit = registeredMajors.admits[registeredMajors.double] || state.term;
+      majorRequirements[registeredMajors.double] = parseMajor(parseCSV(await window.suDesktop.getMajor(registeredMajors.level, registeredMajors.double)), doubleAdmit);
+    }
+    for (const minor of registeredMajors.minors) {
+      const minorAdmit = registeredMajors.admits[minor] || state.term;
+      majorRequirements[minor] = parseMajor(parseCSV(await window.suDesktop.getMajor("MN", minor)), minorAdmit);
+    }
     console.log("Loaded major data:", majorData.requirements);
   }
 
@@ -1409,7 +1411,14 @@
         facultyAddition = '<span class="course-major-pill faculty">' + faculty + ' Faculty Course</span>';
         majorReqs[major] = majorReqs[major].split(":")[0];
       }
-      return '<span class="course-major-pill ' + esc(majorReqs[major].substring(0, 1)) + '">' + esc(majorReqs[major].substring(1)) + '</span>' + facultyAddition;
+      let differentMajor = "";
+      if (major.endsWith("-DM")) {
+        differentMajor = major.replace("-DM", "") + ": ";
+      }
+      else if (major.endsWith("-MINOR")) {
+        differentMajor = major.replace("-MINOR", "") + ": ";
+      }
+      return '<span class="course-major-pill ' + esc(majorReqs[major].substring(0, 1)) + '">' + differentMajor + esc(majorReqs[major].substring(1)) + '</span>' + facultyAddition;
     }).join('') + '</div>';
   }
 
