@@ -2159,11 +2159,11 @@
       }
 
       const course = uniqueCourses.get(courseKey);
-
       if (section.section) course.sections.add(section.section);
       if (course.credits === null) {
-        course.credits.SU = numericCredits(section.credits);
+        course.credits = section.credits;
       }
+      course.credits.SU = parseInt(course.credits.SU);
     });
 
     const courses = [...uniqueCourses.values()].sort((first, second) =>
@@ -2178,7 +2178,7 @@
       (sum, course) => sum + (course.credits.SU ?? 0),
       0
     );
-    const unknownCount = courses.filter(course => course.credits.SU === null).length;
+    const unknownCount = courses.filter(course => course.credits === null).length;
     const totalText =
       `${formatCredits(knownTotal)} credits` +
       (unknownCount ? ` + ${unknownCount} unknown` : "");
