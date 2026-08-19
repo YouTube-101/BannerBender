@@ -85,31 +85,32 @@
       if (row[admit] === undefined) return;
       else row = row[admit];
       if (firstCol.includes(":")) {
-        Object.keys(row).forEach(key => {
-          if (row[key] === "") delete row[key];
-          else row[key] = parseInt(row[key]);
-        });
+        if (row === "") return;
+        else row = parseInt(row);
         requirements[firstCol.split(":")[1].trim()] = row;
       }
       else result[firstCol] = row;
+
     });
     return { result, requirements };
   }
 
   async function loadMajorData() {
+    Object.keys(majorRequirements).forEach(key => delete majorRequirements[key]);
     const majorDataText = await window.suDesktop.getMajor(registeredMajors.level, registeredMajors.major);
     if (!majorDataText) return null;
     const primaryAdmit = registeredMajors.admits[registeredMajors.major] || state.term;
     majorRequirements[registeredMajors.major] = parseMajor(parseCSV(majorDataText), primaryAdmit);
     if (registeredMajors.double && registeredMajors.double !== "none") {
       const doubleAdmit = registeredMajors.admits[registeredMajors.double] || state.term;
-      majorRequirements[registeredMajors.double] = parseMajor(parseCSV(await window.suDesktop.getMajor(registeredMajors.level, registeredMajors.double)), doubleAdmit);
+      const double = await window.suDesktop.getMajor("DM", registeredMajors.double);
+      majorRequirements[registeredMajors.double] = parseMajor(parseCSV(double), doubleAdmit);
     }
     for (const minor of registeredMajors.minors) {
       const minorAdmit = registeredMajors.admits[minor] || state.term;
       majorRequirements[minor] = parseMajor(parseCSV(await window.suDesktop.getMajor("MN", minor)), minorAdmit);
     }
-    console.log("Loaded major data:", majorData.requirements);
+    console.log("Loaded major data:", majorRequirements);
   }
 
   const privacySettings = [
@@ -506,6 +507,7 @@
           majorMenu.querySelector("button[data-major='" + registeredMajors.major + "']").classList.add("active");
         }
         if (registeredMajors.double) {
+          doubleMenu.querySelector("button[data-double-major='none']").classList.remove("active");
           doubleMenu.querySelector("button[data-double-major='" + registeredMajors.double + "']").classList.add("active");
         }
         for (const minor of registeredMajors.minors) {
@@ -751,6 +753,8 @@
   }
 
   async function loadCSVFromGitHub() {
+    window.suDesktop.reloadTitlebar();
+    await window.suDesktop.loadCourseCsv();
     console.log("Loading sabanci_courses.csv from GitHub…");
     setCSVStatus("Fetching the latest version…", "loading");
 
@@ -1412,11 +1416,15 @@
         majorReqs[major] = majorReqs[major].split(":")[0];
       }
       let differentMajor = "";
-      if (major.endsWith("-DM")) {
-        differentMajor = major.replace("-DM", "") + ": ";
-      }
-      else if (major.endsWith("-MINOR")) {
+      if (major.endsWith("-MINOR")) {
         differentMajor = major.replace("-MINOR", "") + ": ";
+      }
+      else if (major.endsWith("-DM")) {
+        differentMajor = major.replace("-DM", "").substring(2) + ": ";
+      }
+      else if (Object.keys(majorReqs).length > 1) {
+        differentMajor = major.substring(2) + ": ";
+        if (major === "BSMS") differentMajor = "IE: ";
       }
       return '<span class="course-major-pill ' + esc(majorReqs[major].substring(0, 1)) + '">' + differentMajor + esc(majorReqs[major].substring(1)) + '</span>' + facultyAddition;
     }).join('') + '</div>';

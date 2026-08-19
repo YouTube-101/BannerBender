@@ -38,6 +38,15 @@ contextBridge.exposeInMainWorld("suDesktop", {
   loadCourseCsv: () => ipcRenderer.invoke("courses:load-default"),
   scrapeCourses: () => ipcRenderer.invoke("scrapeCourses"),
   requestSignIn: () => ipcRenderer.invoke("requestSignIn"),
+  reloadTitlebar:() => {
+    const wco = navigator.windowControlsOverlay.getTitlebarAreaRect();
+    if (process.platform == "win32") document.documentElement.style.setProperty("--title-padding-right", (window.innerWidth - wco.width + 5) + "px");
+    else if (process.platform == "darwin") document.documentElement.style.setProperty("--title-padding-left", (wco.x - 5) + "px");
+    else {
+      document.documentElement.style.setProperty("--title-padding-left", (wco.x + 5) + "px");
+      document.documentElement.style.setProperty("--title-padding-right", (window.innerWidth - wco.width + 5) + "px");
+    }
+  },
   loadFinished: async () => {
     await ipcRenderer.invoke("loadfinished");
     const wco = navigator.windowControlsOverlay.getTitlebarAreaRect();
@@ -69,8 +78,6 @@ contextBridge.exposeInMainWorld("suDesktop", {
       DM: fs.readdirSync("scrapeResults/DMMajors").filter(x => x.endsWith(".csv")).map(x => ({k:x.substring(0, x.length - 4),n:getTopLeftCell("scrapeResults/DMMajors/"+x)})),
       MN: fs.readdirSync("scrapeResults/Minors").filter(x => x.endsWith(".csv")).map(x => ({k:x.substring(0, x.length - 4),n:getTopLeftCell("scrapeResults/Minors/"+x)})),
     }
-    // how to read the first 100 bytes of a file?
-    fs.readFile
     return obj;
   }
 });
@@ -81,7 +88,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 // window.addEventListener("unload") is deprecated.
-window.addEventListener("beforeunload", () => {
+window.addEventListener("beforeunload", async () => {
   document.body.classList.add("invisible");
 });
 
