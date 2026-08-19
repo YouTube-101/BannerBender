@@ -1070,6 +1070,16 @@
   }
 
   async function loadCSVFromGitHub() {
+    const result = await window.suDesktop.loadCourseCsv();
+    if (localStorage.getItem("registeredMajors")) {
+      const json = JSON.parse(localStorage.getItem("registeredMajors"));
+      registeredMajors.level = json.level;
+      registeredMajors.major = json.major;
+      registeredMajors.double = json.double;
+      registeredMajors.minors = json.minors;
+      registeredMajors.admits = json.admits || {};
+      await loadMajorData();
+    }
     if (window.suDesktop) {
       document.querySelector("header").children[0].children[0].style.display = "none";
       window.suDesktop.reloadTitlebar();
@@ -1077,17 +1087,6 @@
       try {
         if (!window.suDesktop?.loadCourseCsv) {
           throw new Error("Electron desktop bridge is unavailable.");
-        }
-
-        const result = await window.suDesktop.loadCourseCsv();
-        if (localStorage.getItem("registeredMajors")) {
-          const json = JSON.parse(localStorage.getItem("registeredMajors"));
-          registeredMajors.level = json.level;
-          registeredMajors.major = json.major;
-          registeredMajors.double = json.double;
-          registeredMajors.minors = json.minors;
-          registeredMajors.admits = json.admits || {};
-          await loadMajorData();
         }
         loadCSVText(result.text, result.source);
       } catch (error) {

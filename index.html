@@ -3,11 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://suis.sabanciuniv.edu data: 'unsafe-inline'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://suis.sabanciuniv.edu data: 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'" />
 <title>BannerBender</title>
 <link rel="stylesheet" href="style.css" />
 <link rel="stylesheet" href="fonts.css" />
-<script defer src="script.js"></script>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
@@ -16,9 +15,21 @@
 <body class="invisible">
 <header>
   <div class="row">
-      <button id="settingsbutton" class="btn">Settings</button>
+    <div>
+      <h1>BannerBender</h1>
+      <p>Integrated course planning tool</p>
+    </div>
+    <button id="settingsbutton" class="btn">Settings</button>
   </div>
   <div class="row">
+    <div class="save-tools">
+      <select id="saveSlotSelect" class="save-slot" aria-label="Schedule save slot"></select>
+      <input id="renameSlotInput" class="save-name-input rename-slot-input" maxlength="60" placeholder="Slot name" aria-label="Rename save slot" hidden>
+      <span id="saveStatus" class="save-status" aria-live="polite"></span>
+      <button class="btn" id="addSaveSlotBtn" type="button">+ New</button>
+      <button class="btn" id="renameSaveSlotBtn" type="button" disabled>Rename</button>
+      <button class="btn danger" id="deleteSaveBtn" type="button" disabled>Delete</button>
+    </div>
     <div class="banner-tools">
       <div id="attemptsdiv" style="display:none;">
         <div><p>Session attempts:</p><div id="attemptscontainer"></div></div>
@@ -225,5 +236,6 @@
   window.addEventListener("DOMContentLoaded", checkForNewVersion);
 })();
 </script>
+<script src="script.js"></script>
 </body>
 </html>
