@@ -12,7 +12,7 @@ const { app, BrowserWindow, ipcMain, screen, shell } = require('electron');
 app.commandLine.appendSwitch('enable-gpu-rasterization');
 app.commandLine.appendSwitch('enable-zero-copy');
 
-const COURSE_CSV_PATH = path.join(__dirname, "sabanci_courses.csv");
+const COURSE_CSV_PATH = path.join(__dirname, "scrapeResults/courses.csv");
 
 const ALLOWED_EXTERNAL_HOSTS = new Set([
   "suis.sabanciuniv.edu"

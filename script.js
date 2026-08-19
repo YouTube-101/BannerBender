@@ -45,6 +45,13 @@
   const confirmBannerSendBtn = $("confirmBannerSendBtn");
   let registeredSchedule = [];
   let pendingBannerUrl = "";
+  const registeredMajors = {
+    level: null,
+    major: null,
+    double: null,
+    minors: [],
+    admits: {}
+  };
 
   search.addEventListener("input", renderCourseList);
   searchFieldFilter.addEventListener("change", () => {
@@ -64,6 +71,44 @@
   signinbutton.addEventListener("click", () => {
     window.suDesktop.requestSignIn();
   });
+
+  const majorRequirements = {};
+
+  function parseMajor(csvRows) {
+    // get the last key of the object here
+    const result = {};
+    const requirements = {};
+    csvRows.forEach(row => {
+      const firstCol = row[Object.keys(row)[Object.keys(row).length - 1]];
+      delete row[Object.keys(row)[Object.keys(row).length - 1]];
+      if (firstCol.includes(":")) {
+        Object.keys(row).forEach(key => {
+          if (row[key] === "") delete row[key];
+          else row[key] = parseInt(row[key]);
+        });
+        requirements[firstCol.split(":")[1].trim()] = row;
+      }
+      else result[firstCol] = row;
+    });
+    return { result, requirements };
+  }
+
+  async function loadMajorData() {
+    const majorDataText = await window.suDesktop.getMajor(registeredMajors.level, registeredMajors.major);
+    if (!majorDataText) return null;
+    const majorData = parseMajor(parseCSV(majorDataText));
+    const primaryAdmit = registeredMajors.admits[registeredMajors.major] || state.term;
+    Object.keys(majorData.result).forEach(key => {
+      if (majorData.result[key][primaryAdmit] === "") delete majorData.result[key];
+      else majorData.result[key] = majorData.result[key][primaryAdmit];
+    });
+    Object.keys(majorData.requirements).forEach(key => {
+      if (majorData.requirements[key][primaryAdmit] === "") delete majorData.requirements[key];
+      majorData.requirements[key] = majorData.requirements[key][primaryAdmit];
+    });
+    majorRequirements[registeredMajors.major] = majorData;
+    console.log("Loaded major data:", majorData.requirements);
+  }
 
   const privacySettings = [
     {
@@ -243,6 +288,230 @@
         }
       });
     }
+    else if (index === 3) {
+      const setMajors = {
+        level: null,
+        major: null,
+        double: null,
+        minors: []
+      };
+      setMajors.level = registeredMajors.level;
+      setMajors.major = registeredMajors.major;
+      setMajors.double = registeredMajors.double;
+      const allMajors = window.suDesktop.getAllMajors();
+      // sort by name alphabetically
+      allMajors.UG.sort((a, b) => a.n > b.n);
+      allMajors.MX.sort((a, b) => a.n > b.n);
+      allMajors.PD.sort((a, b) => a.n > b.n);
+      allMajors.DM.sort((a, b) => a.n > b.n);
+      allMajors.MN.sort((a, b) => a.n > b.n);
+      const settingSave = document.createElement("div");
+      settingSave.classList.add("settingsSwitch");
+      settingSave.innerHTML = '<div><h3>Nothing to save yet</h3><p>Once you select your options, you can save them here.</p></div><button class="btn" disabled>Save</button>'
+      $("settings").querySelector(".settings").appendChild(settingSave)
+      const levelMenu = document.createElement("div");
+      levelMenu.innerHTML = '<h3>I am a(n)...</h3><div><button class="btn" data-level="UG">Undergraduate</button><button class="btn" data-level="MX">Masters</button><button class="btn" data-level="PD">Doctorate</button></div><h3>...student.</h3>'
+      levelMenu.classList.add("centeredbuttonmenu");
+      $("settings").querySelector(".settings").appendChild(levelMenu)
+      const majorMenu = document.createElement("div");
+      majorMenu.classList.add("centeredbuttonmenu");
+      $("settings").querySelector(".settings").appendChild(majorMenu)
+      majorMenu.style.display = "none";
+      majorMenu.innerHTML = '<h3>My primary major is...</h3><div></div>'
+      const doubleMenu = document.createElement("div");
+      doubleMenu.classList.add("centeredbuttonmenu");
+      $("settings").querySelector(".settings").appendChild(doubleMenu)
+      doubleMenu.style.display = "none";
+      doubleMenu.innerHTML = '<h3>My second major is...</h3><div><button class="btn active" data-double-major="none">Nothing</button></div>'
+      function checkForChanges() {
+        const bothAreSame = (setMajors.level === registeredMajors.level && setMajors.major === registeredMajors.major && setMajors.double === registeredMajors.double && setMajors.minors.length === registeredMajors.minors.length);
+        const invalidChoices = (setMajors.level && setMajors.major === null)
+        if (bothAreSame) {
+          settingSave.children[0].children[0].textContent = "Nothing to save yet";
+          settingSave.children[0].children[1].textContent = "Once you select your options, you can save them here.";
+          settingSave.children[1].classList.remove("active");
+          settingSave.children[1].disabled = true;
+        }
+        else if (invalidChoices) {
+          settingSave.children[0].children[0].textContent = "Select a major first";
+          settingSave.children[0].children[1].textContent = "You can save when you select a major for your level of study.";
+          settingSave.children[1].classList.remove("active");
+          settingSave.children[1].disabled = true;
+        }
+        else {
+          settingSave.children[0].children[0].textContent = "You have unsaved changes";
+          settingSave.children[0].children[1].textContent = "Click the save button to save your changes.";
+          settingSave.children[1].classList.add("active");
+          settingSave.children[1].disabled = false;
+        }
+      }
+      settingSave.children[1].addEventListener("click", async () => {
+        settingSave.children[0].children[0].textContent = "Saving...";
+        settingSave.children[0].children[1].textContent = "Please wait while your changes are being saved.";
+        settingSave.children[1].textContent = "Saving...";
+        settingSave.children[1].classList.remove("active");
+        settingSave.children[1].disabled = true;
+
+        const selectHTML = (() => {
+          const startYear = 1999;
+          const currentYear = parseInt(state.term.substring(0, 4));
+          let optionsHTML = '';
+          const yearSelect = document.createElement("select");
+          for (let year = startYear; year <= currentYear; year++) {
+            const option = document.createElement("option");
+            option.value = year;
+            option.textContent = year;
+            yearSelect.appendChild(option);
+          }
+          const termSelect = document.createElement("select");
+          const termOptions = [
+            { value: "01", text: "Fall" },
+            { value: "02", text: "Spring" },
+            { value: "03", text: "Summer" }
+          ];
+          for (const termOption of termOptions) {
+            const option = document.createElement("option");
+            option.value = termOption.value;
+            option.textContent = termOption.text;
+            termSelect.appendChild(option);
+          }
+          return termSelect.outerHTML + yearSelect.outerHTML;
+        })()
+        const dialog = createDialog("Admit term confirmation",
+          `<p>Select your admitted term for each major and minor.</p>
+          <div style="display: flex;gap: 5px;flex-wrap: wrap;justify-content: space-between;"><h3>Your entrance term</h3><div data-term="${setMajors.major}">${selectHTML}</div></div>
+          ${(setMajors.double && setMajors.double !== "none") ? `<div style="display: flex;gap: 5px;flex-wrap: wrap;justify-content: space-between;"><h3>Your double major declaration term</h3><div data-term="${setMajors.double}">${selectHTML}</div></div>` : ''}
+          ${(() => {
+            let html = '';
+            for (const minor of setMajors.minors) {
+              html += `<div style="display: flex;gap: 5px;flex-wrap: wrap;justify-content: space-between;"><h3>Your ${minor.substring(0, minor.indexOf("-"))} minor declaration term</h3><div data-term="${minor}">${selectHTML}</div></div>`;
+            }
+            return html;
+          })()}
+          <button class="btn active">Confirm & Save</button><button class="btn modalHide">Cancel</button>
+          `
+        );
+        let confirmed = false;
+        dialog.querySelectorAll("div[data-term]").forEach(div => {
+          let termCode = state.term;
+          if (registeredMajors.admits[div.getAttribute("data-term")]) {
+            termCode = registeredMajors.admits[div.getAttribute("data-term")];
+          }
+          const year = termCode.substring(0, 4);
+          const term = termCode.substring(4, 6);
+          const selects = div.querySelectorAll("select");
+          selects[1].value = year;
+          selects[0].value = term;
+        });
+        dialog.querySelector("button.active").addEventListener("click", () => {
+          confirmed = true;
+          dialog.querySelectorAll("div[data-term]").forEach(div => {
+            const selects = div.querySelectorAll("select");
+            const year = selects[1].value;
+            const term = selects[0].value;
+            const termCode = year + term;
+            registeredMajors.admits[div.getAttribute("data-term")] = termCode;
+          });
+          dialog.hide();
+        });
+        dialog.querySelector("button.modalHide").addEventListener("click", () => {
+          dialog.hide();
+        });
+        dialog.show();
+        dialog.onceOnClose(async () => {
+          dialog.remove();
+          if (confirmed) {
+            registeredMajors.level = setMajors.level;
+            registeredMajors.major = setMajors.major;
+            registeredMajors.double = setMajors.double;
+            registeredMajors.minors = [...setMajors.minors];
+            localStorage.setItem("registeredMajors", JSON.stringify(registeredMajors));
+            await loadMajorData();
+            renderCourseList();
+          }
+          settingSave.children[1].textContent = "Save";
+          checkForChanges();
+        });
+      });
+      for (const major of allMajors.DM) {
+        const majorButton = document.createElement("button");
+        majorButton.classList.add("btn");
+        majorButton.textContent = major.n;
+        majorButton.setAttribute("data-double-major", major.k);
+        doubleMenu.children[1].appendChild(majorButton);
+      }
+      const minorMenu = document.createElement("div");
+      minorMenu.classList.add("centeredbuttonmenu");
+      $("settings").querySelector(".settings").appendChild(minorMenu)
+      minorMenu.style.display = "none";
+      minorMenu.innerHTML = '<h3>My minors are...</h3><div></div>'
+      for (const major of allMajors.MN) {
+        const majorButton = document.createElement("button");
+        majorButton.classList.add("btn");
+        majorButton.textContent = major.n;
+        majorButton.setAttribute("data-minor", major.k);
+        minorMenu.children[1].appendChild(majorButton);
+      }
+      function showMajorFor(level) {
+        setMajors.level = level;
+        if (level === "UG") {
+          doubleMenu.style.display = "";
+          minorMenu.style.display = "";
+        } else {
+          doubleMenu.style.display = "none";
+          minorMenu.style.display = "none";
+        }
+        checkForChanges();
+        majorMenu.style.display = "";
+        majorMenu.children[1].innerHTML = '';
+        for (const major of allMajors[level]) {
+          const majorButton = document.createElement("button");
+          majorButton.classList.add("btn");
+          majorButton.textContent = major.n;
+          majorButton.setAttribute("data-major", major.k);
+          majorMenu.children[1].appendChild(majorButton);
+          majorButton.addEventListener("click", () => {
+            majorMenu.children[1].querySelectorAll("button").forEach(x => x.classList.remove("active"));
+            majorButton.classList.add("active");
+            setMajors.major = major.k;
+            checkForChanges();
+          });
+        }
+      }
+      levelMenu.children[1].querySelectorAll("button").forEach(x => x.addEventListener("click", () => {
+        levelMenu.children[1].querySelectorAll("button").forEach(x => x.classList.remove("active"));
+        x.classList.add("active");
+        const level = x.getAttribute("data-level");
+        showMajorFor(level);
+      }))
+      doubleMenu.children[1].querySelectorAll("button").forEach(x => x.addEventListener("click", () => {
+        doubleMenu.children[1].querySelectorAll("button").forEach(x => x.classList.remove("active"));
+        x.classList.add("active");
+        setMajors.double = x.getAttribute("data-double-major");
+        if (setMajors.double === "none") setMajors.double = null;
+        checkForChanges();
+      }))
+      minorMenu.children[1].querySelectorAll("button").forEach(x => x.addEventListener("click", () => {
+        x.classList.toggle("active");
+        if (x.classList.contains("active")) setMajors.minors.push(x.getAttribute("data-minor"));
+        else setMajors.minors = setMajors.minors.filter(y => y !== x.getAttribute("data-minor"));
+        checkForChanges();
+      }))
+      if (registeredMajors.level) {
+        levelMenu.querySelector("button[data-level='" + registeredMajors.level + "']").classList.add("active");
+        showMajorFor(registeredMajors.level);
+        if (registeredMajors.major) {
+          majorMenu.querySelector("button[data-major='" + registeredMajors.major + "']").classList.add("active");
+        }
+        if (registeredMajors.double) {
+          doubleMenu.querySelector("button[data-double-major='" + registeredMajors.double + "']").classList.add("active");
+        }
+        for (const minor of registeredMajors.minors) {
+          minorMenu.querySelector("button[data-minor='" + minor + "']").classList.add("active");
+          setMajors.minors.push(minor);
+        }
+      }
+    }
   }
   Array.from($("settings").querySelector(".sidebar").children).forEach((button, index) => {
     button.addEventListener("click", event => {
@@ -282,6 +551,56 @@
   settingsbutton.addEventListener("click", () => {
     $("settings").show();
   });
+
+  function createDialog(title, content) {
+    const dialog = document.createElement("dialog");
+    dialog.classList.add("modal");
+    dialog.innerHTML =
+      `<div style="height: max-content; width: max-content;">
+      <section class="modal-header">
+        <h2>${title}</h2>
+        <button class="btn close"></button>
+      </section>
+      <div style="grid-template-columns: auto;">
+        ${content}
+      </div>
+    </div>`;
+    dialog.show = async () => {
+      dialog.style.display = "flex";
+      dialog.style.animation = "modalBG 0.2s cubic-bezier(0, 1, 1, 1) forwards";
+      dialog.children[0].style.animation = "modalAppear 0.2s cubic-bezier(0, 1, 1, 1) forwards";
+      if (dialog.initialize) {
+        dialog.initialize();
+      }
+    }
+    dialog.hide = () => {
+      dialog.style.animation = "modalBGDisappear 0.2s cubic-bezier(1, 0, 1, 1) forwards";
+      dialog.children[0].style.animation = "modalDisppear 0.2s cubic-bezier(1, 0, 1, 1) forwards";
+      setTimeout(() => {
+        dialog.style.display = "none";
+      }, 200);
+    }
+    dialog.onceOnClose = async (callback) => {
+      await new Promise(async resolve => {
+        while (dialog.style.display !== "none") {
+          await new Promise(r => setTimeout(r, 100));
+        }
+        resolve();
+      });
+      callback();
+    }
+    dialog.addEventListener("click", event => {
+      if (event.target === dialog) {
+        dialog.hide();
+      }
+    });
+    dialog.querySelector(".close").addEventListener("click", () => {
+      dialog.hide();
+    });
+    document.body.appendChild(dialog);
+    return dialog;
+  }
+
 
   cancelBannerSendBtn.addEventListener("click", () => {
     pendingBannerUrl = "";
@@ -439,6 +758,15 @@
       }
 
       const result = await window.suDesktop.loadCourseCsv();
+      if (localStorage.getItem("registeredMajors")) {
+        const json = JSON.parse(localStorage.getItem("registeredMajors"));
+        registeredMajors.level = json.level;
+        registeredMajors.major = json.major;
+        registeredMajors.double = json.double;
+        registeredMajors.minors = json.minors;
+        registeredMajors.admits = json.admits || {};
+        await loadMajorData();
+      }
       loadCSVText(result.text, result.source);
     } catch (error) {
       console.error(error);
@@ -579,7 +907,23 @@
       const key = crn
         ? `CRN:${crn}`
         : `${subject}:${course}:${section}:${title}`;
-
+      const creditsObj = {
+        SU: row.credits,
+        ECTS: {
+          base: row.creditsects,
+          eng: row.engnrects,
+          bsc: row.basicects,
+          exception: null,
+        }
+      }
+      if (row.ectsexceptionadmitbefore.length > 0) {
+        creditsObj.ECTS.exception = {
+          admit: row.ectsexceptionadmitbefore,
+          base: row.ectsexception,
+          eng: row.ectsexceptionengnr,
+          bsc: row.ectsexceptionbasic
+        }
+      }
       if (!map.has(key)) {
         map.set(key, {
           key,
@@ -588,7 +932,7 @@
           section,
           crn,
           title,
-          credits: row.credits || "",
+          credits: creditsObj,
           instructors: new Set(),
           meetings: []
         });
@@ -704,7 +1048,7 @@
 
         const preferredSection = mainSections[0] || auxiliarySections[0];
         const creditSource = [...mainSections, ...auxiliarySections]
-          .find(section => numericCredits(section.credits) !== null);
+          .find(section => numericCredits(section.credits.SU) !== null);
         const preferredTitle = mainSections
           .map(section => cleanCourseTitle(section.title))
           .find(Boolean) ||
@@ -713,14 +1057,23 @@
             .find(Boolean) ||
           preferredSection?.title ||
           `${course.subject} ${course.course}`;
-
+        creditSource.credits.SU = parseInt(creditSource.credits.SU);
+        creditSource.credits.ECTS.base = parseInt(creditSource.credits.ECTS.base);
+        if (creditSource.credits.ECTS.eng) creditSource.credits.ECTS.eng = parseInt(creditSource.credits.ECTS.eng);
+        if (creditSource.credits.ECTS.bsc) creditSource.credits.ECTS.bsc = parseInt(creditSource.credits.ECTS.bsc);
+        if (creditSource.credits.ECTS.exception) {
+          creditSource.credits.ECTS.exception.admit = parseInt(creditSource.credits.ECTS.exception.admit);
+          creditSource.credits.ECTS.exception.base = parseInt(creditSource.credits.ECTS.exception.base);
+          if (creditSource.credits.ECTS.exception.eng) creditSource.credits.ECTS.exception.eng = parseInt(creditSource.credits.ECTS.exception.eng);
+          if (creditSource.credits.ECTS.exception.bsc) creditSource.credits.ECTS.exception.bsc = parseInt(creditSource.credits.ECTS.exception.bsc);
+        }
         return {
           ...course,
           course: preferredSection
             ? canonicalCourseNumber(preferredSection)
             : course.course,
           title: preferredTitle,
-          credits: creditSource?.credits || "",
+          credits: creditSource ? creditSource.credits : null,
           mainSections,
           auxiliarySections,
           sections: [...mainSections, ...auxiliarySections]
@@ -915,7 +1268,7 @@
 
   function openCourseInList(courseKey) {
     const course = state.courses.find(item => item.key === courseKey);
-    
+
     if (!course) return;
 
     search.value = "";
@@ -1028,6 +1381,44 @@
     if (hasUnknown && !hasBad) return "unknown";
     if (hasUnknown && hasGood) return "partial";
     return "nofit";
+  }
+  function renderCourseMajorRequirementSummary(course) {
+    if (registeredMajors.level === null) {
+      return "";
+    }
+    const majorReqs = (() => {
+      const currentReqs = {};
+      Object.keys(majorRequirements).forEach(major => {
+        if (Object.keys(majorRequirements[major].result).includes(course.key.replaceAll(":", " "))) {
+          currentReqs[major] = majorRequirements[major].result[course.key.replaceAll(":", " ")];
+        }
+      });
+      return currentReqs;
+    })();
+    if (!Object.keys(majorReqs).length) return "<div class='course-fit-summary'><span class='course-major-pill useless'>No progress upon completion</span></div>";
+    return '<div class="course-fit-summary">' + Object.keys(majorReqs).map((major) => {
+      let facultyAddition = "";
+      if (majorReqs[major].includes(":")) {
+        const faculty = (() => {
+          const text = esc(majorReqs[major].split(":")[1]);
+          if (text === "E") return "FENS";
+          else if (text === "M") return "FMAN";
+          else if (text === "A") return "FASS";
+          return text;
+        })();
+        facultyAddition = '<span class="course-major-pill faculty">' + faculty + ' Faculty Course</span>';
+        majorReqs[major] = majorReqs[major].split(":")[0];
+      }
+      return '<span class="course-major-pill ' + esc(majorReqs[major].substring(0, 1)) + '">' + esc(majorReqs[major].substring(1)) + '</span>' + facultyAddition;
+    }).join('') + '</div>';
+  }
+
+  function renderCourseCreditsSummary(course) {
+    let creditsText = `<div class="course-fit-summary"><span class="course-credits-pill">${course.credits.SU} credits</span><span class="course-credits-pill ects">${course.credits.ECTS.base} ECTS</span>`;
+    if (course.credits.ECTS.bsc && course.credits.ECTS.bsc > 0) {
+      creditsText += `<span class="course-credits-pill basic">${course.credits.ECTS.bsc} Basic</span>`;
+    }
+    return creditsText + '</div>';
   }
 
   function renderCourseFitSummary(course) {
@@ -1190,8 +1581,8 @@
             </div>
           </div>
           <div class="course-summary-side">
-            <div class="course-credit">${esc(formatCredits(numericCredits(course.credits)))} credits</div>
-            <div class="section-count">${esc(countParts.join(" · ") || "No sections")}</div>
+            ${renderCourseMajorRequirementSummary(course)}
+            ${renderCourseCreditsSummary(course)}
             ${renderCourseFitSummary(course)}
             <div class="expand-label">Select sections</div>
           </div>
@@ -1513,7 +1904,7 @@
     const otherIssues = findIssues(chosen);
     if (otherIssues.length) {
       console.log(otherIssues);
-      otherIssues.map(x => [x.section.subject + " " + x.section.course + "-" + x.section.section + ": " + x.header,x.key]).forEach(x => createWarning(x[0],x[1]));
+      otherIssues.map(x => [x.section.subject + " " + x.section.course + "-" + x.section.section + ": " + x.header, x.key]).forEach(x => createWarning(x[0], x[1]));
     }
 
     const gridHeight = minutesToPixels(END_MIN - START_MIN);

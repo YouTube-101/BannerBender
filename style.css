@@ -245,6 +245,40 @@ input[type="search"]{
   gap:4px;
   max-width:220px;
 }
+.course-major-pill{
+  border-radius:999px;
+  padding:3px 7px;
+  font-size:14px;
+  font-weight:500;
+  white-space:nowrap;
+  background:#d9d9d9;color:#101010;
+}
+.course-major-pill.faculty {background:#f1e3ff;color:#400050}
+.course-major-pill.D {background: #ff0000;color: #ffffff;}
+.course-major-pill.R {background:#ffdddd;color:#860000}
+.course-major-pill.C {background:#fff0d6;color:#412800}
+.course-major-pill.A {background:#d3f0ff;color:#00283c}
+.course-major-pill.F {background:#d4ffd7;color:#00500b}
+.course-major-pill.S {background:#ffd4f0;color:#390019}
+.course-major-pill.S {background:#ffd4f0;color:#390019}
+.course-major-pill.useless {background:#a40000;color:#ffffff}
+.course-credits-pill{
+  border-radius:999px;
+  padding:3px 7px;
+  font-size:12px;
+  font-weight:600;
+  white-space:nowrap;
+  background: #ffebd7;
+  color: #7f3f00;
+}
+.course-credits-pill.ects{
+  background:#f0f5ff;
+  color: #0646eb;
+}
+.course-credits-pill.basic{
+  background: #f0fff0;
+  color: #017800;
+}
 .course-fit-pill{
   border-radius:999px;
   padding:3px 7px;
@@ -635,9 +669,18 @@ input[type="search"]{
   height: 40px;
   gap: 5px;
 }
-.sidebar > button.active {
+button.active {
   background: var(--brand);
   color: white;
+}
+.centeredbuttonmenu {
+  display: flex;
+  flex-direction: column;
+}
+.centeredbuttonmenu > div {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
 }
 .settings {
   display: flex;
