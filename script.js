@@ -1597,7 +1597,7 @@
   function populateFilters() {
     const creditValues = [...new Set(
       state.courses
-        .map(course => numericCredits(course.credits))
+        .map(course => numericCredits(course.credits.SU))
         .filter(value => value !== null)
     )].sort((first, second) => first - second);
 
@@ -1871,7 +1871,7 @@
     const fitStatus = fitFilter.value;
 
     state.filteredCourses = state.courses.filter(course => {
-      const courseCredit = numericCredits(course.credits);
+      const courseCredit = numericCredits(course.credits.SU);
       const matchesCredit =
         !credit ||
         (credit === "unknown"
@@ -2162,7 +2162,7 @@
 
       if (section.section) course.sections.add(section.section);
       if (course.credits === null) {
-        course.credits = numericCredits(section.credits);
+        course.credits.SU = numericCredits(section.credits);
       }
     });
 
@@ -2175,10 +2175,10 @@
     );
 
     const knownTotal = courses.reduce(
-      (sum, course) => sum + (course.credits ?? 0),
+      (sum, course) => sum + (course.credits.SU ?? 0),
       0
     );
-    const unknownCount = courses.filter(course => course.credits === null).length;
+    const unknownCount = courses.filter(course => course.credits.SU === null).length;
     const totalText =
       `${formatCredits(knownTotal)} credits` +
       (unknownCount ? ` + ${unknownCount} unknown` : "");
@@ -2211,7 +2211,7 @@
             : ""}
           </div>
           <div class="selected-summary-actions">
-            <div class="selected-summary-credit">${esc(formatCredits(course.credits))} credits</div>
+            <div class="selected-summary-credit">${esc(formatCredits(course.credits.SU))} credits</div>
             <button
               type="button"
               class="remove-course-btn"
