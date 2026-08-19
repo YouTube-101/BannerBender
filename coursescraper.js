@@ -419,7 +419,7 @@ async function generateCSV() {
     const allSchedules = [];
     for (let i = 0; i < courses.length; i++) {
       const course = courses[i];
-      const c = {CRN: course.crn,Subject:course.subject,Course:course.course,Section:course.section,Title:course.title,MeetingType:course.scheduleType,...course};
+      const c = { CRN: course.crn, Subject: course.subject, Course: course.course, Section: course.section, Title: course.title, MeetingType: course.scheduleType, ...course };
       delete c.crn;
       delete c.subject;
       delete c.course;
@@ -477,13 +477,14 @@ async function generateCSV() {
         console.log("No timetable found for course", course.subject + " " + course.course + " - " + course.section);
         allSchedules.push(c);
       }
-      else for (let j = 0; j < course.timetable.length; j++) {
-        c.timetable = course.timetable[j];
-        Object.keys(c.timetable).forEach(key => {
-          if (key !== "Type") c[key.replaceAll(" ", "")] = c.timetable[key];
+      else for (const meeting of course.timetable) {
+        const schedule = { ...c };
+        schedule.timetable = meeting;
+        Object.keys(meeting).forEach(key => {
+          if (key !== "Type") schedule[key.replaceAll(" ", "")] = meeting[key];
         });
-        delete c.timetable;
-        allSchedules.push(c);
+        delete schedule.timetable;
+        allSchedules.push(schedule);
       }
     }
 
