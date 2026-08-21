@@ -449,25 +449,27 @@ async function generateCSV() {
       delete c.link;
       if (course.restrictions.general !== null && course.restrictions.general.credits !== undefined) c.CreditLimit = course.restrictions.general.credits;
       else c.CreditLimit = null;
+      c.Prerequisites = null;
+      c.Corequisites = null;
+      c.AllowedLevels = null;
+      c.DeniedLevels = null;
+      c.AllowedFaculties = null;
+      c.DeniedFaculties = null;
+      c.AllowedPrograms = null;
+      c.DeniedPrograms = null;
+      c.AllowedClasses = null;
+      c.DeniedClasses = null;
       if (course.restrictions.prerequisites) c.Prerequisites = JSON.stringify(course.restrictions.prerequisites);
       if (course.restrictions.corequisites) c.Corequisites = course.restrictions.corequisites.join(":");
       if (course.restrictions.enrollment) {
         if (course.restrictions.enrollment.allowedLevels) c.AllowedLevels = course.restrictions.enrollment.allowedLevels.join(":");
-        else c.AllowedLevels = null;
-        // if (course.restrictions.enrollment.deniedLevels) c.DeniedLevels = course.restrictions.enrollment.deniedLevels.join(":");
-        // else c.deniedLevels = null;
+        if (course.restrictions.enrollment.deniedLevels) c.DeniedLevels = course.restrictions.enrollment.deniedLevels.join(":");
         if (course.restrictions.enrollment.allowedFaculties) c.AllowedFaculties = course.restrictions.enrollment.allowedFaculties.join(":");
-        else c.allowedFaculties = null;
         if (course.restrictions.enrollment.deniedFaculties) c.DeniedFaculties = course.restrictions.enrollment.deniedFaculties.join(":");
-        else c.deniedFaculties = null;
         if (course.restrictions.enrollment.allowedPrograms) c.AllowedPrograms = course.restrictions.enrollment.allowedPrograms.join(":");
-        else c.allowedPrograms = null;
-        // if (course.restrictions.enrollment.deniedPrograms) c.DeniedPrograms = course.restrictions.enrollment.deniedPrograms.join(":");
-        // else c.deniedPrograms = null;
+        if (course.restrictions.enrollment.deniedPrograms) c.DeniedPrograms = course.restrictions.enrollment.deniedPrograms.join(":");
         if (course.restrictions.enrollment.allowedClasses) c.AllowedClasses = course.restrictions.enrollment.allowedClasses.join(":");
-        else c.allowedClasses = null;
-        // if (course.restrictions.enrollment.deniedClasses) c.DeniedClasses = course.restrictions.enrollment.deniedClasses.join(":");
-        // else c.deniedClasses = null;
+        if (course.restrictions.enrollment.deniedClasses) c.DeniedClasses = course.restrictions.enrollment.deniedClasses.join(":");
       }
       if (course.restrictions) {
         delete c.restrictions;

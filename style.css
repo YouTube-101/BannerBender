@@ -303,6 +303,8 @@ input[type="search"]{
 .course-major-pill.S {background:#ffd4f0;color:#390019}
 .course-major-pill.S {background:#ffd4f0;color:#390019}
 .course-major-pill.useless {background:#a40000;color:#ffffff}
+.course-major-pill.requirement {border: 2px solid red;}
+.requirement.creditneeded {background:#ffe3f0;color:#500023}
 .course-credits-pill{
   border-radius:999px;
   padding:3px 7px;

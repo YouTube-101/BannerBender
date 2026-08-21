@@ -1282,6 +1282,20 @@
           bsc: row.ectsexceptionbasic
         }
       }
+      const restrictions = {}
+      if (row.creditlimit) restrictions.creditLimit = parseInt(row.creditlimit);
+      if (row.prerequisites) restrictions.prerequisites = JSON.parse(row.prerequisites);
+      if (row.corequisites) restrictions.corequisites = row.corequisites.split(":");
+      restrictions.enrollment = {}
+      if (row.allowedlevels) restrictions.enrollment.allowedLevels = row.allowedlevels.split(":");
+      if (row.deniedlevels) restrictions.enrollment.deniedLevels = row.deniedlevels.split(":");
+      if (row.allowedfaculties) restrictions.enrollment.allowedFaculties = row.allowedfaculties.split(":");
+      if (row.deniedfaculties) restrictions.enrollment.deniedFaculties = row.deniedfaculties.split(":");
+      if (row.allowedprograms) restrictions.enrollment.allowedPrograms = row.allowedprograms.split(":");
+      if (row.deniedprograms) restrictions.enrollment.deniedPrograms = row.deniedprograms.split(":");
+      if (row.allowedclasses) restrictions.enrollment.allowedClasses = row.allowedclasses.split(":");
+      if (row.deniedclasses) restrictions.enrollment.deniedClasses = row.deniedclasses.split(":");
+      if (Object.keys(restrictions.enrollment).length === 0) delete restrictions.enrollment;
       if (!map.has(key)) {
         map.set(key, {
           key,
@@ -1292,6 +1306,7 @@
           title,
           credits: creditsObj,
           instructors: new Set(),
+          restrictions: restrictions,
           meetings: []
         });
       }
@@ -1387,7 +1402,6 @@
               { numeric: true }
             )
           );
-
         const auxiliarySections = course.sections
           .filter(isLabOrRecitation)
           .sort((first, second) => {
@@ -1434,6 +1448,7 @@
           credits: creditSource ? creditSource.credits : null,
           mainSections,
           auxiliarySections,
+          restrictions: course.sections[0].restrictions || {},
           sections: [...mainSections, ...auxiliarySections]
         };
       })
@@ -1781,6 +1796,20 @@
     }).join('') + '</div>';
   }
 
+  function renderCourseRestrictionSummary(course) {
+    const restrictions = course.restrictions || {};
+    const parts = [];
+    console.log(restrictions);
+    if (restrictions.creditLimit) {
+      parts.push({ c: "creditneeded", t: `${restrictions.creditLimit} credits needed` });
+    }
+    console.log(parts);
+    return '<div class="course-fit-summary">' +
+      parts.map((part) => {
+        return '<span class="course-major-pill requirement '+part.c+'">' + part.t + '</span>'
+      }).join('') + '</div>';
+  }
+
   function renderCourseCreditsSummary(course) {
     let creditsText = `<div class="course-fit-summary"><span class="course-credits-pill">${course.credits.SU} credits</span><span class="course-credits-pill ects">${course.credits.ECTS.base} ECTS</span>`;
     if (course.credits.ECTS.bsc && course.credits.ECTS.bsc > 0) {
@@ -1949,6 +1978,7 @@
           </div>
           <div class="course-summary-side">
             ${renderCourseMajorRequirementSummary(course)}
+            ${renderCourseRestrictionSummary(course)}
             ${renderCourseCreditsSummary(course)}
             ${renderCourseFitSummary(course)}
             <div class="expand-label">Select sections</div>
@@ -2584,7 +2614,6 @@
     }
   );
   window.suDesktop?.onMessageFromMain("session-attempts", (data) => {
-    console.log(data);
     signinbutton.style.display = "none";
     const attemptsDiv = document.querySelector("#attemptsdiv");
     if (attemptsDiv) {
@@ -2625,7 +2654,6 @@
     }
   });
   window.suDesktop?.onMessageFromMain("login-details", (data) => {
-    console.log(data);
     if (data.signedin && data.status === "active") {
       usermenubutton.querySelector("span").textContent = data.user.name;
       usermenubutton.querySelector("div").style.backgroundImage = `url(${data.user.image})`;
@@ -2639,7 +2667,6 @@
     }
   });
   window.suDesktop?.onMessageFromMain("login-information", (data) => {
-    console.log(data);
     if (data.status === "wait") document.querySelector("#attemptsdiv").children[0].children[0].textContent = data.process;
   });
   loadCSVFromGitHub();
