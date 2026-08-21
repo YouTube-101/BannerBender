@@ -20,8 +20,6 @@
       <p>Integrated course planning tool</p>
     </div>
     <button id="settingsbutton" class="btn">Settings</button>
-  </div>
-  <div class="row">
     <div class="save-tools">
       <select id="saveSlotSelect" class="save-slot" aria-label="Schedule save slot"></select>
       <input id="renameSlotInput" class="save-name-input rename-slot-input" maxlength="60" placeholder="Slot name" aria-label="Rename save slot" hidden>
@@ -30,6 +28,8 @@
       <button class="btn" id="renameSaveSlotBtn" type="button" disabled>Rename</button>
       <button class="btn danger" id="deleteSaveBtn" type="button" disabled>Delete</button>
     </div>
+  </div>
+  <div class="row">
     <div class="banner-tools">
       <div id="attemptsdiv" style="display:none;">
         <div><p>Session attempts:</p><div id="attemptscontainer"></div></div>
@@ -175,6 +175,11 @@
 
   async function checkForNewVersion() {
     try {
+      if (window.suDesktop) {
+        // Electron app version is managed by the main process, not the web files.
+        return;
+      }
+
       const response = await fetch(
         `version.json?check=${Date.now()}`,
         {cache:"no-store"}

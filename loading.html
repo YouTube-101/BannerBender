@@ -131,6 +131,7 @@
         window.suDesktop.onMessageFromMain("login-information", (data) => {
             genericLoading.style.opacity = 0;
             loginLoading.style.opacity = 1;
+            scraperLoading.style.opacity = 0;
             console.log(data);
             if (data.user) {
                 if (data.user.name) loginLoading.querySelector("h1").textContent = data.user.name;
@@ -141,6 +142,7 @@
 
         window.suDesktop.onMessageFromMain("scraper-information", (data) => {
             genericLoading.style.opacity = 0;
+            loginLoading.style.opacity = 0;
             scraperLoading.style.opacity = 1;
             if (data.h) scraperLoading.querySelector("h1").textContent = data.h;
             if (data.t) scraperLoading.querySelector("span").textContent = data.t;

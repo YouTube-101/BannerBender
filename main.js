@@ -102,14 +102,15 @@ function createLoading(force = false) {
       return;
     }
     if (force.signinrequested) force = { parent: force.parent };
-    if (force.signinprocess) {
+    if (force.signinprocess && !force.brute) {
       await banner.getInformation(true);
       if ((await banner.getSessionDetails()).signedIn) force.signedIn = true;
     }
     const possiblesessions = force ? force : await banner.initInterface();
-    if (possiblesessions.signedIn || possiblesessions.guest) {
+    if (possiblesessions.signedIn || possiblesessions.guest || possiblesessions.brute) {
       const mainWin = await createMainWindow();
       if (mainWin) activeWindow = mainWin;
+      if (force.brute) banner.printAllAttempts();
       unlockMainWindow("loading");
       win.close();
       if (mainWin) {
@@ -288,13 +289,28 @@ ipcMain.handle("signIn", async (event, form) => {
     console.log("No session exists, creating a new one...");
     if (form.rushing) {
       setTimeout(async () => {
-
+        if (activeWindow && activeWindow !== mainWindow && !activeWindow.isDestroyed()) {
+          activeWindow.close();
+        }
+        createLoading({ signinprocess: true, brute: true });
+        await banner.getBannerSession(true);
+        const result = await banner.signIn(form);
+        if (!result.s) {
+          createLoading({ signinrequested: true, parent: mainWindow, error: result.d });
+        }
+        else {
+          await banner.getInformation(true);
+          const bannerSession = await banner.getSessionDetails();
+          if (bannerSession.signedIn) mainWindow.webContents.send("login-details", { status: "active", signedin: true, process: null, user: { name: bannerSession.user.name, image: bannerSession.user.pfp, schedule: bannerSession.user.actualschedule } });
+          else createLoading({ signinrequested: true, parent: mainWindow, error: "Failed to sign in. Please try again." });
+        }
       }, 20);
       return { s: false, w: true, d: "SESSIONGRABBING" };
     }
     else {
       const result = await banner.getBannerSession();
       if (!result.s) {
+        result.d = result.e;
         result.w = false;
         return result;
       }

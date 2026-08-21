@@ -600,7 +600,7 @@ async function generateCSV() {
               const title = row.find("td").eq(0).find("a").eq(0);
               const codeForUs = (() => {
                 const text = title.text().trim();
-                if (text === "University Courses") return "D1st Year Foundation";
+                if (text === "University Courses") return "DFoundationally Required";
                 else if (text === "Internship") return "IInternship";
                 else if (text === "Seminar") return "SSeminar";
                 else if (text === "Required") return "RRequired";

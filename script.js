@@ -2584,9 +2584,11 @@
     }
   );
   window.suDesktop?.onMessageFromMain("session-attempts", (data) => {
-    console.log(Object.keys(data.attempts).length);
+    console.log(data);
+    signinbutton.style.display = "none";
     const attemptsDiv = document.querySelector("#attemptsdiv");
     if (attemptsDiv) {
+      attemptsDiv.children[0].children[0].textContent = `Session Attempts`;
       const container = attemptsDiv.querySelector("#attemptscontainer");
       attemptsDiv.style.display = "block";
       if (container) {
@@ -2635,6 +2637,10 @@
       signinbutton.style.display = "block";
       usermenubutton.style.display = "none";
     }
+  });
+  window.suDesktop?.onMessageFromMain("login-information", (data) => {
+    console.log(data);
+    if (data.status === "wait") document.querySelector("#attemptsdiv").children[0].children[0].textContent = data.process;
   });
   loadCSVFromGitHub();
 })();

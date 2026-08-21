@@ -7,7 +7,8 @@ function LoadPage(type) {
     const main = document.querySelector("main");
     main.setAttribute("page-type", type);
     if (type === "login") {
-        main.innerHTML = '<div id="attemptsdiv" style="display:none;"></div><h1>Sign in</h1><div class="form"><span id="loginerror"></span><label for="username">Username</label><input id="username" type="text" placeholder="Username"><label for="password">Password</label><input id="password" type="password" placeholder="Password"><div><input type="checkbox" id="rememberme"><label for="rememberme">Remember my name</label></div><div><input type="checkbox" id="rememberpass" disabled><label for="rememberpass">Remember my password</label></div><div><input type="checkbox" id="registrationmode"><label for="registrationmode">In a hurry! Need to register my courses!</label></div><button class="btn banner" id="loginbutton">Login</button><div class="dash"><div></div><p>OR</p><div></div></div><button class="btn" id="guestbutton">Use without signing in</button></div>'
+        let manualLoginSet = false;
+        main.innerHTML = '<div id="attemptsdiv" style="display:none;"></div><h1>Sign in</h1><div class="form"><span id="loginerror"></span><label for="username">Username</label><input id="username" type="text" placeholder="Username"><label for="password">Password</label><input id="password" type="password" placeholder="Password"><div><input type="checkbox" id="rememberme"><label for="rememberme">Remember my name</label></div><div><input type="checkbox" id="rememberpass" disabled><label for="rememberpass">Remember my password</label></div><div><input type="checkbox" id="registrationmode"><label for="registrationmode">Brute force me in!</label></div><button class="btn banner" id="loginbutton">Login</button><div class="dash"><div></div><p>OR</p><div></div></div><button class="btn" id="guestbutton">Use without signing in</button></div>'
         main.querySelector("#username").addEventListener("input", () => {
             if (main.querySelector("#username").value.includes("@")) {
                 main.querySelector("#username").value = main.querySelector("#username").value.split("@")[0];
@@ -44,13 +45,22 @@ function LoadPage(type) {
             const result = await window.suDesktop.signIn({ username, password, rememberme, rememberpass, rushing });
             if (!result.s) {
                 if (!result.w) {
+                    if (result.d === 503) {
+                        if (!manualLoginSet) {
+                            manualLoginSet = true;
+                            result.d = "\"System is busy or out of registration hours.\"\nTry again now to brute force your way in.\nUncheck the \"Brute force!\" box to log in manually.";
+                            main.querySelector("#registrationmode").checked = true;
+                        } else {
+                            result.d = "\"System is busy or out of registration hours.\"\nPlease try again later.\nSelect the \"Brute force!\" box to auto retry.";
+                        }
+                    }
                     main.querySelector("#loginbutton").innerText = "Login";
                     main.querySelector("#loginerror").innerText = result.d;
                     main.querySelector("#loginerror").style.display = "block";
                     main.querySelector("#username").disabled = false;
                     main.querySelector("#password").disabled = false;
                     main.querySelector("#rememberme").disabled = false;
-                    main.querySelector("#rememberpass").disabled = false;
+                    if (main.querySelector("#rememberme").checked) main.querySelector("#rememberpass").disabled = false;
                     main.querySelector("#registrationmode").disabled = false;
                     main.querySelector("#loginbutton").disabled = false;
                     main.querySelector("#guestbutton").disabled = false;

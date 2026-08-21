@@ -182,6 +182,7 @@ function deleteCookie(cookieName) {
 
 async function initInterface() {
     await initCookieJar();
+    await resetCookies();
     const sessionExists = await cookieExists("__gpi") && await cookieExists("__sli");
     const loginExists = await cookieExists("SESSID");
     console.log("Session exists:", sessionExists, "Login exists:", loginExists);
@@ -223,6 +224,18 @@ async function getSession(force = false) {
     const thisAttempt = bannerSession.attemptCount;
     bannerSession.attempts[thisAttempt] = { status: "pending" };
     if (force) printAllAttempts();
+
+    // Randomly fail to simulate system busy
+    if (force) {
+        const randomFail = Math.random() > 0.1; // 90% chance to fail
+        const randomTime = Math.floor(Math.random() * 6000) + 500; // Random delay between 500ms and 6000ms
+        await delay(randomTime);
+        if (randomFail) {
+            bannerSession.attempts[thisAttempt] = { status: "busy" };
+            return { s: false, e: 503, attempt: thisAttempt };
+        }
+    }
+
     const sessionResult = await requestToBanner("twbkwbis.P_SabanciLogin", "GET", undefined, undefined, true);
     if (sessionResult.s === 200) {
         for (const cookie of sessionResult.cookie) {
@@ -232,9 +245,16 @@ async function getSession(force = false) {
         bannerSession.sessionExists = true;
         bannerSession.sessionCreatedAt = new Date().getTime();
         bannerSession.lastSuccessfulContact = bannerSession.sessionCreatedAt;
+        bannerSession.attempts[thisAttempt] = { status: "accepted" };
         return { s: true, attempt: thisAttempt };
     }
     else {
+        if (sessionResult.s === 503) {
+            bannerSession.attempts[thisAttempt] = { status: "busy" };
+        }
+        else {
+            bannerSession.attempts[thisAttempt] = { status: "error" };
+        }
         return { s: false, e: sessionResult.s, attempt: thisAttempt };
     }
 }
@@ -268,11 +288,21 @@ async function getSessionDetails() {
 async function getBannerSession(force = false) {
     bannerSession.attemptCount = 0;
     bannerSession.attempts = {};
+    if (!force) {
+        await delay(3000);
+        return { s: false, e: 503, attempt: 1 }
+    }
     if (force) {
+        let lastRequest = new Date().getTime() - bannerInterval;
         while (bannerSession.sessionExists === false) {
-            getSession(force).then(session => printAllAttempts);
-            await delay(bannerInterval);
+            if (new Date().getTime() - lastRequest > bannerInterval) {
+                getSession(force).then(session => printAllAttempts);
+                lastRequest = new Date().getTime();
+            }
+            if (bannerSession.sessionExists === true) break;
+            await delay(1);
         }
+        return { s: true, attempt: bannerSession.attemptCount };
     }
     else {
         if (bannerSession.sessionExists === false) {
@@ -414,4 +444,4 @@ function getCurrentTerm() {
     return thisterm;
 }
 
-module.exports = { initInterface, getBannerSession, signIn, getSessionDetails, resetCookies, getInformation, requestToPublicBanner, getCurrentTerm };
+module.exports = { initInterface, getBannerSession, signIn, getSessionDetails, resetCookies, getInformation, requestToPublicBanner, getCurrentTerm, printAllAttempts };
