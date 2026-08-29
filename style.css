@@ -491,7 +491,7 @@ input[type="search"]{
 }
 .selected-summary-empty{padding:12px 0;color:var(--muted);font-size:12px}
 .schedule-wrap{overflow: hidden;padding:14px;}
-.schedule-wrap > div {overflow: scroll;height: 100%;border-radius: 10px;}
+.schedule-wrap > div {overflow: auto;height: 100%;border-radius: 10px;}
 .schedule{
   min-width:850px;
   display:grid;
@@ -693,7 +693,7 @@ input[type="search"]{
   padding: 10px;
   border: 1px solid var(--line);
   border-radius: 15px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .sidebar {
   display: flex;
