@@ -83,6 +83,7 @@ POLS 531,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,CCore
 POLS 532,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 POLS 537,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 POLS 548,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
+POLS 563,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,,,,,,,,,,,,,,,,,,,,,
 POLS 565,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14
 POLS 580,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14
 POLS 583,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -91,6 +92,7 @@ ANTH 521,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree
 ANTH 526,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ANTH 568,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CONF 500,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
+CONF 501,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,,,,,,,,,,,,,,,,,,,,,
 CONF 511,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CONF 512,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CONF 523,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -107,6 +109,7 @@ CULT 552,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree
 CULT 553,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14
 CULT 555,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14,CCore 14
 CULT 561,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,
+CULT 562,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,,,,,,,,,,,,,,,,,,,,,
 CULT 568,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CULT 570,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CULT 584,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -127,11 +130,13 @@ ECON 603,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree
 ECON 604,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ECON 605,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ECON 607,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
+ECON 610,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,,,,,,,,,,,,,,,,,,,,,
 ECON 630,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ECON 635,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ECON 688,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ECON 691,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ECON 692,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
+ES 507,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,,,,,,,,,,,,,,,,,,,,,
 ES 524,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ES 554,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ES 592,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -355,8 +360,3 @@ VA 597,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,F
 VIS 508,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,
 VIS 510,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,
 VIS 512,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,
-POLS 563,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,,,,,,,,,,,,,,,,,,,,,
-CONF 501,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,,,,,,,,,,,,,,,,,,,,,
-CULT 562,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,,,,,,,,,,,,,,,,,,,,,
-ECON 610,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,,,,,,,,,,,,,,,,,,,,,
-ES 507,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FFree,,,,,,,,,,,,,,,,,,,,,

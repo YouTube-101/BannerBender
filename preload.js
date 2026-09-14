@@ -40,7 +40,6 @@ contextBridge.exposeInMainWorld("suDesktop", {
   requestSignIn: () => ipcRenderer.invoke("requestSignIn"),
   reloadTitlebar: () => {
     const wco = navigator.windowControlsOverlay.getTitlebarAreaRect();
-    console.log((window.innerWidth - wco.width + 5));
     if (process.platform == "win32") document.documentElement.style.setProperty("--title-padding-right", (window.innerWidth - wco.width + 5) + "px");
     else if (process.platform == "darwin") document.documentElement.style.setProperty("--title-padding-left", (wco.x - 5) + "px");
     else {

@@ -285,6 +285,7 @@ CS 48008,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 48010,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 48011,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 48012,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
+CS 48013,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 481,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 CULT 230,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,,,
 CULT 242,FFree:A,FFree:A,FFree:A,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -358,6 +359,7 @@ ECON 494,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ECON 495,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 200,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E
 EE 202,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E
+EE 234,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 301,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 EE 302,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 303,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -381,11 +383,13 @@ EE 408,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,F
 EE 409,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 410,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 411,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
+EE 412,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 413,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 414,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 415,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 417,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 419,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
+EE 420,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 423,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 426,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 440,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -400,6 +404,7 @@ EE 48008,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 48009,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 48010,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 48011,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
+EE 48012,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 482,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 EL 202,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 EL 204,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

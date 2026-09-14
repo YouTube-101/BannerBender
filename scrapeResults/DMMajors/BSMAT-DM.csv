@@ -185,7 +185,12 @@ DSA 428,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,
 DSA 440,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 DSA 473,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 200,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E
+EE 321,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 411,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
+EE 412,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
+EE 420,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
+EE 423,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
+EE 426,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 440,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 48000,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,,,
 EE 48001,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,
@@ -193,6 +198,8 @@ EE 48002,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 48004,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,
 EE 48008,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 48009,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
+EE 48010,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
+EE 48012,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EL 202,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 EL 302,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 EL 303,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -261,6 +268,7 @@ MATH 405,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 MATH 409,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 MATH 410,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 MATH 414,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
+MATH 428,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 MATH 479,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,,,,,
 MATH 480,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 MATH 481,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -401,6 +409,7 @@ CS 449,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,F
 CS 48006,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 48007,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,
 CS 48008,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
+CS 48013,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CULT 230,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,,,
 CULT 242,FFree:A,FFree:A,FFree:A,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 CULT 299,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
@@ -471,6 +480,7 @@ ECON 492,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ECON 494,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ECON 495,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 202,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E,AArea:E
+EE 234,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 301,FFree,FFree,FFree,AArea,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 EE 302,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 303,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
@@ -482,7 +492,6 @@ EE 311,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,A
 EE 312,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 313,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 314,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
-EE 321,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 401,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 402,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 403,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
@@ -498,12 +507,9 @@ EE 414,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,A
 EE 415,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 417,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 419,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
-EE 423,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
-EE 426,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 444,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 473,FFree,FFree,FFree,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 480,FFree,FFree,FFree,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-EE 48010,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 48011,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 482,FFree,FFree,FFree,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ENRG 220,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -700,7 +706,6 @@ LIT 445,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,
 LIT 492,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,,,
 MATH 212,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E,RRequired:E
 MATH 221,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,,,,
-MATH 428,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 MGMT 201,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 MGMT 203,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 MGMT 213,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree

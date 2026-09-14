@@ -43,7 +43,7 @@ PHYS 553,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
 PHYS 555,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
 PHYS 556,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 PHYS 561,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
-PHYS 562,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+PHYS 562,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 PHYS 566,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
 PHYS 576,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 PHYS 580,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -127,10 +127,8 @@ BIO 676,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AAr
 CHEM 505,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 CS 500,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 CS 501,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,,,,,
-CS 502,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,,,,,,,,,,,,,,,,,,
 CS 503,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 CS 504,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
-CS 505,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,,,,,,,,,,,,,,,,,,
 CS 507,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 CS 508,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,,,,,
 CS 510,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
@@ -169,6 +167,7 @@ CS 58009,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AA
 CS 58010,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 CS 58011,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 CS 58012,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
+CS 58013,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 CS 601,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,,,,,
 CS 611,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 CS 68000,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,,,,,
@@ -239,6 +238,7 @@ EE 58006,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AA
 EE 58008,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 58009,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 58010,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
+EE 58012,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 5807,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 606,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 620,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,,,,,
@@ -255,6 +255,7 @@ EE 635,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AAre
 EE 636,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 637,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,,,,,
 EE 638,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,,,,,
+EE 640,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 EE 651,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,,,,,
 EE 652,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,,,,,
 EE 653,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
@@ -385,6 +386,7 @@ ME 515,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AAre
 ME 518,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 ME 520,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 ME 525,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
+ME 528,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 ME 530,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 ME 535,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 ME 541,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
@@ -415,5 +417,7 @@ SEC 58006,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,A
 SEC 592,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 XM 590,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 XM 591,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
+CS 502,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,,,,,,,,,,,,,,,,,,
+CS 505,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,AArea,,,,,,,,,,,,,,,,,,
 PSY 569,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
 PSY 521,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,CCore,CCore,CCore,CCore,CCore,CCore

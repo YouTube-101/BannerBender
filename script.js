@@ -146,7 +146,6 @@
       const minorAdmit = registeredMajors.admits[minor] || state.term;
       majorRequirements[minor] = parseMajor(parseCSV(await window.suDesktop.getMajor("MN", minor)), minorAdmit);
     }
-    console.log("Loaded major data:", majorRequirements);
   }
 
   const privacySettings = [
@@ -1799,11 +1798,9 @@
   function renderCourseRestrictionSummary(course) {
     const restrictions = course.restrictions || {};
     const parts = [];
-    console.log(restrictions);
     if (restrictions.creditLimit) {
       parts.push({ c: "creditneeded", t: `${restrictions.creditLimit} credits needed` });
     }
-    console.log(parts);
     return '<div class="course-fit-summary">' +
       parts.map((part) => {
         return '<span class="course-major-pill requirement '+part.c+'">' + part.t + '</span>'
@@ -2614,6 +2611,7 @@
     }
   );
   window.suDesktop?.onMessageFromMain("session-attempts", (data) => {
+    console.log("Session attempts received:", data);
     signinbutton.style.display = "none";
     const attemptsDiv = document.querySelector("#attemptsdiv");
     if (attemptsDiv) {
@@ -2654,6 +2652,7 @@
     }
   });
   window.suDesktop?.onMessageFromMain("login-details", (data) => {
+    console.log("Login details received:", data);
     if (data.signedin && data.status === "active") {
       usermenubutton.querySelector("span").textContent = data.user.name;
       usermenubutton.querySelector("div").style.backgroundImage = `url(${data.user.image})`;
@@ -2667,6 +2666,7 @@
     }
   });
   window.suDesktop?.onMessageFromMain("login-information", (data) => {
+    console.log("Login information received:", data);
     if (data.status === "wait") document.querySelector("#attemptsdiv").children[0].children[0].textContent = data.process;
   });
   loadCSVFromGitHub();

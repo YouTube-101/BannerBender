@@ -1,7 +1,7 @@
 "Experimental Psychology - With Master's Degree","202101","202102","202103","202201","202202","202203","202301","202302","202303","202401","202402","202403","202501","202502","202503","202601"
-Requirement:credits,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24
-Requirement:ECTS,250,250,250,250,250,250,250,250,250,250,250,250,250,250,250,250
-Requirement:courses,14,14,14,14,14,14,11,11,11,11,11,11,11,11,11,11
+Requirement:credits,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,21
+Requirement:ECTS,250,250,250,250,250,250,250,250,250,250,250,250,250,250,250,240
+Requirement:courses,14,14,14,14,14,14,11,11,11,11,11,11,11,11,11,10
 PSY 799,TPhD Thesis,TPhD Thesis,TPhD Thesis,TPhD Thesis,TPhD Thesis,TPhD Thesis,TPhD Thesis,TPhD Thesis,TPhD Thesis,TPhD Thesis,TPhD Thesis,TPhD Thesis,TPhD Thesis,TPhD Thesis,TPhD Thesis,TPhD Thesis
 GR 501S,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 GR 502S,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -144,6 +144,7 @@ CS 58009,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 58010,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 58011,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 58012,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
+CS 58013,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 601,FFree,FFree,FFree,FFree,,,,,,,,,,,,
 CS 611,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 68000,FFree,FFree,FFree,FFree,,,,,,,,,,,,
@@ -255,6 +256,7 @@ EE 58008,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 58009,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 58010,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 58011,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
+EE 58012,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 5807,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 606,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 620,FFree,FFree,FFree,FFree,,,,,,,,,,,,
@@ -273,6 +275,7 @@ EE 635,FFree,FFree,FFree,FFree,,,,,,,,,,,,
 EE 636,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 637,FFree,FFree,FFree,FFree,,,,,,,,,,,,
 EE 638,FFree,FFree,FFree,FFree,,,,,,,,,,,,
+EE 640,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 EE 651,FFree,FFree,FFree,FFree,,,,,,,,,,,,
 EE 652,FFree,FFree,FFree,FFree,,,,,,,,,,,,
 EE 653,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -556,6 +559,7 @@ ME 515,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,F
 ME 518,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ME 520,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ME 525,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
+ME 528,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ME 530,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ME 535,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ME 537,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -748,7 +752,7 @@ PSY 590,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,
 PSY 595,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 PSY 599,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 PSY 621,FFree,FFree,FFree,FFree,FFree,FFree,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
-PSY 622,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
+PSY 622,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,CCore
 PUBL 500,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,
 PUBL 501,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,
 PUBL 503,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,

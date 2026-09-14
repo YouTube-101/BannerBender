@@ -113,6 +113,7 @@ function createLoading(force = false) {
       if (force.brute) banner.printAllAttempts();
       unlockMainWindow("loading");
       win.close();
+      if (possiblesessions.guest) mainWin.webContents.send("login-details", {status: "inactive", signedin: false, user: null});
       if (mainWin) {
         mainWin.maximize();
         mainWin.focus();

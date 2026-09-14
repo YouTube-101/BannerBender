@@ -42,6 +42,7 @@ GR 502S,,,,,,,,,,,,,,,,,,,,,,,,,,,,RRequired,RRequired,RRequired,RRequired,RRequ
 GR 503S,,,,,,,,,,,,,,,,,,,,,,,,,,,,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,,,,,,,,,,
 GR 555S,,,,,,,,,,,,,,,,,,,,,,,,,,,,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired
 ECON 688,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
-MATH 571,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
+MATH 571,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,
 ECON 635,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
+ECON 571,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,CCore,CCore,CCore,CCore,CCore,RRequired
 MATH 501,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CCore,CCore,CCore,CCore,CCore,CCore,CCore

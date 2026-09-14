@@ -307,63 +307,128 @@ async function generateCSV() {
       broadcastToAllWindows("scraper-information", { p: ((completeCount + 1) / allCourseCodes.length) });
       new Promise(async r => {
         const catalogData = await banner.requestToPublicBanner("bwckctlg.p_disp_course_detail?cat_term_in=202601&subj_code_in=" + allCourseCodes[i].split(" ")[0] + "&crse_numb_in=" + allCourseCodes[i].split(" ")[1], "GET");
-        const $$ = cheerio.load(catalogData.dom("td.ntdefault").html().replaceAll("\n", " ").replaceAll("<br>", "\n"));
-        const description = $$("i")[0] && $$("i")[0].next ? $$("i")[0].next.data.trim() : null;
-        const descriptionTR = $$("b")[0] && $$("b")[0].next ? $$("b")[0].next.data.substring(0, $$("b")[0].next.data.indexOf("\n")).trim() : null;
-        const restrictions = $$("span.fieldlabeltext:contains('Restrictions:')")[0] ? $$("span.fieldlabeltext:contains('Restrictions:')")[0].next.data.trim().split("\n").map(x => { x = x.trim(); if (x === "Must be enrolled in one of the following Levels:") return "MUSTBE:allowedLevels"; else if (x === "Must be enrolled in one of the following Colleges:") return "MUSTBE:allowedFaculties"; else if (x === "Must be enrolled in one of the following Programs:") return "MUSTBE:allowedPrograms"; else if (x === "Must be enrolled in one of the following Classifications:") return "MUSTBE:allowedClasses"; else if (x === "May not be enrolled in one of the following Colleges:") return "MUSTBE:deniedFaculties"; else return x }).filter(x => x.length > 0) : null;
-        const getSectionText = (startLabel, endLabel) => {
-          const $start = $$(`span.fieldlabeltext:contains('${startLabel}')`);
-          if ($start.length === 0) return null;
-          let rawText = '';
-          let currentNode = $start[0].next;
-          const endSelector = endLabel ? `span.fieldlabeltext:contains('${endLabel}')` : null;
-          while (currentNode) {
-            if (endSelector && currentNode.type === 'tag' && $$(currentNode).is(endSelector)) {
-              break;
-            }
-            if (currentNode.type === 'text') {
-              rawText += currentNode.data;
-            }
-            else if (currentNode.type === 'tag') {
-              rawText += $$(currentNode).text();
-            }
-            currentNode = currentNode.next;
+        let obj;
+        if (catalogData.dom(".errortext").length > 0) {
+          const isUndergrad = (parseInt(allCourseCodes[i].split(" ")[1].substring(0,1))<5)?"U":"";
+          const offers = await banner.requestToPublicBanner("sabanci_www.p_get_courses?levl_code="+isUndergrad+"G&subj_code=" + allCourseCodes[i].split(" ")[0] + "&crse_numb=" + allCourseCodes[i].split(" ")[1] + "&lang=eng");
+          const $$ = cheerio.load(offers.dom.html());
+          if (!$$("tbody")) {
+            console.error("Error fetching catalog for course " + allCourseCodes[i] + ": No tbody found in HTML");
+            process.exit(1);
           }
-          return rawText.trim();
-        };
-
-        const rawCoreqText = getSectionText('Corequisites:', 'Prerequisites:');
-        const coreqText = rawCoreqText ? rawCoreqText.split("\n").map(x => x.trim()).filter(x => x.length > 0) : null;
-        if (coreqText && coreqText.length > 0) {
-          for (let j = 0; j < coreqText.length; j++) {
-            coreqs[coreqText[j]] = [allCourseCodes[i], ...coreqText.filter(x => x !== coreqText[j])].filter(x => x !== undefined);
+          let rawPrereqText = $$("tbody").eq(0).children().eq(3).children().eq(0).text().substring("Prerequisite: ".length).trim();
+          let prepping = 4;
+          while (!$$("tbody").eq(0).children().eq(prepping).children().eq(0).text().includes("Corequisite: ")) {
+            rawPrereqText += " " + $$("tbody").eq(0).children().eq(prepping).children().eq(0).text().trim();
+            prepping++;
           }
+          if (rawPrereqText === "__") rawPrereqText = null;
+          let rawCoreqText = $$("tbody").eq(0).children().eq(prepping).children().eq(0).text().substring("Corequisite: ".length).trim();
+          if (rawCoreqText === "__") rawCoreqText = null;
+          else rawCoreqText = [rawCoreqText.trim()];
+          prepping++;
+          while (!$$("tbody").eq(0).children().eq(prepping).children().eq(0).text().includes("ECTS Credit: ")) {
+            rawCoreqText.push($$("tbody").eq(0).children().eq(prepping).children().eq(0).text().trim());
+            prepping++;
+          }
+          prepping++;
+          let rawGeneralText = $$("tbody").eq(0).children().eq(prepping).children().eq(0).text().substring("General Requirements: ".length).trim();
+          prepping++;
+          while (prepping < $$("tbody").eq(0).children().length) {
+            rawGeneralText += " " + $$("tbody").eq(0).children().eq(prepping).children().eq(0).text().trim();
+            prepping++;
+          }
+          rawGeneralText = rawGeneralText.trim();
+          if (rawGeneralText === "") rawGeneralText = null;
+          const generalText = rawGeneralText ? parseGeneralRequirements(rawGeneralText) : null;
+          if (generalText && generalText.prerequisites) {
+            if (rawPrereqText && !rawPrereqText.includes(">")) {
+              rawPrereqText += " and (" + generalText.prerequisites + ")";
+            }
+            else {
+              rawPrereqText = generalText.prerequisites;
+            }
+            delete generalText.prerequisites;
+          }
+          const turkish = await banner.requestToPublicBanner("sabanci_www.p_get_courses?levl_code="+isUndergrad+"G&subj_code=" + allCourseCodes[i].split(" ")[0] + "&crse_numb=" + allCourseCodes[i].split(" ")[1] + "&lang=tur");
+          const $$tr = cheerio.load(turkish.dom.html());
+          obj = {
+            subject: allCourseCodes[i].split(" ")[0],
+            course: allCourseCodes[i].split(" ")[1],
+            description: $$("tbody").eq(0).children().eq(1).children().eq(0).text().replaceAll("\n", " ").replaceAll("  ", " ").trim(),
+            descriptionTR: $$tr("tbody").eq(0).children().eq(1).children().eq(0).text().replaceAll("\n", " ").replaceAll("  ", " ").trim(),
+            restrictions: null,
+            prerequisites: rawPrereqText ? parsePrerequisites(rawPrereqText) : null,
+            coreqText: rawCoreqText,
+            generalText: generalText
+          }
+          console.log(obj);
         }
-
-        let rawPrereqText = getSectionText('Prerequisites:', 'General Requirements:');
-        const rawGeneralText = getSectionText('General Requirements:', null);
-
-        const generalText = rawGeneralText ? parseGeneralRequirements(rawGeneralText) : null;
-        if (generalText && generalText.prerequisites) {
-          if (rawPrereqText && !rawPrereqText.includes(">")) {
-            rawPrereqText += " and (" + generalText.prerequisites + ")";
+        else {
+          const $$ = cheerio.load(catalogData.dom("td.ntdefault").html().replaceAll("\n", " ").replaceAll("<br>", "\n"));
+          try {
+          } catch (error) {
+            console.log(catalogData, catalogData.dom.html());
+            console.error("Error loading catalog data for course " + allCourseCodes[i] + ": " + error);
+            process.exit(1);
           }
-          else {
-            rawPrereqText = generalText.prerequisites;
-          }
-          delete generalText.prerequisites;
-        }
-        const prereqText = rawPrereqText ? parsePrerequisites(rawPrereqText) : null;
+          const description = $$("i")[0] && $$("i")[0].next ? $$("i")[0].next.data.trim() : null;
+          const descriptionTR = $$("b")[0] && $$("b")[0].next ? $$("b")[0].next.data.substring(0, $$("b")[0].next.data.indexOf("\n")).trim() : null;
+          const restrictions = $$("span.fieldlabeltext:contains('Restrictions:')")[0] ? $$("span.fieldlabeltext:contains('Restrictions:')")[0].next.data.trim().split("\n").map(x => { x = x.trim(); if (x === "Must be enrolled in one of the following Levels:") return "MUSTBE:allowedLevels"; else if (x === "Must be enrolled in one of the following Colleges:") return "MUSTBE:allowedFaculties"; else if (x === "Must be enrolled in one of the following Programs:") return "MUSTBE:allowedPrograms"; else if (x === "Must be enrolled in one of the following Classifications:") return "MUSTBE:allowedClasses"; else if (x === "May not be enrolled in one of the following Colleges:") return "MUSTBE:deniedFaculties"; else return x }).filter(x => x.length > 0) : null;
+          const getSectionText = (startLabel, endLabel) => {
+            const $start = $$(`span.fieldlabeltext:contains('${startLabel}')`);
+            if ($start.length === 0) return null;
+            let rawText = '';
+            let currentNode = $start[0].next;
+            const endSelector = endLabel ? `span.fieldlabeltext:contains('${endLabel}')` : null;
+            while (currentNode) {
+              if (endSelector && currentNode.type === 'tag' && $$(currentNode).is(endSelector)) {
+                break;
+              }
+              if (currentNode.type === 'text') {
+                rawText += currentNode.data;
+              }
+              else if (currentNode.type === 'tag') {
+                rawText += $$(currentNode).text();
+              }
+              currentNode = currentNode.next;
+            }
+            return rawText.trim();
+          };
 
-        const obj = {
-          subject: allCourseCodes[i].split(" ")[0],
-          course: allCourseCodes[i].split(" ")[1],
-          description,
-          descriptionTR,
-          restrictions,
-          prerequisites: prereqText,
-          coreqText,
-          generalText
+          const rawCoreqText = getSectionText('Corequisites:', 'Prerequisites:');
+          const coreqText = rawCoreqText ? rawCoreqText.split("\n").map(x => x.trim()).filter(x => x.length > 0) : null;
+          if (coreqText && coreqText.length > 0) {
+            for (let j = 0; j < coreqText.length; j++) {
+              coreqs[coreqText[j]] = [allCourseCodes[i], ...coreqText.filter(x => x !== coreqText[j])].filter(x => x !== undefined);
+            }
+          }
+
+          let rawPrereqText = getSectionText('Prerequisites:', 'General Requirements:');
+          const rawGeneralText = getSectionText('General Requirements:', null);
+
+          const generalText = rawGeneralText ? parseGeneralRequirements(rawGeneralText) : null;
+          if (generalText && generalText.prerequisites) {
+            if (rawPrereqText && !rawPrereqText.includes(">")) {
+              rawPrereqText += " and (" + generalText.prerequisites + ")";
+            }
+            else {
+              rawPrereqText = generalText.prerequisites;
+            }
+            delete generalText.prerequisites;
+          }
+          const prereqText = rawPrereqText ? parsePrerequisites(rawPrereqText) : null;
+
+          obj = {
+            subject: allCourseCodes[i].split(" ")[0],
+            course: allCourseCodes[i].split(" ")[1],
+            description,
+            descriptionTR,
+            restrictions,
+            prerequisites: prereqText,
+            coreqText,
+            generalText
+          }
         }
         if (obj.restrictions && obj.restrictions.length === 0) delete obj.restrictions;
         else if (obj.restrictions) {
@@ -384,6 +449,9 @@ async function generateCSV() {
         completeCount++;
         ongoingCount--;
         r();
+      }).catch(err => {
+        console.error("Error fetching catalog for course " + allCourseCodes[i] + ": " + err);
+        process.exit(1);
       });
     }
     await new Promise(async r => { while (completeCount < allCourseCodes.length) { await new Promise(o => setTimeout(o, 1)); }; r(); });
