@@ -1,3 +1,9 @@
+if (!window.suDesktop) {
+    setTimeout(() => {
+        window.location.href = "/";
+    }, 100);
+    document.body.innerHTML = "<span>This page is only accessible from the BannerBender application. Redirecting you to the website...</span>";
+}
 function initializeAttemptsDiv() {
     const attemptsDiv = document.querySelector("#attemptsdiv");
     attemptsDiv.innerHTML = '<div><p>Session attempts:</p><div id="attemptscontainer"></div></div>';
@@ -113,10 +119,4 @@ window.suDesktop.onMessageFromMain("session-attempts", (data) => {
         }
     }
 });
-if (!window.suDesktop) {
-    setTimeout(() => {
-        window.location.href = "/";
-    }, 100);
-    document.body.innerHTML = "<span>This page is only accessible from the BannerBender application. Redirecting you to the website...</span>";
-}
 ["drop", "dragover"].forEach((t => { document.addEventListener(t, (e => { e.stopPropagation() }), !0) }));
