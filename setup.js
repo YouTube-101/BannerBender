@@ -113,4 +113,10 @@ window.suDesktop.onMessageFromMain("session-attempts", (data) => {
         }
     }
 });
-["drop", "dragover"].forEach((t => {document.addEventListener(t, (e => {e.stopPropagation()}), !0)}));
+if (!window.suDesktop) {
+    setTimeout(() => {
+        window.location.href = "/";
+    }, 100);
+    document.body.innerHTML = "<span>This page is only accessible from the BannerBender application. Redirecting you to the website...</span>";
+}
+["drop", "dragover"].forEach((t => { document.addEventListener(t, (e => { e.stopPropagation() }), !0) }));
