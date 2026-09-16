@@ -28,22 +28,14 @@
     "productName": "BannerBender",
     "asar": true,
     "files": [
-      "main.js",
-      "preload.js",
-      "index.html",
-      "loading.html",
-      "style.css",
-      "script.js",
-      "preload.js",
-      "package.json",
-      "sabanci_courses.csv"
+      "**/*"
     ],
     "directories": {
       "output": "dist"
     },
     "win": {
       "target": "nsis",
-      "icon": "build/icon.ico"
+      "icon": "iconbg.ico"
     },
     "nsis": {
       "oneClick": false,

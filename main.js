@@ -128,7 +128,7 @@ function createLoading(force = false) {
       win.close();
       setup.show();
       setup.focus();
-      setup.webContents.openDevTools();
+      //setup.webContents.openDevTools();
       applyMainWindowInteractivity();
       const errorcode = force.error ? `document.querySelector("#loginerror").innerText = '${force.error}';document.querySelector("#loginerror").style.display = "block";` : "";
       await setup.webContents.executeJavaScript(`window.requestAnimationFrame(() => { document.body.classList.remove('invisible'); LoadPage('login'); ${errorcode} });`);
