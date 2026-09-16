@@ -47,6 +47,7 @@
     },
     "dmg": {
       "title": "Install BannerBender",
+      "background": "macosdmgbackground.png",
       "window": {
         "width": 540,
         "height": 380
