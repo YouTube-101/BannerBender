@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "node start-electron.js",
-    "buildmacos": "electron-packager . BannerBender --platform=darwin --arch=x64 --out=dist --overwrite",
+    "buildmacos": "electron-builder --mac",
     "buildwin": "electron-builder --win"
   },
   "repository": {
@@ -36,6 +36,34 @@
     "win": {
       "target": "nsis",
       "icon": "iconbg.ico"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "icon.icns",
+      "category": "public.app-category.utilities",
+      "identity": null
+    },
+    "dmg": {
+      "title": "Install BannerBender",
+      "window": {
+        "width": 540,
+        "height": 380
+      },
+      "contents": [
+        {
+          "x": 130,
+          "y": 220,
+          "type": "file"
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
     },
     "nsis": {
       "oneClick": false,
