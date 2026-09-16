@@ -1,12 +1,12 @@
 {
   "name": "bannerbender",
-  "version": "1.0.0",
+  "version": "2026.09.16.1",
   "description": "",
   "main": "main.js",
   "scripts": {
     "start": "node start-electron.js",
     "buildmacos": "electron-packager . BannerBender --platform=darwin --arch=x64 --out=dist --overwrite",
-    "buildwin": "electron-packager . BannerBender --platform=win32 --arch=x64 --out=dist --ignore=\"^/(dist|node_modules)\" --overwrite --asar"
+    "buildwin": "electron-builder --win"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/YouTube-101/BannerBender#readme",
   "devDependencies": {
     "electron": "^43.6.0",
+    "electron-builder": "^26.15.3",
     "electron-packager": "^17.1.2"
   },
   "build": {
@@ -41,9 +42,8 @@
       "output": "dist"
     },
     "win": {
-      "target": [
-        "portable"
-      ]
+      "target": "nsis",
+      "icon": "build/icon.ico"
     },
     "nsis": {
       "oneClick": false,
