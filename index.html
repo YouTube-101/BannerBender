@@ -10,7 +10,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
-<meta id="version" name="suchedule-version" content="2026.08.19.5" />
+<meta id="version" name="suchedule-version" content="2026.09.16.1" />
 </head>
 <body class="invisible">
 <header>
@@ -31,11 +31,22 @@
   </div>
   <div class="row">
     <div class="banner-tools">
+      <button id="resetbutton" class="btn" style="display:none;">Reset</button>
+      <button id="savebutton" class="btn banner" style="display:none;">Save Changes</button>
       <div id="attemptsdiv" style="display:none;">
         <div><p>Session attempts:</p><div id="attemptscontainer"></div></div>
+        <div style="display:none;"><p>Logging in...</p><div id="attemptcontainer"><div style="background-color: rgb(0, 160, 0);"></div><h3>Inserting Credentials...</h3></div></div>
       </div>
-      <button id="signinbutton" class="btn banner">Sign in</button>
-      <button id="usermenubutton" class="btn usermenu"><span></span><span>▾</span><div></div></button>
+      <button id="signinbutton" class="btn banner" style="display:none;">Sign in</button>
+      <button id="downloadbutton" class="btn banner" style="display:none;">Download</button>
+      <button id="usermenubutton" class="btn usermenu" onclick="document.getElementById('usermenu').classList.toggle('show')"><span></span><span>▾</span><div></div></button>
+      <div id="usermenu">
+        <button class="btn">Launch Banner</button>
+        <button class="btn">Request Override</button>
+        <button class="btn">Registration Form</button>
+        <button class="btn">Summer Registration</button>
+        <button class="btn active red">Sign Out</button>
+      </div>
     </div>
   </div>
 </header>
@@ -92,7 +103,7 @@
     </div>
 
     <div class="schedule-wrap" id="scheduleWrap">
-      <div class="empty">Loading course data from GitHub…</div>
+      <div class="empty">Loading course data…</div>
     </div>
   </section>
 </main>
@@ -127,6 +138,16 @@
       <section class="settings">
 
       </section>
+    </div>
+  </div>
+</dialog>
+<dialog id="savedialog" class="modal">
+  <div>
+    <section class="modal-header">
+      <h2>Save Changes</h2>
+      <button class="btn close"></button>
+    </section>
+    <div style="display: flex;flex-direction: column;align-items: center;justify-content: center;">
     </div>
   </div>
 </dialog>

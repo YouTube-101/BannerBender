@@ -15,7 +15,8 @@ app.commandLine.appendSwitch('enable-zero-copy');
 const COURSE_CSV_PATH = path.join(__dirname, "scrapeResults/courses.csv");
 
 const ALLOWED_EXTERNAL_HOSTS = new Set([
-  "suis.sabanciuniv.edu"
+  "suis.sabanciuniv.edu",
+  "mysu.sabanciuniv.edu",
 ]);
 
 let mainWindow = null;
@@ -98,10 +99,10 @@ function createLoading(force = false) {
       return;
     }
     if (showOnlyBG) {
-      win.webContents.openDevTools();
+      //win.webContents.openDevTools();
       return;
     }
-    if (force.signinrequested) force = { parent: force.parent };
+    if (force.signinrequested) force = { error: force.error, parent: force.parent };
     if (force.signinprocess && !force.brute) {
       await banner.getInformation(true);
       if ((await banner.getSessionDetails()).signedIn) force.signedIn = true;
@@ -113,7 +114,7 @@ function createLoading(force = false) {
       if (force.brute) banner.printAllAttempts();
       unlockMainWindow("loading");
       win.close();
-      if (possiblesessions.guest) mainWin.webContents.send("login-details", {status: "inactive", signedin: false, user: null});
+      if (possiblesessions.guest) mainWindow.webContents.send("login-details", { status: "inactive", signedin: false, user: null });
       if (mainWin) {
         mainWin.maximize();
         mainWin.focus();
@@ -127,8 +128,12 @@ function createLoading(force = false) {
       win.close();
       setup.show();
       setup.focus();
+      setup.webContents.openDevTools();
       applyMainWindowInteractivity();
-      await setup.webContents.executeJavaScript(`window.requestAnimationFrame(() => { document.body.classList.remove('invisible'); LoadPage('login') });`);
+      const errorcode = force.error ? `document.querySelector("#loginerror").innerText = '${force.error}';document.querySelector("#loginerror").style.display = "block";` : "";
+      await setup.webContents.executeJavaScript(`window.requestAnimationFrame(() => { document.body.classList.remove('invisible'); LoadPage('login'); ${errorcode} });`);
+      const bannerSession = await banner.getSessionDetails();
+      if (bannerSession.user.username) await setup.webContents.send("login-details", { status: "inactive", signedin: false, user: {name:bannerSession.user.name, pfp:bannerSession.user.pfp} });
     }
   });
   win.loadFile(path.join(__dirname, 'loading.html'));
@@ -212,7 +217,7 @@ async function createMainWindow() {
   applyMainWindowInteractivity();
   if (process.platform === 'darwin' && typeof win.setWindowButtonPosition === "function") win.setWindowButtonPosition({ x: 19, y: 18 });
 
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
 
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (isAllowedExternalUrl(url)) {
@@ -281,8 +286,26 @@ ipcMain.handle("courses:load-default", async () => {
 
 ipcMain.handle("loadfinished", async () => {
   csvloaded = true;
+  const bannerSession = await banner.getSessionDetails();
+  if (!bannerSession.signedIn) return;
+  await mainWindow.webContents.send("login-details", { status: "active", signedin: true, process: null, user: { name: bannerSession.user.name, image: bannerSession.user.pfp, schedule: bannerSession.user.actualschedule } });
 });
 
+ipcMain.handle("getPopulation", (event, subject, course, crns) => banner.getPopulation(subject, course, crns));
+ipcMain.handle("submitRegistration", (event, adds, drops) => banner.submitRegistration(adds, drops));
+ipcMain.handle("signOut", (event) => banner.signOut());
+ipcMain.handle("launchBanner", (event,url) => {
+  banner.launchBanner(url);
+});
+ipcMain.handle("openExternal", (event, url) => {
+  if (isAllowedExternalUrl(url)) {
+    console.log(`Opening external URL: ${url}`);
+    shell.openExternal(url);
+  }
+  else {
+    console.warn(`Blocked attempt to open disallowed external URL: ${url}`);
+  }
+});
 ipcMain.handle("signIn", async (event, form) => {
   if (!activeWindow) return;
   const currentSession = await banner.getSessionDetails();
@@ -295,14 +318,22 @@ ipcMain.handle("signIn", async (event, form) => {
         }
         createLoading({ signinprocess: true, brute: true });
         await banner.getBannerSession(true);
+        mainWindow.webContents.send("login-details", { status: "wait", signedin: false, process: "signing", user: null });
         const result = await banner.signIn(form);
         if (!result.s) {
-          createLoading({ signinrequested: true, parent: mainWindow, error: result.d });
+          mainWindow.webContents.send("login-details", { status: "wait", signedin: false, process: "heldback", user: null });
+          createLoading({ signinrequested: true, parent: mainWindow, error: result.d || "Please check your username and password and try again." });
         }
         else {
           await banner.getInformation(true);
           const bannerSession = await banner.getSessionDetails();
-          if (bannerSession.signedIn) mainWindow.webContents.send("login-details", { status: "active", signedin: true, process: null, user: { name: bannerSession.user.name, image: bannerSession.user.pfp, schedule: bannerSession.user.actualschedule } });
+          if (bannerSession.signedIn) {
+            BrowserWindow.getAllWindows().forEach((window) => {
+              if (!window.isDestroyed()) {
+                window.webContents.send("login-details", { status: "active", signedin: true, process: null, user: { name: bannerSession.user.name, image: bannerSession.user.pfp, schedule: bannerSession.user.actualschedule } });
+              }
+            });
+          }
           else createLoading({ signinrequested: true, parent: mainWindow, error: "Failed to sign in. Please try again." });
         }
       }, 20);

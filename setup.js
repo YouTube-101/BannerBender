@@ -119,4 +119,33 @@ window.suDesktop.onMessageFromMain("session-attempts", (data) => {
         }
     }
 });
+window.suDesktop.onMessageFromMain("login-details", (data) => {
+    if (data.status === "inactive") {
+        LoadPage("login");
+        const main = document.querySelector("main");
+        main.querySelector("#username").style.display = "none";
+        main.querySelector("label[for='username']").style.display = "none";
+        main.querySelector("#rememberme").checked = true;
+        main.querySelector("#rememberme").style.display = "none";
+        main.querySelector("label[for='rememberme']").style.display = "none";
+        main.children[1].textContent = data.user.name;
+        main.querySelector("#rememberpass").disabled = false;
+        if (data.user.pfp) {
+            const pfp = document.createElement("div");
+            pfp.style.backgroundSize = "cover";
+            pfp.style.backgroundImage = "url("+data.user.pfp+")";
+            pfp.style.width = "100px";
+            pfp.style.height = "100px";
+            pfp.style.borderRadius = "50%";
+            main.insertBefore(pfp, main.querySelector(".form"));
+            const notyou = document.createElement("button");
+            notyou.classList.add("btn");
+            notyou.textContent = "Not you?";
+            notyou.addEventListener("click", () => {
+                LoadPage("login");
+            });
+            main.insertBefore(notyou, main.querySelector(".form"));
+        }
+    }
+});
 ["drop", "dragover"].forEach((t => { document.addEventListener(t, (e => { e.stopPropagation() }), !0) }));

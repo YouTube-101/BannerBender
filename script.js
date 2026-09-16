@@ -31,10 +31,13 @@
   const dropZone = $("dropZone");
   const reloadCsvBtn = $("reloadCsvBtn");
   const csvStatus = $("csvStatus");
+  const saveButton = $("savebutton");
+  const resetButton = $("resetbutton");
   const csvSourceLabel = $("csvSourceLabel");
   const controls = $("controls");
   const courseList = $("courseList");
   const signinbutton = $("signinbutton");
+  const downloadbutton = $("downloadbutton");
   const usermenubutton = $("usermenubutton");
   const settingsbutton = $("settingsbutton");
   const scheduleWrap = $("scheduleWrap");
@@ -593,14 +596,23 @@
       }
     }
     dialog.hide = () => {
+      if (dialog.classList.contains("locked")) return;
       dialog.style.animation = "modalBGDisappear 0.2s cubic-bezier(1, 0, 1, 1) forwards";
       dialog.children[0].style.animation = "modalDisppear 0.2s cubic-bezier(1, 0, 1, 1) forwards";
       setTimeout(() => {
         dialog.style.display = "none";
       }, 200);
     }
+    dialog.lock = () => {
+      dialog.children[0].children[0].children[1].style.display = "none";
+      dialog.classList.add("locked");
+    }
+    dialog.unlock = () => {
+      dialog.children[0].children[0].children[1].style.display = "";
+      dialog.classList.remove("locked");
+    }
     dialog.addEventListener("click", event => {
-      if (event.target === dialog) {
+      if (event.target === dialog && !dialog.classList.contains("locked")) {
         dialog.hide();
       }
     });
@@ -1079,6 +1091,7 @@
       await loadMajorData();
     }
     if (window.suDesktop) {
+      signinbutton.style.display = "block";
       document.querySelector("header").children[0].children[0].style.display = "none";
       window.suDesktop.reloadTitlebar();
       setCSVStatus("Fetching the latest version…", "loading");
@@ -1105,6 +1118,7 @@
     else {
       signinbutton.style.display = "none";
       signinbutton.disabled = true;
+      downloadbutton.style.display = "block";
       const settingsmenu = document.querySelector("#settings").querySelector(".sidebar").children;
       settingsmenu[0].style.display = "none";
       settingsmenu[1].style.display = "none";
@@ -1803,7 +1817,7 @@
     }
     return '<div class="course-fit-summary">' +
       parts.map((part) => {
-        return '<span class="course-major-pill requirement '+part.c+'">' + part.t + '</span>'
+        return '<span class="course-major-pill requirement ' + part.c + '">' + part.t + '</span>'
       }).join('') + '</div>';
   }
 
@@ -2009,11 +2023,34 @@
     courseList.querySelectorAll(".course-group").forEach(details => {
       details.addEventListener("toggle", () => {
         const key = details.dataset.courseKey;
-
+        const alreadyExpanded = (state.expandedCourses.has(key) && details.open)
         if (details.open) {
           state.expandedCourses.clear();
           state.expandedCourses.add(key);
-
+          if (window.suDesktop && !alreadyExpanded) {
+            const subj = key.split(":")[0]
+            const crse = key.split(":")[1];
+            const crns = state.sections.filter(section => section.subject === subj && section.course.startsWith(crse)).map(section => section.crn);
+            crns.forEach(crn => {
+              document.querySelector("input[data-section-key='CRN:" + crn + "']").parentElement.querySelector(".capacity").classList.add("loading");
+            });
+            window.suDesktop.getPopulation(key.split(":")[0], key.split(":")[1], crns).then((population) => {
+              if (Array.isArray(population)) {
+                population.forEach((pop) => {
+                  const section = state.sections.find(section => section.crn === pop.crn);
+                  section.cap = pop.cap;
+                  section.taken = pop.taken;
+                  document.querySelector("input[data-section-key='" + section.key + "']").parentElement.querySelector(".capacity").textContent = getSectionCapacityText(section);
+                  document.querySelector("input[data-section-key='" + section.key + "']").parentElement.querySelector(".capacity").classList = "badge capacity" + getSectionCapacityClass(section);
+                });
+              }
+              else {
+                crns.forEach(crn => {
+                  document.querySelector("input[data-section-key='CRN:" + crn + "']").parentElement.querySelector(".capacity").classList.remove("loading");
+                });
+              }
+            });
+          }
           courseList.querySelectorAll(".course-group").forEach(other => {
             if (other !== details && other.open) other.open = false;
           });
@@ -2037,6 +2074,29 @@
         renderAll();
       });
     });
+  }
+
+  function getSectionCapacityHTML(section) {
+    const hidden = !window.suDesktop;
+    return `<span ${hidden ? 'style="display: none;"' : ''}class="badge capacity${getSectionCapacityClass(section)}">${getSectionCapacityText(section)}</span>`;
+  }
+
+  function getSectionCapacityClass(section) {
+    if (section.cap === undefined && section.taken == undefined) return " unknown";
+    if (section.taken > section.cap) return " overflow";
+    if (section.taken === section.cap) return " full";
+    if (section.taken + 1 === section.cap) return " last";
+    if (section.taken + 5 >= section.cap) return " limited";
+    return "";
+  }
+
+  function getSectionCapacityText(section) {
+    if (section.cap === undefined && section.taken == undefined) return "Loading capacity...";
+    if (section.taken > section.cap) return section.taken + "/" + section.cap;
+    if (section.taken === section.cap) return "Full (" + section.taken + ")";
+    if (section.taken + 1 === section.cap) return "LAST SEAT!";
+    if (section.taken + 5 >= section.cap) return (section.cap - section.taken) + " seats left!";
+    return (section.taken) + "/" + (section.cap);
   }
 
   function renderSectionOption(section, compact = false) {
@@ -2069,6 +2129,7 @@
           <span>
             <span class="section-title">Section ${esc(section.section || "?")}</span>
             ${auxiliary ? `<span class="badge aux">${esc(auxiliaryLabel(section))}</span>` : ""}
+            ${getSectionCapacityHTML(section)}
           </span>
           <span class="fit-status ${issue ? issue.kind : "ok"}">${esc(fitLabel)}</span>
         </span>
@@ -2264,16 +2325,6 @@
     });
   }
 
-  function resizeSchedule() {
-    // const schedule = scheduleWrap.querySelector(".schedule");
-    // if (!schedule) return;
-    // const height = schedule.parentElement.getBoundingClientRect().height - 42;
-    // const times = Array.from(schedule.querySelector(".time-col").children);
-    // const heightPerSlot = times.length ? (height / times.length) : 64;
-    // schedule.style.setProperty("--slot-height", `${heightPerSlot}px`);
-  }
-  window.addEventListener("resize", resizeSchedule);
-
   function createWarning(text, courseKey = null) {
     const warning = document.createElement("div");
     warning.textContent = text;
@@ -2376,7 +2427,6 @@
         }
       });
     });
-    resizeSchedule();
   }
   function findIssue(section, notimeconflicts) {
     const parentCourse = courseForSection(section);
@@ -2610,6 +2660,7 @@
       }
     }
   );
+  let attemptnumber = null;
   window.suDesktop?.onMessageFromMain("session-attempts", (data) => {
     console.log("Session attempts received:", data);
     signinbutton.style.display = "none";
@@ -2646,6 +2697,9 @@
           else if (status != "pending") {
             attemptDiv.style.animation = "none";
           }
+          if (status == "accepted") {
+            attemptnumber = attempt;
+          }
           attemptDiv.style.backgroundColor = status == "pending" ? "var(--brand)" : status == "accepted" ? "#00a000" : status == "busy" ? "#ff8100" : status == "error" ? "red" : "gray";
         }
       }
@@ -2653,21 +2707,247 @@
   });
   window.suDesktop?.onMessageFromMain("login-details", (data) => {
     console.log("Login details received:", data);
+    document.querySelector("#attemptsdiv").children[1].children[1].children[0].textContent = attemptnumber;
     if (data.signedin && data.status === "active") {
       usermenubutton.querySelector("span").textContent = data.user.name;
       usermenubutton.querySelector("div").style.backgroundImage = `url(${data.user.image})`;
       registeredSchedule = data.user.schedule;
       usermenubutton.style.display = "flex";
       signinbutton.style.display = "none";
+      document.querySelector("#attemptsdiv").children[0].style.display = "flex";
+      document.querySelector("#attemptsdiv").children[1].style.display = "none";
+      document.querySelector("#attemptsdiv").style.display = "none";
+      saveButton.style.display = "block";
+      resetButton.style.display = "block";
+    }
+    else if (data.status === "wait") {
+      console.log("Login pending", attemptnumber);
+      document.querySelector("#attemptsdiv").children[0].style.display = "none";
+      const attemptDiv = document.querySelector("#attemptsdiv").children[1];
+      attemptDiv.children[1].children[0].textContent = attemptnumber;
+      if (attemptnumber > 99) attemptDiv.children[0].style.fontSize = "12px";
+      attemptDiv.children[1].children[1].textContent = data.process == "signing" ? "Entering Banner" : data.process == "heldback" ? "Waiting for credentials" : "Unknown";
+      attemptDiv.style.display = "flex";
     }
     else {
+      document.querySelector("#attemptsdiv").children[0].style.display = "flex";
+      document.querySelector("#attemptsdiv").children[1].style.display = "none";
+      saveButton.style.display = "none";
+      resetButton.style.display = "none";
+      document.querySelector("#attemptsdiv").style.display = "none";
       signinbutton.style.display = "block";
       usermenubutton.style.display = "none";
     }
   });
   window.suDesktop?.onMessageFromMain("login-information", (data) => {
     console.log("Login information received:", data);
-    if (data.status === "wait") document.querySelector("#attemptsdiv").children[0].children[0].textContent = data.process;
+    if (data.status === "wait") document.querySelector("#attemptsdiv").children[1].children[1].children[1].textContent = data.process;
+  });
+  saveButton.addEventListener("click", () => {
+    const savemodal = $("savedialog");
+    (() => {
+      const modaldisplay = $("savedialog").children[0].children[1];
+      modaldisplay.innerHTML = '';
+      if (!window.suDesktop) {
+        modaldisplay.innerHTML = '<h2>Unable to save changes</h2><p>This feature is supported only in the desktop application.</p><button class="btn active">OK</button>';
+        modaldisplay.querySelector("button").addEventListener("click", () => { savemodal.hide(); });
+        return;
+      }
+      const chosen = state.sections.filter(section => state.selected.has(section.key)).map(section => {
+        return {
+          crn: section.crn,
+          code: section.subject + " " + section.course,
+          section: section.section
+        }
+      });
+      const registered = state.sections.filter(section => registeredSchedule.includes(section.crn)).map(section => {
+        return {
+          crn: section.crn,
+          code: section.subject + " " + section.course,
+          section: section.section
+        }
+      });
+      const adds = chosen.filter(section => !registered.some(registeredSection => registeredSection.crn === section.crn));
+      const drops = registered.filter(section => !chosen.some(chosenSection => chosenSection.crn === section.crn));
+      if (!adds.length && !drops.length) {
+        modaldisplay.innerHTML = '<h2>No changes to save</h2><p>Your schedule is already up to date.</p><button class="btn active">OK</button>';
+        modaldisplay.querySelector("button").addEventListener("click", () => { savemodal.hide(); });
+      }
+      modaldisplay.innerHTML = `<h2 style="display: none;opacity: 0;">Confirm changes</h2><div><h3>Before you start, make sure:</h3><div class="warning"><h3>You are <u>${$("usermenubutton").children[0].textContent}</u></h3><p>We will send this form on this user's behalf.</p></div><div class="warning"><h3>You're <u>comfortable</u> with this</h3><p>No joke, this will send an add-drop form to Banner on your behalf.</p></div><div class="warning"><h3>You picked the <u>correct</u> sections</h3><p>Take a look at the add/drop changes below before confirming.</p></div></div><div class="bannergenericerrors" style="display: none;width: 100%;"><p>General Errors by Banner:</p><div style="background: #ff000033;"><div></div></div></div><div><div style="background: #00ff0033;"><div></div></div><div style="background: #ff000033;"><div></div></div></div><button style="width: 100%;" class="btn">Return to Safety</button><button style="width: 100%;" class="btn active red">Confirm Registration</button><button style="width:100%;display:none;" class="btn">See Error Details</button>`;
+      modaldisplay.children[4].addEventListener("click", () => { savemodal.hide(); });
+      modaldisplay.children[6].addEventListener("click", () => {
+        // launch a page in the default browser?
+        window.suDesktop?.openExternal("https://mysu.sabanciuniv.edu/sr/en/system-warnings");
+      });
+      modaldisplay.children[5].addEventListener("click", async () => {
+        // this is where we send the add-drop form to Banner
+        // we send here, hopefully.
+        let loadingAnimationDone = false;
+        window.suDesktop.submitRegistration(adds.map(s => s.crn), drops.map(s => s.crn)).then(async (result) => {
+          console.log("Banner response:", result);
+          const courseErrors = result.errors.filter(error => error.crn !== undefined);
+          const errorCRNs = courseErrors.map(error => error.crn);
+          const generalErrors = result.errors.filter(error => error.crn === undefined);
+          if (generalErrors.length) {
+            modaldisplay.children[2].style.display = "block";
+            modaldisplay.children[2].children[1].children[0].innerHTML = "";
+            generalErrors.forEach(section => {
+              const item = document.createElement("div");
+              item.classList.add("event");
+              item.classList.add("adddropitem");
+              item.classList.add("erroritem");
+              item.style.backgroundColor = "#ff9595";
+              item.innerHTML = `<span><span></span> <strong>${section.title}</strong></span><span class="response">${section.desc}</span>`;
+              modaldisplay.children[2].children[1].children[0].appendChild(item);
+            });
+          }
+          adds.forEach(section => {
+            if (!errorCRNs.includes(section.crn) && !result.newschedule.includes(section.crn)) {
+              courseErrors.push({ crn: section.crn, desc: "No error, but not registered." });
+            }
+          });
+          drops.forEach(section => {
+            if (!errorCRNs.includes(section.crn) && result.newschedule.includes(section.crn)) {
+              courseErrors.push({ crn: section.crn, desc: "No error, but still registered." });
+            }
+          });
+          while (!loadingAnimationDone) {
+            await new Promise(resolve => setTimeout(resolve, 1));
+          }
+          modaldisplay.children[1].style.opacity = "0";
+          modaldisplay.children[0].style.opacity = "0";
+          modaldisplay.children[3].style.opacity = "0";
+          await new Promise(resolve => setTimeout(resolve, 250));
+          courseErrors.forEach(section => {
+            const el = modaldisplay.querySelector(`.adddropitem[data-crn='${section.crn}']`);
+            if (el) {
+              el.classList.add("erroritem");
+              el.classList.remove("loading");
+              el.querySelector(".response").textContent = section.desc;
+              el.style.backgroundColor = "#ff9595";
+            }
+          });
+          modaldisplay.querySelectorAll(".adddropitem:not(.erroritem)").forEach(el => {
+            el.classList.add("successitem");
+            el.classList.remove("loading");
+            el.querySelector(".response").textContent = "Done!";
+            el.style.backgroundColor = "#95ff95";
+          });
+          savemodal.unlock();
+          if (!courseErrors.length && !generalErrors.length) {
+            modaldisplay.children[0].textContent = "Registered Successfully";
+            modaldisplay.children[1].innerHTML = `<h3>All courses registered successfully</h3>`;
+          }
+          modaldisplay.children[0].textContent = "Registration Errors";
+          modaldisplay.children[1].innerHTML = `<h3>Before you continue, make sure to:</h3><div class="warning"><h3>Read the errors <u>carefully</u></h3><p>Do not submit repetitive forms without reviewing them first.</p></div><div class="warning"><h3>Keep the <u>restrictions</u> in mind</h3><p>Abuse of repeating forms may result in account restrictions!</p></div>`;
+          modaldisplay.children[1].style.opacity = "1";
+          modaldisplay.children[0].style.opacity = "1";
+          modaldisplay.children[3].style.opacity = "1";
+          modaldisplay.children[6].style.display = "block";
+        });
+        savemodal.lock();
+        modaldisplay.children[1].style.opacity = "0";
+        modaldisplay.children[3].style.opacity = "0";
+        modaldisplay.children[4].style.opacity = "0";
+        modaldisplay.children[5].style.opacity = "0";
+        await new Promise(resolve => setTimeout(resolve, 250));
+        loadingAnimationDone = true;
+        modaldisplay.children[3].children[0].children[0].querySelectorAll(".adddropitem").forEach(child => {
+          child.classList.add("loading");
+          child.querySelector(".response").textContent = "Adding now...";
+        });
+        modaldisplay.children[3].children[1].children[0].querySelectorAll(".adddropitem").forEach(child => {
+          child.classList.add("loading");
+          child.querySelector(".response").textContent = "Dropping now...";
+        });
+        modaldisplay.children[0].textContent = "Sending to Banner...";
+        modaldisplay.children[0].style.display = "block";
+        modaldisplay.children[4].style.display = "none";
+        modaldisplay.children[5].style.display = "none";
+        modaldisplay.children[1].innerHTML = `<div class="warning"><h3>Do not <u>interrupt</u> the process</h3><p>Do not refresh the page, do not close the process.</p></div>`;
+        modaldisplay.children[1].style.opacity = "1";
+        modaldisplay.children[0].style.opacity = "1";
+        modaldisplay.children[3].style.opacity = "1";
+      })
+      const addsList = modaldisplay.children[3].children[0];
+      const dropsList = modaldisplay.children[3].children[1];
+      adds.forEach(section => {
+        const item = document.createElement("div");
+        item.classList.add("event");
+        item.classList.add("adddropitem");
+        item.setAttribute("data-crn", section.crn);
+        item.style.backgroundColor = colorFor(section.code.replaceAll(" ", ":"));
+        item.innerHTML = `<span><span></span> <strong>${section.crn}</strong> · ${section.code}-${section.section}</span><span class="response">To be added</span>`;
+        addsList.children[0].appendChild(item);
+      });
+      if (!adds.length) {
+        const item = document.createElement("p");
+        item.textContent = "No courses will be added.";
+        addsList.children[0].appendChild(item);
+      }
+      drops.forEach(section => {
+        const item = document.createElement("div");
+        item.classList.add("event");
+        item.classList.add("adddropitem");
+        item.setAttribute("data-crn", section.crn);
+        item.style.backgroundColor = colorFor(section.code.replaceAll(" ", ":"));
+        item.innerHTML = `<span><span></span> <strong>${section.crn}</strong> · ${section.code}-${section.section}</span><span class="response">To be dropped</span>`;
+        dropsList.children[0].appendChild(item);
+      });
+      if (!drops.length) {
+        const item = document.createElement("p");
+        item.textContent = "No courses will be dropped.";
+        dropsList.children[0].appendChild(item);
+      }
+      console.log(adds, drops, chosen, registered);
+    })();
+    savemodal.show();
+  });
+  $("usermenu").children[4].addEventListener("click", async () => {
+    if (window.suDesktop) {
+      $("usermenu").classList.remove("show");
+      $("attemptsdiv").style.display = "flex";
+      resetButton.style.display = "none";
+      saveButton.style.display = "none";
+      usermenubutton.style.display = "none";
+      $("attemptsdiv").children[0].style.display = "none";
+      $("attemptsdiv").children[1].style.display = "flex";
+      $("attemptcontainer").children[0].style.display = "none";
+      $("attemptsdiv").children[1].children[0].textContent = "Clearing session...";
+      $("attemptcontainer").children[1].textContent = "Signing out...";
+      await window.suDesktop.signOut();
+      $("attemptsdiv").children[1].children[0].textContent = "Logging in...";
+      $("attemptcontainer").children[1].textContent = "Inserting Credentials...";
+      $("attemptcontainer").children[0].style.display = "flex";
+      $("attemptsdiv").children[0].style.display = "flex";
+      $("attemptsdiv").children[1].style.display = "none";
+      $("attemptsdiv").style.display = "none";
+      signinbutton.style.display = "block";
+    }
+  });
+  $("usermenu").children[0].addEventListener("click", async () => {
+    if (window.suDesktop) {
+      $("usermenu").classList.remove("show");
+      await window.suDesktop.launchBanner();
+    }
+  });
+  $("usermenu").children[1].addEventListener("click", async () => {
+    if (window.suDesktop) {
+      $("usermenu").classList.remove("show");
+      await window.suDesktop.launchBanner("su_registration_approve.p_stu_request?term_code=" + state.term);
+    }
+  });
+  $("usermenu").children[2].addEventListener("click", async () => {
+    if (window.suDesktop) {
+      $("usermenu").classList.remove("show");
+      await window.suDesktop.launchBanner("bwskfreg.P_AltPin?term_in=" + state.term);
+    }
+  });
+  $("usermenu").children[3].addEventListener("click", async () => {
+    if (window.suDesktop) {
+      $("usermenu").classList.remove("show");
+      await window.suDesktop.launchBanner("bwskfreg.P_AltPin?term_in=" + state.term.substring(0, 4) + "03");
+    }
   });
   loadCSVFromGitHub();
 })();

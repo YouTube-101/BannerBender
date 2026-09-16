@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body { margin: 0; padding: 1px; background: #f0f0f0; font-family: sans-serif; }
+      #url-bar { width: 100%; padding: 7px; font-size: 14px; box-sizing: border-box; }
+    </style>
+  </head>
+  <body>
+    <!-- The URL Bar -->
+    <input type="text" id="url-bar" placeholder="Enter URL...">
+
+    <script>
+      if (!window.browserAPI) {
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 100);
+        document.body.innerHTML = "<span>This page is only accessible from the BannerBender application. Redirecting you to the website...</span>";
+      }
+      const urlBar = document.getElementById('url-bar');
+
+      // 1. When the user hits 'Enter', tell the Main process to load the URL
+      urlBar.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          window.browserAPI.goToUrl(urlBar.value);
+        }
+      });
+
+      // 2. When the embedded view navigates (e.g., clicking a link), update the text box
+      window.browserAPI.onUrlChanged((newUrl) => {
+        urlBar.value = newUrl;
+      });
+    </script>
+    <style>
+      
+    </style>
+  </body>
+</html>

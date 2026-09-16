@@ -38,6 +38,11 @@ contextBridge.exposeInMainWorld("suDesktop", {
   loadCourseCsv: () => ipcRenderer.invoke("courses:load-default"),
   scrapeCourses: () => ipcRenderer.invoke("scrapeCourses"),
   requestSignIn: () => ipcRenderer.invoke("requestSignIn"),
+  signOut: () => ipcRenderer.invoke("signOut"),
+  openExternal: (url) => ipcRenderer.invoke("openExternal", url),
+  launchBanner: (url) => ipcRenderer.invoke("launchBanner", url),
+  submitRegistration: (add,drop) => ipcRenderer.invoke("submitRegistration", add, drop),
+  getPopulation: (subject, course, crns) => ipcRenderer.invoke("getPopulation", subject, course, crns),
   reloadTitlebar: () => {
     const wco = navigator.windowControlsOverlay.getTitlebarAreaRect();
     if (process.platform == "win32") document.documentElement.style.setProperty("--title-padding-right", (window.innerWidth - wco.width + 5) + "px");
@@ -99,8 +104,4 @@ window.addEventListener("DOMContentLoaded", () => {
 // window.addEventListener("unload") is deprecated.
 window.addEventListener("beforeunload", async () => {
   document.body.classList.add("invisible");
-});
-
-ipcRenderer.on("login-information", async (e, loginInfo) => {
-  document.querySelector(".banner-tools").innerHTML = '';
 });
