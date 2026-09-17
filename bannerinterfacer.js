@@ -102,7 +102,7 @@ async function requestToBanner(URL, method = "GET", body = null, extraHeaders = 
   const $ = cheerio.load(html);
   obj.dom = $;
   return obj;
-};
+}
 
 async function requestToPublicBanner(URL, method = "GET", body = null) {
   const fetchRes = await fetch(domain + (testenvironment ? "dolly" : "prod") + "/" + URL, {
@@ -180,6 +180,7 @@ function deleteCookie(cookieName) {
     });
   });
 }
+
 function setSessionCookieEvent() {
   session.defaultSession.cookies.on('changed', async (event, cookie, cause, removed) => {
     if (!cookie.domain.includes('sabanciuniv.edu')) return;
@@ -197,7 +198,9 @@ function setSessionCookieEvent() {
     await saveCookies();
   });
 }
+
 let sessionCookieEventSet = false;
+
 async function initInterface() {
   await initCookieJar();
   // await resetCookies(); // Uncomment this line to clear cookies on every app start for testing purposes
@@ -255,17 +258,6 @@ async function getSession(force = false) {
   bannerSession.attempts[thisAttempt] = { status: "pending" };
   if (force) printAllAttempts();
 
-  // Randomly fail to simulate system busy
-  if (force) {
-    const randomFail = Math.random() > 0.05; // 99% chance to fai0l
-    const randomTime = Math.floor(Math.random() * 6000) + 500; // Random delay between 500ms and 6000ms
-    await delay(randomTime);
-    if (randomFail) {
-      bannerSession.attempts[thisAttempt] = { status: "busy" };
-      return { s: false, e: 503, attempt: thisAttempt };
-    }
-  }
-
   const sessionResult = await requestToBanner("twbkwbis.P_SabanciLogin", "GET", undefined, undefined, true);
   if (sessionResult.s === 200) {
     for (const cookie of sessionResult.cookie) {
@@ -322,7 +314,7 @@ async function getBannerSession(force = false) {
     let lastRequest = new Date().getTime() - bannerInterval;
     while (bannerSession.sessionExists === false) {
       if (new Date().getTime() - lastRequest > bannerInterval) {
-        getSession(force).then(session => printAllAttempts);
+        getSession(force).then(session => printAllAttempts); // We don't await this because we want to keep trying even if one attempt is still waiting
         lastRequest = new Date().getTime();
       }
       if (bannerSession.sessionExists === true) break;
@@ -375,6 +367,7 @@ async function getInformation(displayStatus = false) {
     return;
   }
 }
+
 async function getUsersCourses() {
   let currentCourses = await requestToBanner("bwskfreg.P_AltPin", "POST", "term_in=" + thisterm, { "Referer": domain + (testenvironment ? "dolly" : "prod") + "/bwskfreg.P_AltPin" });
   let fallback = false;
@@ -429,6 +422,7 @@ async function getUsersCourses() {
     bannerSession.user.registrationActive = true;
   }
 }
+
 async function getUsersName() {
   const tuitionInfoBase = await requestToBanner("SU_TUITION_PAYMENT_INFO.p_main");
   if (tuitionInfoBase.s !== 302) {
@@ -455,6 +449,7 @@ async function getUsersName() {
   bannerSession.user.realname = true;
   bannerSession.user.name = fullname;
 }
+
 async function getUsersPFP() {
   const pfpBase = await requestToBanner("sabanciw4f.p_view_my_photo");
   if (pfpBase.s !== 200) {
@@ -466,6 +461,7 @@ async function getUsersPFP() {
   const pfpURL = $("img[src*='photo']").eq(0).attr("src");
   bannerSession.user.pfp = domain + pfpURL.substring(1);
 }
+
 async function resetRememberedDetails() {
     rememberedDetails.username = null;
     rememberedDetails.password = null;
@@ -474,6 +470,7 @@ async function resetRememberedDetails() {
     rememberedDetails.key = null;
     save.set("rememberDetails", await save.encrypt(JSON.stringify(rememberedDetails)).d);
 }
+
 async function signIn(form) {
   if (rememberedDetails.username && rememberedDetails.username === "") {
     form.username = rememberedDetails.username;
@@ -693,6 +690,7 @@ async function signOut() {
   bannerSession.user = { key: null, name: null, realname: false, pfp: null, actualschedule: [], registrationActive: false };
   broadcastToAllWindows("login-details", { status: "inactive", signedin: false, process: null, user: { name: null, image: null, schedule: [] } });
 }
+
 async function launchBanner(url = "twbkwbis.P_GenMenu?name=bmenu.P_MainMnu") {
   const cookies = await cookieJar.getCookies(domain + (testenvironment ? "dolly" : "prod") + "/");
 
