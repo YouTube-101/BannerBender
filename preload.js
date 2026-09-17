@@ -1,5 +1,6 @@
 "use strict";
 const fs = require("fs");
+const path = require("path");
 const {
   contextBridge,
   ipcRenderer
@@ -70,7 +71,7 @@ contextBridge.exposeInMainWorld("suDesktop", {
     };
   },
   getMajor: (code, major) => {
-    const filePath = code === "MN" ? `scrapeResults/Minors/${major}.csv` : `scrapeResults/${code}Majors/${major}.csv`;
+    const filePath = path.join(__dirname, (code === "MN" ? `scrapeResults/Minors/${major}.csv` : `scrapeResults/${code}Majors/${major}.csv`));
     if (!fs.existsSync(filePath)) return null;
     const data = fs.readFileSync(filePath, "utf8");
     return data;
@@ -83,7 +84,7 @@ contextBridge.exposeInMainWorld("suDesktop", {
       DM: [],
       MN: [],
     }
-    const majorNames = fs.readFileSync("scrapeResults/majorNames.csv", "utf8").split("\n").filter(x => x.trim() !== "").forEach(x => {
+    const majorNames = fs.readFileSync(path.join(__dirname, "scrapeResults/majorNames.csv"), "utf8").split("\n").filter(x => x.trim() !== "").forEach(x => {
       const idx = x.indexOf(",");
       const line = { k: x.substring(0, idx), n: x.substring(idx + 1).replaceAll("\"", "") };
       if (line.k.endsWith("-MINOR") && !obj.MN.includes(line)) obj.MN.push(line);

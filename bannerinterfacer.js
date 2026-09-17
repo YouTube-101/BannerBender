@@ -621,7 +621,8 @@ async function submitRegistration(adds, drops) {
       else {
         try {
           const currentcourses = [];
-          $(".datadisplaytable").eq(0).children().eq(1).children().each((index, element) => {
+          ($(".datadisplaytable").eq(0).html())
+          $(".datadisplaytable").eq(0).children().eq(0).children().each((index, element) => {
             if (index > 0) {
               currentcourses.push($(element).children().eq(2).text().trim());
             }

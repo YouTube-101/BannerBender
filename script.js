@@ -2811,6 +2811,7 @@
               courseErrors.push({ crn: section.crn, desc: "No error, but still registered." });
             }
           });
+          registeredSchedule = result.newschedule;
           while (!loadingAnimationDone) {
             await new Promise(resolve => setTimeout(resolve, 1));
           }
@@ -2838,8 +2839,10 @@
             modaldisplay.children[0].textContent = "Registered Successfully";
             modaldisplay.children[1].innerHTML = `<h3>All courses registered successfully</h3>`;
           }
-          modaldisplay.children[0].textContent = "Registration Errors";
-          modaldisplay.children[1].innerHTML = `<h3>Before you continue, make sure to:</h3><div class="warning"><h3>Read the errors <u>carefully</u></h3><p>Do not submit repetitive forms without reviewing them first.</p></div><div class="warning"><h3>Keep the <u>restrictions</u> in mind</h3><p>Abuse of repeating forms may result in account restrictions!</p></div>`;
+          else {
+            modaldisplay.children[0].textContent = "Registration Errors";
+            modaldisplay.children[1].innerHTML = `<h3>Before you continue, make sure to:</h3><div class="warning"><h3>Read the errors <u>carefully</u></h3><p>Do not submit repetitive forms without reviewing them first.</p></div><div class="warning"><h3>Keep the <u>restrictions</u> in mind</h3><p>Abuse of repeating forms may result in account restrictions!</p></div>`;
+          }
           modaldisplay.children[1].style.opacity = "1";
           modaldisplay.children[0].style.opacity = "1";
           modaldisplay.children[3].style.opacity = "1";

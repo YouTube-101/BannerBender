@@ -1,11 +1,14 @@
 {
   "name": "bannerbender",
-  "version": "2026.09.16.1",
+  "version": "2026.09.17.1",
   "description": "",
   "main": "main.js",
+  "desktopName": "BannerBender",
+  "author": "YouTube 101 <bender@youcantdrop.com>, LastPotatos",
   "scripts": {
     "start": "node start-electron.js",
-    "buildmacos": "electron-builder --mac",
+    "buildlinux": "electron-builder --linux",
+    "buildmacos": "electron-builder --mac --universal",
     "buildwin": "electron-builder --win"
   },
   "repository": {
@@ -28,7 +31,8 @@
     "productName": "BannerBender",
     "asar": true,
     "files": [
-      "**/*"
+      "**/*",
+      "scrapeResults/**/*"
     ],
     "directories": {
       "output": "dist"
@@ -45,8 +49,14 @@
       "category": "public.app-category.utilities",
       "identity": null
     },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "icon": "iconbg512.png",
+      "category": "Utility",
+      "syncDesktopName": true
+    },
     "dmg": {
-      "title": "Install BannerBender",
+      "title": "BannerBender",
       "background": "macosdmgbackground.png",
       "window": {
         "width": 540,
