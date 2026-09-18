@@ -4,7 +4,7 @@ const { app, ipcMain, BrowserWindow, WebContentsView, session } = require("elect
 const { CookieJar } = require('tough-cookie'); // To save cookies in memory
 const cheerio = require('cheerio'); // For parsing HTML
 const domain = "https://suis.sabanciuniv.edu/";
-const testenvironment = true;
+const testenvironment = false;
 const thisterm = "202601"; // Change this to the current term code as needed
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
