@@ -806,7 +806,6 @@ IE 512,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CEle
 IE 514,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,,,,,,,,,,,,,,,,,,,,,,
 IE 515,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective
 IE 519,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,,,,,,,,,,,,
-IE 522,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,,,,,,,,,,,,,,,,,,,,,,,,
 IE 525,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective
 IE 527,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,,,,,,,,,,,,,,,,,,,,,
 IE 530,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective
@@ -820,7 +819,6 @@ IE 564,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CEle
 IE 567,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective
 IE 573,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective
 IE 58000,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,,,,,,
-IE 58002,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,,,,,,,,,,,,,,,,,,,,,,,,
 IE 58003,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,,,,,,,,,,,,
 IE 58004,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective
 IE 58005,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,,,,,,,,,,,,
@@ -854,7 +852,6 @@ MATH 526,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CE
 MATH 527,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,,,,,,,,,,,,,,,,,,,
 MATH 528,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective
 MATH 532,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,,,,,,,,,,,,,,,,
-MATH 541,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,,,,,,,,,,,,,,,,,,,,,,,,
 MATH 542,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,,,,,,,,,,,,,
 MATH 543,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective
 MATH 546,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective
@@ -997,3 +994,6 @@ SEC 58006,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,C
 SEC 592,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective
 XM 590,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective
 XM 591,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective,CElective
+IE 522,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,,,,,,,,,,,,,,,,,,,,,,,,
+IE 58002,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,,,,,,,,,,,,,,,,,,,,,,,,
+MATH 541,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CElective,,,,,,,,,,,,,,,,,,,,,,,,

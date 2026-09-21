@@ -18,20 +18,7 @@ HIST 192,DFoundationally Required,DFoundationally Required,DFoundationally Requi
 HUM 201,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
 PROJ 201,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
 HUM 202,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-HUM 203,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
-HUM 204,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
-HUM 206,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
 HUM 207,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-HUM 211,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
-HUM 212,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
-HUM 214,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
-HUM 221,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
-HUM 224,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
-HUM 231,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
-HUM 232,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
-HUM 241,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
-HUM 261,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
-HUM 271,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
 SPS 303,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
 HUM 304,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,
 HUM 311,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
@@ -63,23 +50,16 @@ PSY 315,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,
 PSY 316,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
 PSY 341,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
 PSY 345,CCore,CCore,CCore,CCore,CCore,CCore,CCore,,,,,,,,,,,,,,,
-PSY 352,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,
 PSY 360,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
 PSY 361,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
 PSY 364,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
 PSY 366,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
-PSY 370,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,
-PSY 371,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,
-PSY 380,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,
-PSY 382,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,
-PSY 390,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,
 PSY 443,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
 PSY 452,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
 PSY 317,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 PSY 322,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 PSY 323,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 PSY 325,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
-PSY 330,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,
 PSY 343,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 PSY 344,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 PSY 362,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
@@ -89,7 +69,6 @@ PSY 368,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,
 PSY 398,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 PSY 399,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 PSY 403,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
-PSY 405,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,
 PSY 407,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 PSY 410,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 PSY 411,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
@@ -102,13 +81,10 @@ PSY 421,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,
 PSY 422,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 PSY 423,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,,,,,,
 PSY 424,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
-PSY 433,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,
-PSY 440,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,
 PSY 442,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 PSY 444,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 PSY 445,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 PSY 450,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
-PSY 464,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,
 PSY 467,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 PSY 469,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 PSY 480,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
@@ -121,7 +97,6 @@ ACC 404,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,
 ACC 405,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ACC 406,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,
 ANTH 214,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
-ANTH 251,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
 ANTH 255,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A
 ANTH 321,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 ANTH 326,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A
@@ -167,7 +142,6 @@ CHEM 212,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E
 CHEM 301,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CHEM 302,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CHEM 405,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
-CHEM 421,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
 CIP 101,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CIP 102,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CIP 201,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -197,7 +171,6 @@ CS 405,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,F
 CS 406,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 407,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 408,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
-CS 409,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
 CS 411,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 412,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 414,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -229,7 +202,6 @@ CS 48010,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 48011,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 48012,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CS 48013,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
-CULT 299,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
 CULT 322,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CULT 355,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CULT 361,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -241,7 +213,6 @@ CULT 399,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CULT 421,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,
 CULT 432,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CULT 451,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,
-CULT 452,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
 CULT 453,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 CULT 491,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,
 DSA 201,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E,FFree:E
@@ -437,7 +408,6 @@ HIST 323,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,
 HIST 324,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,
 HIST 326,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,
 HIST 331,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,
-HIST 332,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
 HIST 335,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 HIST 336,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,
 HIST 341,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,
@@ -532,18 +502,13 @@ IR 201,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,F
 IR 301,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A
 IR 341,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 IR 342,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
-IR 389,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
 IR 391,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A
 IR 392,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 IR 394,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A
-IR 400,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
 IR 402,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 IR 405,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 IR 410,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 IR 489,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
-IR 493,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
-ITA 110,FFree,FFree,,,,,,,,,,,,,,,,,,,,
-ITA 120,FFree,FFree,,,,,,,,,,,,,,,,,,,,
 LAT 110,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,
 LAT 120,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,
 LAT 130,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,
@@ -672,7 +637,6 @@ MJC 100,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,
 MKTG 301,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M,FFree:M
 MKTG 401,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 MKTG 402,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
-MKTG 403,FFree,FFree,,,,,,,,,,,,,,,,,,,,
 MKTG 404,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 MKTG 405,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 MKTG 406,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -721,9 +685,7 @@ ORG 450,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,
 ORG 451,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,
 PERS 110,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,
 PERS 120,FFree,FFree,FFree,FFree,FFree,,,,,,,,,,,,,,,,,
-PHIL 201,FFree:A,FFree:A,FFree:A,,,,,,,,,,,,,,,,,,,
 PHIL 202,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A
-PHIL 240,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
 PHIL 310,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 PHIL 321,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A
 PHIL 322,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -749,7 +711,6 @@ POLS 251,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 POLS 301,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A,FFree:A
 POLS 302,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 POLS 303,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
-POLS 304,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
 POLS 305,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 POLS 307,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 POLS 351,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -770,7 +731,6 @@ POLS 405,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 POLS 408,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 POLS 421,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 POLS 422,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
-POLS 431,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
 POLS 434,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 POLS 446,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
 POLS 448,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
@@ -865,6 +825,46 @@ VIS 308,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,
 VIS 310,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,
 VIS 412,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,,,,,,,,
 XM 490,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree,FFree
+HUM 203,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
+HUM 204,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
+HUM 206,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
+HUM 211,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
+HUM 212,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
+HUM 214,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
+HUM 221,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
+HUM 224,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
+HUM 231,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
+HUM 232,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
+HUM 241,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
+HUM 261,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
+HUM 271,DFoundationally Required,DFoundationally Required,DFoundationally Required,,,,,,,,,,,,,,,,,,,
+PSY 352,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,
+PSY 370,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,
+PSY 371,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,
+PSY 380,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,
+PSY 382,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,
+PSY 390,CCore,CCore,CCore,,,,,,,,,,,,,,,,,,,
+PSY 330,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,
+PSY 405,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,
+PSY 433,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,
+PSY 440,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,
+PSY 464,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,
+ANTH 251,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
+CHEM 421,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
+CS 409,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
+CULT 299,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
+CULT 452,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
+HIST 332,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
+IR 389,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
+IR 400,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
+IR 493,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
+PHIL 201,FFree:A,FFree:A,FFree:A,,,,,,,,,,,,,,,,,,,
+PHIL 240,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
+POLS 304,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
+POLS 431,FFree,FFree,FFree,,,,,,,,,,,,,,,,,,,
+ITA 110,FFree,FFree,,,,,,,,,,,,,,,,,,,,
+ITA 120,FFree,FFree,,,,,,,,,,,,,,,,,,,,
+MKTG 403,FFree,FFree,,,,,,,,,,,,,,,,,,,,
 ACC 401,FFree,,,,,,,,,,,,,,,,,,,,,
 ARA 150,FFree,,,,,,,,,,,,,,,,,,,,,
 CULT 230,FFree,,,,,,,,,,,,,,,,,,,,,

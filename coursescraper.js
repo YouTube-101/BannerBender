@@ -372,8 +372,8 @@ async function generateCSV() {
             console.error("Error loading catalog data for course " + allCourseCodes[i] + ": " + error);
             process.exit(1);
           }
-          const description = $$("i")[0] && $$("i")[0].next ? $$("i")[0].next.data.trim() : null;
-          const descriptionTR = $$("b")[0] && $$("b")[0].next ? $$("b")[0].next.data.substring(0, $$("b")[0].next.data.indexOf("\n")).trim() : null;
+          const description = $$("i")[0] && $$("i")[0].next ? $$("i")[0].next.data.trim().replaceAll("\n", " ").replaceAll("  ", " ") : null;
+          const descriptionTR = $$("b")[0] && $$("b")[0].next ? $$("b")[0].next.data.substring(0, $$("b")[0].next.data.indexOf("\n")).trim().replaceAll("\n", " ").replaceAll("  ", " ") : null;
           const restrictions = $$("span.fieldlabeltext:contains('Restrictions:')")[0] ? $$("span.fieldlabeltext:contains('Restrictions:')")[0].next.data.trim().split("\n").map(x => { x = x.trim(); if (x === "Must be enrolled in one of the following Levels:") return "MUSTBE:allowedLevels"; else if (x === "Must be enrolled in one of the following Colleges:") return "MUSTBE:allowedFaculties"; else if (x === "Must be enrolled in one of the following Programs:") return "MUSTBE:allowedPrograms"; else if (x === "Must be enrolled in one of the following Classifications:") return "MUSTBE:allowedClasses"; else if (x === "May not be enrolled in one of the following Colleges:") return "MUSTBE:deniedFaculties"; else return x }).filter(x => x.length > 0) : null;
           const getSectionText = (startLabel, endLabel) => {
             const $start = $$(`span.fieldlabeltext:contains('${startLabel}')`);
