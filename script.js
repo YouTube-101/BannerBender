@@ -2661,14 +2661,39 @@
     }
   );
   let attemptnumber = null;
+  let timeLoop = null;
   window.suDesktop?.onMessageFromMain("session-attempts", (data) => {
     console.log("Session attempts received:", data);
     signinbutton.style.display = "none";
     const attemptsDiv = document.querySelector("#attemptsdiv");
     if (attemptsDiv) {
+      document.querySelector("#attemptsdiv").children[0].style.display = "";
+      document.querySelector("#attemptsdiv").children[1].children[1].children[0].style.display = "";
+      attemptsDiv.style.display = "block";
+      clearInterval(timeLoop);
+      timeLoop = null;
+      if (data.outOfRegistrationHours !== undefined) {
+        document.querySelector("#attemptsdiv").children[0].style.display = "none";
+        const attemptDiv = document.querySelector("#attemptsdiv").children[1];
+        attemptDiv.children[1].children[0].style.display = "none";
+        timeLoop = setInterval(() => {
+          const timeLeft = data.outOfRegistrationHours - ((new Date()).getTime() % (24 * 60 * 60 * 1000));
+          const hours = Math.floor(timeLeft / (60 * 60 * 1000));
+          const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
+          const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
+          attemptDiv.children[1].children[1].textContent = "Starting in "+ (hours > 0 ? hours + ":" : "") + (minutes > 0 ? (hours > 0 && minutes < 10 ? "0" : "") + minutes + ":" : "") + (minutes > 0 && seconds < 10 ? "0" : "") + seconds;
+        }, 100);
+        attemptDiv.style.display = "flex";
+        attemptDiv.children[0].textContent = "Waiting for registration hours";
+        return;
+      }
+      document.querySelector("#attemptsdiv").children[1].style.display = "none";
+      document.querySelector("#attemptsdiv").children[0].style.display = "flex";
+
+
+
       attemptsDiv.children[0].children[0].textContent = `Session Attempts`;
       const container = attemptsDiv.querySelector("#attemptscontainer");
-      attemptsDiv.style.display = "block";
       if (container) {
         const elements = container.querySelectorAll("div");
         for (const el of elements) {
@@ -2724,6 +2749,8 @@
       console.log("Login pending", attemptnumber);
       document.querySelector("#attemptsdiv").children[0].style.display = "none";
       const attemptDiv = document.querySelector("#attemptsdiv").children[1];
+      attemptDiv.children[0].textContent = "Logging in...";
+      attemptDiv.children[1].children[0].style.display = "";
       attemptDiv.children[1].children[0].textContent = attemptnumber;
       if (attemptnumber > 99) attemptDiv.children[0].style.fontSize = "12px";
       attemptDiv.children[1].children[1].textContent = data.process == "signing" ? "Entering Banner" : data.process == "heldback" ? "Waiting for credentials" : "Unknown";

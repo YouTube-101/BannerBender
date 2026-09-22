@@ -11,6 +11,17 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const bannerTimeout = 1800000;
 const bannerInterval = 1200;
+const registrationHeadStart = 1500; // 1500ms before the registration lock ends
+const registrationLock = [
+  {
+    start: 6 * 60 * 60 * 1000, // 9:00 AM TRT - 6:00 AM UTC
+    end: 7 * 60 * 60 * 1000 // 10:00 AM TRT - 7:00 AM UTC
+  },
+  {
+    start: 10 * 60 * 60 * 1000, // 1:00 PM TRT - 10:00 AM UTC
+    end: ((10 * 60) + 30) * 60 * 1000 // 1:30 PM TRT - 10:30 AM UTC
+  }
+]
 const bannerSession = { sessionExists: false, signedIn: false, sessionCreatedAt: null, lastSuccessfulContact: null, lastURL: undefined, user: { key: null, name: null, realname: false, pfp: null, actualschedule: [] } };
 const rememberedDetails = {};
 let cookieJar;
@@ -203,7 +214,7 @@ let sessionCookieEventSet = false;
 
 async function initInterface() {
   await initCookieJar();
-  // await resetCookies(); // Uncomment this line to clear cookies on every app start for testing purposes
+  //await resetCookies(); // Uncomment this line to clear cookies on every app start for testing purposes
   const sessionExists = await cookieExists("__gpi") && await cookieExists("__sli");
   const loginExists = await cookieExists("SESSID");
   console.log("Session exists:", sessionExists, "Login exists:", loginExists);
@@ -257,7 +268,6 @@ async function getSession(force = false) {
   const thisAttempt = bannerSession.attemptCount;
   bannerSession.attempts[thisAttempt] = { status: "pending" };
   if (force) printAllAttempts();
-
   const sessionResult = await requestToBanner("twbkwbis.P_SabanciLogin", "GET", undefined, undefined, true);
   if (sessionResult.s === 200) {
     for (const cookie of sessionResult.cookie) {
@@ -300,22 +310,45 @@ function printAllAttempts() {
       }
     }
   }
-  broadcastToAllWindows("session-attempts", { attempts: toSend });
+  broadcastToAllWindows("session-attempts", { attempts: toSend, outOfRegistrationHours: bannerSession.outOfRegistrationHours });
 }
 
 async function getSessionDetails() {
+  if (bannerSession.outOfRegistrationHours !== undefined) printAllAttempts();
   return bannerSession;
 }
 
+
+
 async function getBannerSession(force = false) {
+  if (bannerSession.outOfRegistrationHours === undefined) delete bannerSession.outOfRegistrationHours
   bannerSession.attemptCount = 0;
   bannerSession.attempts = {};
   if (force) {
-    let lastRequest = new Date().getTime() - bannerInterval;
+    let rightNow = new Date().getTime();
+    let lastRequest = rightNow - bannerInterval;
+    let enforceLockUntil = -1;
+    let utcMSOfDay = (rightNow) % (24 * 60 * 60 * 1000);
+    for (let i = 0; i < registrationLock.length; i++) {
+      if (utcMSOfDay >= registrationLock[i].start && utcMSOfDay <= registrationLock[i].end) {
+        enforceLockUntil = registrationLock[i].end - registrationHeadStart;
+        break;
+      }
+    }
+    if (enforceLockUntil !== -1) bannerSession.outOfRegistrationHours = enforceLockUntil;
+    printAllAttempts();
+    while (enforceLockUntil != -1 && utcMSOfDay < enforceLockUntil) {
+      rightNow = new Date().getTime();
+      utcMSOfDay = (rightNow) % (24 * 60 * 60 * 1000);
+      await delay(10);
+    }
+    if (bannerSession.outOfRegistrationHours !== undefined) delete bannerSession.outOfRegistrationHours;
+    printAllAttempts();
     while (bannerSession.sessionExists === false) {
-      if (new Date().getTime() - lastRequest > bannerInterval) {
-        getSession(force).then(session => printAllAttempts); // We don't await this because we want to keep trying even if one attempt is still waiting
-        lastRequest = new Date().getTime();
+      rightNow = new Date().getTime();
+      if (rightNow - lastRequest > bannerInterval) {
+        getSession(force).then(session => printAllAttempts); // IMPORTANT: We don't "await" this because we want to keep trying even if one attempt is still waiting
+        lastRequest = rightNow;
       }
       if (bannerSession.sessionExists === true) break;
       await delay(1);
@@ -468,7 +501,12 @@ async function resetRememberedDetails() {
     rememberedDetails.name = null;
     rememberedDetails.pfp = null;
     rememberedDetails.key = null;
-    save.set("rememberDetails", await save.encrypt(JSON.stringify(rememberedDetails)).d);
+    try {
+      await save.del("rememberDetails");
+    }
+    catch (error) {
+      console.error("Failed to reset remembered details:", error);
+    }
 }
 
 async function signIn(form) {
