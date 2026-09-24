@@ -544,6 +544,7 @@ async function signIn(form) {
   }
   else if (result.s === 401) {
     // Session timeout, so we try again with another one!
+    console.log("Session timeout during login, trying again...");
     const sessionResult = await getBannerSession();
     if (!sessionResult.s) {
       sessionResult.w = false;
@@ -561,6 +562,13 @@ async function signIn(form) {
       }
     }
     return { s: true, w: true, d: "LOGINSUCCESS" };
+  }
+  else if (result.s === 503 || result.s === 303) {
+    bannerSession.sessionExists = false;
+    return { s: false, w: false, d: "Please try again now." };
+  }
+  else {
+    return { s: false, w: false, d: "Unknown error occurred during login. Status code: " + result.s };
   }
 }
 
