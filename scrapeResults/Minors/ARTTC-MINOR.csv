@@ -23,6 +23,7 @@ HART 311,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea
 HART 312,AArea,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 HART 320,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,CCore,CCore,CCore,CCore,CCore,CCore,CCore
 HART 323,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+HART 333,AArea,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 HART 380,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,,,,,,,
 HART 392,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,
 HART 411,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,
@@ -44,7 +45,6 @@ VA 430,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,A
 VIS 308,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,
 VIS 310,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,,,,,,,,
 VIS 412,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,,,,,,,,
-HART 333,AArea,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 MGMT 425,,,,,,,,,,,,,,,,,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore,CCore
 HUM 312,,,,,,,,,,,,,,,,,,,,,,,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,RRequired,,,,,,,
 VA 423,,,,,,,,,,,,,,,,,,,,,,,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,AArea,CCore,CCore,CCore,CCore,CCore,CCore,CCore

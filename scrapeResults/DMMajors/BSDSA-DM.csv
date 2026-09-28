@@ -2,41 +2,7 @@
 Requirement:facultyCourses,5,5,5,5
 Requirement:credits,156,156,156,156
 Requirement:ECTS,300,300,300,300
-IF 100,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-MATH 101,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-CIP 101N,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-NS 101,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-SPS 101,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-TLL 101,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-AL 102,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-MATH 102,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-NS 102,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-SPS 102,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-TLL 102,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-HIST 191,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-HIST 192,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-HUM 201,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-PROJ 201,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-HUM 202,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-HUM 207,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-SPS 303,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-HUM 311,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-HUM 312,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-HUM 317,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-HUM 321,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-HUM 322,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-HUM 371,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
-CS 412,RRequired,RRequired,RRequired,RRequired
-DSA 201,RRequired,RRequired,RRequired,RRequired
-DSA 210,RRequired,RRequired,RRequired,RRequired
-DSA 301,RRequired,RRequired,RRequired,RRequired
-DSA 395,RRequired,RRequired,RRequired,RRequired
-DSA 492,RRequired,RRequired,RRequired,RRequired
-ECON 301,RRequired,RRequired,RRequired,RRequired
-MATH 203,RRequired,RRequired,RRequired,RRequired
-MATH 212,RRequired,RRequired,RRequired,RRequired
-MATH 306,RRequired,RRequired,RRequired,RRequired
-OPIM 390,RRequired,RRequired,RRequired,RRequired
+,DFoundationally Required,DFoundationally Required,DFoundationally Required,DFoundationally Required
 BIO 310,CCore,CCore,CCore,CCore
 CS 306,CCore,CCore,CCore,CCore
 CS 404,CCore,CCore,CCore,CCore
@@ -59,9 +25,12 @@ IE 305,CCore,CCore,CCore,CCore
 IE 311,CCore,CCore,CCore,CCore
 IE 451,CCore,CCore,CCore,CCore
 MATH 204,CCore,CCore,CCore,CCore
+MKTG 401,CCore,CCore,CCore,CCore
 MKTG 414,CCore,CCore,CCore,CCore
 OPIM 302,CCore,CCore,CCore,CCore
 OPIM 402,CCore,CCore,CCore,CCore
+OPIM 404,CCore,CCore,CCore,CCore
+OPIM 407,CCore,CCore,CCore,CCore
 OPIM 408,CCore,CCore,CCore,CCore
 OPIM 410,CCore,CCore,CCore,CCore
 ORG 405,CCore,CCore,CCore,CCore
@@ -75,6 +44,7 @@ CS 440,AArea,AArea,AArea,AArea
 CS 449,AArea,AArea,AArea,AArea
 CS 48011,AArea,AArea,AArea,AArea
 CS 48012,AArea,AArea,AArea,AArea
+CS 48013,AArea,AArea,AArea,AArea
 ECON 201,AArea,AArea,AArea,AArea
 ECON 204,AArea,AArea,AArea,AArea
 ECON 321,AArea,AArea,AArea,AArea
@@ -85,6 +55,8 @@ EE 410,AArea,AArea,AArea,AArea
 EE 48009,AArea,AArea,AArea,AArea
 EE 48010,AArea,AArea,AArea,AArea
 EE 48012,AArea,AArea,AArea,AArea
+EE 48013,AArea,AArea,AArea,AArea
+ENS 48014,AArea,AArea,AArea,AArea
 FIN 301,AArea,AArea,AArea,AArea
 FIN 401,AArea,AArea,AArea,AArea
 FIN 402,AArea,AArea,AArea,AArea
@@ -98,14 +70,11 @@ MATH 428,AArea,AArea,AArea,AArea
 MATH 484,AArea,AArea,AArea,AArea
 MGMT 404,AArea,AArea,AArea,AArea
 MGMT 421,AArea,AArea,AArea,AArea
-MKTG 401,AArea,AArea,AArea,CCore
 MKTG 404,AArea,AArea,AArea,AArea
 MKTG 405,AArea,AArea,AArea,AArea
 MKTG 409,AArea,AArea,AArea,AArea
 MKTG 410,AArea,AArea,AArea,AArea
 MKTG 413,AArea,AArea,AArea,AArea
-OPIM 404,AArea,AArea,AArea,CCore
-OPIM 407,AArea,AArea,AArea,CCore
 OPIM 409,AArea,AArea,AArea,AArea
 POLS 404,AArea,AArea,AArea,AArea
 PSIR 401,AArea,AArea,AArea,AArea
@@ -185,10 +154,8 @@ CS 447,FFree,FFree,FFree,FFree
 CS 460,FFree,FFree,FFree,FFree
 CS 48004,FFree,FFree,FFree,FFree
 CS 48006,FFree,FFree,FFree,FFree
-CS 48007,FFree,,,
 CS 48008,FFree,FFree,FFree,FFree
 CS 48010,FFree,FFree,FFree,FFree
-CS 48013,FFree,FFree,FFree,FFree
 CULT 322,FFree,FFree,FFree,FFree
 CULT 355,FFree,FFree,FFree,FFree
 CULT 361,FFree,FFree,FFree,FFree
@@ -313,6 +280,8 @@ HIST 335,FFree,FFree,FFree,FFree
 HIST 349,FFree,FFree,FFree,FFree
 HIST 371,FFree,FFree,FFree,FFree
 HIST 439,FFree,FFree,FFree,FFree
+HIST 440,FFree,FFree,FFree,FFree
+HIST 445,FFree,FFree,FFree,FFree
 HIST 489,FFree,FFree,FFree,FFree
 HUM 413,FFree,FFree,FFree,FFree
 HUM 414,FFree,FFree,FFree,FFree
@@ -623,3 +592,4 @@ VA 455,FFree,FFree,FFree,FFree
 VA 465,FFree,FFree,FFree,FFree
 VA 490,FFree,FFree,FFree,FFree
 XM 490,FFree,FFree,FFree,FFree
+CS 48007,FFree,,,
