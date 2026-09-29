@@ -818,9 +818,9 @@
       const courseKey = `${section.subject}:${canonicalCourseNumber(section)}`;
 
       if (!uniqueCourses.has(courseKey)) {
-        uniqueCourses.set(courseKey, numericCredits(section.credits));
+        uniqueCourses.set(courseKey, numericCredits(section.credits.SU));
       } else if (uniqueCourses.get(courseKey) === null) {
-        uniqueCourses.set(courseKey, numericCredits(section.credits));
+        uniqueCourses.set(courseKey, numericCredits(section.credits.SU));
       }
     });
 
@@ -940,7 +940,7 @@
     }
   });
 
-  addSaveSlotBtn.addEventListener("click", event => {
+  addSaveSlotBtn.addEventListener("click", async (event) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -949,10 +949,28 @@
     const defaultName =
       `Schedule ${slots.length + 1}`;
 
-    const entered = prompt(
-      "Name the new schedule:",
-      defaultName
-    );
+
+    const entered = await new Promise(resolve => {
+        const dialog = createDialog("Create new schedule", `<p>Enter a name for the new schedule.</p>
+          <input type="text" value="${esc(defaultName)}" placeholder="${esc(defaultName)}">
+          <button class="btn active">Create</button><button class="btn modalHide">Cancel</button>
+        `);
+        dialog.initialize = () => {
+          const input = dialog.querySelector("input");
+          input.focus();
+          input.select();
+        }
+        dialog.querySelector("button.active").addEventListener("click", () => {
+          const input = dialog.querySelector("input");
+          resolve(input.value);
+          dialog.hide();
+        });
+        dialog.querySelector("button.modalHide").addEventListener("click", () => {
+          resolve(null);
+          dialog.hide();
+        });
+        dialog.show();
+    });
 
     if (entered === null) return;
 
@@ -1634,6 +1652,7 @@
       creditValues.map(value =>
         `<option value="${value}">${esc(formatCredits(value))} credit${value === 1 ? "" : "s"}</option>`
       ).join("") +
+      `<option value="basic">Basic science</option>` +  
       `<option value="unknown">Unknown credits</option>`;
   }
 
@@ -1917,7 +1936,7 @@
         !credit ||
         (credit === "unknown"
           ? courseCredit === null
-          : courseCredit === Number(credit));
+          : courseCredit === Number(credit)) || (credit === "basic" && course.credits.ECTS.bsc > 0);
 
       const searchValues = {
         coursecode: [
@@ -2262,12 +2281,10 @@
         { numeric: true }
       )
     );
-
     const knownTotal = courses.reduce(
-      (sum, course) => sum + (course.credits.SU ?? 0),
-      0
+      (sum, course) => sum + (course.credits.SU || 0),0
     );
-    const unknownCount = courses.filter(course => course.credits === null).length;
+    const unknownCount = courses.filter(course => course.credits.SU === null).length;
     const totalText =
       `${formatCredits(knownTotal)} credits` +
       (unknownCount ? ` + ${unknownCount} unknown` : "");
