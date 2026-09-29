@@ -161,19 +161,35 @@
       type: "checkbox",
       forced: true,
       id: "Courses",
-      head: "Registered Course Read Access",
+      head: "READ > Registered Courses",
       label: "Permit this app to read your registered courses from Banner.",
-      why: "To show your registered courses on the schedule view and to prevent any duplicate entries during registration.",
-      how: "During registration times, the app goes to the registration form page and reads the registered course numbers from that page. During non-registration times, the app goes to the detailed schedule page and reads the registered course numbers from that page."
+      why: {
+        title: "Usage of registered course access",
+        description: "To show your registered courses on the schedule view. You can hit the reset button to clear your changes and set it back to your registered courses. This is a required access for the app to find potential changes in your schedule and to prevent any duplicate entries during registration. Only the CRNs are read on your device and the differences between registered CRNs and selected CRNs are calculated on your device for the registration summary. Your selected courses and registered courses are never sent to any server other than Banner.",
+        image: "whyscheduleaccess.png"
+      },
+      how: {
+        title: "How the app reads your registered courses",
+        description: "The app visits the \"Student Detail Schedule\" page and reads the CRNs in the page during regular hours. <b>If the app is used INSIDE registration hours, the app just reads your \"Add/Drop Courses\" form and reads the CRNs from that form.</b> Only the CRNs are read on your device.",
+        image: "howscheduleaccess.png"
+      }
     },
     {
       type: "checkbox",
       forced: true,
       id: "BaseName",
-      head: "Basic Name Access",
+      head: "READ > Your Name",
       label: "Permit this app to read your name from the registration page on Banner.",
-      why: "Just to make sure the app is being used by you and not someone else. This is a security measure to prevent accidental use by someone else.",
-      how: "On registration page and detailed schedule page, Banner shows the user's name on the top right corner of the page. The app effortlessly reads the name from that location. Please note that Banner returns the name with initials for middle names."
+      why: {
+        title: "Usage of your name",
+        description: "Just to show your name on the top right corner of the window. This is to make sure it is you using the app and not someone else. This is a required access for the app to function properly.",
+        image: "whynameaccess.png"
+      },
+      how: {
+        title: "How the app reads your name",
+        description: "While reading your schedule, the app also reads your name from the top right corner of the page. Banner shows the name of the user inside most pages and the app reads the name from there. <b>If you have multiple words in your name (excluding surname), the name the app reads will likely be abbreviated slightly. Check full name access in the advanced access section if you want to.</b>",
+        image: "hownameaccess.png"
+      }
     },
     {
       type: "header",
@@ -184,19 +200,35 @@
       type: "checkbox",
       default: true,
       id: "Image",
-      head: "Image Access",
+      head: "READ > Profile Image",
       label: "Permit this app to access your profile image from Banner.",
-      why: "Just to show your profile image on the top right corner of the window. This is purely cosmetic and does not affect the app's core functionality.",
-      how: "The app goes to the view my photo page under Personal Information section on Banner and gets the image from that page."
+      why: {
+        title: "Usage of your profile image",
+        description: "Just to show your profile image on the top right corner of the window. Optional for user experience.",
+        image: null
+      },
+      how: {
+        title: "How the app accesses your profile image",
+        description: "The app goes to the view my photo page under Personal Information section on Banner and gets the image URL from that page.",
+        image: null
+      }
     },
     {
       type: "checkbox",
       default: true,
       id: "FullName",
-      head: "Full Name Access",
-      label: "Permit this app to access your full name from Banner.\nThis permission is not necessary and this access won't be needed if your full name is only 2 words. This only matters to you if you have multiple words in your name.",
-      why: "Unlike basic name access, this permission is needed to display your full name without abbreviations on the top right corner of the window. This is purely cosmetic and does not affect the app's core functionality.",
-      how: "Banner does not provide your full name on most pages other than some personal information pages. The app goes to Student > Financial Aid > My Award Information > Payment Information page and reads the full name from that page. Yes, it does load your tuition information in order to get your full name. However, the app does not read any tuition information and only reads your full name from that page."
+      head: "READ > Full Name (Important for multi-word names)",
+      label: "Permit this app to access your full name from Banner.\nThis permission is unnecessary if your full name is only 2 words. PLEASE READ the \"How\" section below before granting this permission.",
+      why: {
+        title: "Usage of your full name",
+        description: "If your full name is more than 2 words, Banner abbreviates your middle name on almost all pages. On some pages, Banner shows your full name. This permission is to read your full name from those pages and show it on the top right corner of the window. Optional for user experience.",
+        image: null
+      },
+      how: {
+        title: "How the app accesses your full name",
+        description: "Banner does not provide your full name on most pages other than some personal information pages. The app goes to Student > Financial Aid > My Award Information > Payment Information page and reads the full name from that page. <b>Yes, it does load your tuition information in order to get your full name.</b> However, the app does not read any tuition information and only reads your full name from that page.",
+        image: null
+      }
     },
     {
       type: "header",
@@ -206,18 +238,34 @@
     {
       type: "checkbox",
       id: "MajorsMinors",
-      head: "Program Access",
+      head: "READ > Your Majors and Minors",
       label: "Permit this app to access your majors and minors along with admit term from Banner.",
-      why: "To display whether a course you are looking at is required or a certain type of elective for your program. This is purely for giving you more information regarding your progress in your program and does not affect the app's core functionality.",
-      how: "The app goes to Student > Student Records > General Student Information page and reads your majors and minors along with admit term from that page."
+      why: {
+        title: "Usage of your majors and minors",
+        description: "To show the courses' requirements based on your majors and minors. Your majors and minors that are read from Banner are automatically selected in \"Major Settings\" in the settings page. You can always manually select your own major if you want to without needing to grant this permission. Optional for better user experience.",
+        image: null
+      },
+      how: {
+        title: "How the app accesses your majors and minors",
+        description: "The app goes to Student > Student Records > General Student Information page and reads your majors and minors along with admit term from that page. Majors are then automatically selected in the \"Major Settings\" in the settings page.",
+        image: null
+      }
     },
     {
       type: "checkbox",
       id: "FinalGrades",
-      head: "Final Grades Access",
-      label: "Permit this app to access your final grades of all terms from Banner.",
-      why: "To display whether a course you are looking can be registered to or not due to pre-requisites and other requirements.",
-      how: "The app goes to Student > Student Records > Final Grades page and loads the final grades of each term and reads the final grades from that page."
+      head: "READ > Your Final Grades",
+      label: "Permit this app to access your final grades of all terms from Banner. Not necessary if you have already granted access to degree evaluation requests.",
+      why: {
+        title: "Usage of your final grades",
+        description: "To check for pre-requisites for the courses you are looking at. Optional for better user experience.",
+        image: null
+      },
+      how: {
+        title: "How the app accesses your final grades",
+        description: "The app goes to Student > Student Records > Final Grades page and loads the final grades of each term and reads the final grades from that page.",
+        image: null
+      }
     },
     {
       type: "header",
@@ -227,18 +275,34 @@
     {
       type: "checkbox",
       id: "Registration",
-      head: "Registration Editing Access",
+      head: "WRITE > Add/Drop & Registration Submissions",
       label: "Permit this app to submit registration changes on your behalf.",
-      why: "To allow you to submit registration forms directly from this app without having to go to Banner and typing all of your course numbers on a form. This is purely for your convenience.",
-      how: "The app creates a registration/add-drop form request that's specifically made for your courses and submits that form on your behalf. The app then reads the response from Banner and shows you the result of your registration request. The form submission will not be made without your explicit consent and you will always be shown the form summary before submission. You can choose how efficient/replicative you want the form submission to be. For that, please refer to Network settings."
+      why: {
+        title: "Usage of registration form submissions",
+        description: "To allow you to submit registration forms directly from this app without having to go to Banner and typing all of your course numbers on a form. This is purely for your convenience.",
+        image: null
+      },
+      how: {
+        title: "How the app sends registration forms",
+        description: "The app creates a registration/add-drop form request that's specifically made for your courses and submits that form on your behalf. The app then reads the response from Banner and shows you the result of your registration request. The form submission will not be made without your explicit consent and you will always be shown the form summary before submission. You can choose how efficient/replicative you want the form submission to be. For that, please refer to Network settings.",
+        image: null
+      }
     },
     {
       type: "checkbox",
       id: "DegreeEvaluation",
-      head: "Degree Evaluation Access",
-      label: "Permit this app to submit degree evaluation requests on your behalf.",
-      why: "A combinational alternative to program access and final grades access. For displaying pre-requisites and program requirement information on the course you are looking at. This permission is not necessary if you have already granted program access and final grades access. However, you can achieve a similar result by granting those two permissions instead of this one.",
-      how: "The app checks for previous degree evaluation requests during the last semester and if there are any, it reads the results from those requests. If there are no previous requests, the app can submit a new degree evaluation request on your behalf and reads the results from that request. If an evaluation form submission is required, the app will request your explicit consent and you will always be shown the form summary before submission."
+      head: "WRITE > Degree Evaluation Requests & READ > Past Degree Evaluation Results",
+      label: "Permit this app to submit degree evaluation requests on your behalf. Not necessary if you have already granted access to final grades.",
+      why: {
+        title: "Usage of degree evaluations",
+        description: "To check for pre-requisites for the courses you are looking at. Optional for better user experience.",
+        image: null
+      },
+      how: {
+        title: "How the app accesses your degree evaluations",
+        description: "The app checks for previous degree evaluation requests during the last semester and if there are any, it reads the results from those requests. If there are no previous requests, the app can submit a new degree evaluation request on your behalf and reads the results from that request. If an evaluation form submission is required, the app will request your explicit consent and you will always be shown the form summary before submission.",
+        image: null
+      }
     },
   ]
   const networkSettings = [
@@ -297,34 +361,24 @@
           <div>
             <span></span>
             <span></span>
-            ${setting.why || setting.how ? `<div class="explanationboxes">
-              <div class="explanation">
-                <div>
-                  <span></span>
-                  <span></span>
-                </div>
-                <button class="btn">Learn more</button>
-              </div>
-              <div class="explanation">
-                <div>
-                  <span></span>
-                  <span></span>
-                </div>
-                <button class="btn">Learn more</button>
-              </div>
-            </div>`: ''}
+            ${setting.why || setting.how ? `
+            <div class="explanation">
+              <button class="btn">Why?</button>
+              <button class="btn">How?</button>
+            </div>
+            `: ''}
           </div>
           <input type="checkbox" id="bannerPrivacy${setting.id}" ${(setting.forced ? 'disabled checked' : setting.default ? 'checked' : '')}>`;
           switchLabel.classList.add("settingsSwitch");
           switchLabel.setAttribute("for", `bannerPrivacy${setting.id}`);
           switchLabel.children[0].children[0].textContent = setting.head;
           switchLabel.children[0].children[1].textContent = setting.label;
-          if (setting.why || setting.how) {
-            switchLabel.children[0].children[2].children[0].children[0].children[0].textContent = "Why do you need this?";
-            switchLabel.children[0].children[2].children[0].children[0].children[1].textContent = setting.why || "No explanation provided.";
-            switchLabel.children[0].children[2].children[1].children[0].children[0].textContent = "How do you access this information?";
-            switchLabel.children[0].children[2].children[1].children[0].children[1].textContent = setting.how || "No explanation provided.";
-          }
+          switchLabel.children[0].children[2].children[0].addEventListener("click", () => {
+            createDialog(setting.why.title, `<p style="width: 600px;">${setting.why.description}</p>${setting.why.image ? `<img src="${setting.why.image}" style="width: 600px;">` : ''}`).show();
+          });
+          switchLabel.children[0].children[2].children[1].addEventListener("click", () => {
+            createDialog(setting.how.title, `<p style="width: 600px;">${setting.how.description}</p>${setting.how.image ? `<img src="${setting.how.image}" style="width: 600px;">` : ''}`).show();
+          });
           $("settings").querySelector(".settings").appendChild(switchLabel);
         }
       });
@@ -370,7 +424,7 @@
       allMajors.MN.sort((a, b) => a.n > b.n);
       const settingSave = document.createElement("div");
       settingSave.classList.add("settingsSwitch");
-      settingSave.innerHTML = '<div><h3>Nothing to save yet</h3><p>Once you select your options, you can save them here.</p></div><button class="btn" disabled>Save</button>'
+      settingSave.innerHTML = '<div><h3>Nothing to save yet</h3><p>Once you select your options, you can save them here.</p></div><button class="btn">Change Admit Terms</button>'
       $("settings").querySelector(".settings").appendChild(settingSave)
       const levelMenu = document.createElement("div");
       levelMenu.innerHTML = '<h3>I am a(n)...</h3><div><button class="btn" data-level="UG">Undergraduate</button><button class="btn" data-level="MX">Masters</button><button class="btn" data-level="PD">Doctorate</button></div><h3>...student.</h3>'
@@ -392,18 +446,21 @@
         if (bothAreSame) {
           settingSave.children[0].children[0].textContent = "Nothing to save yet";
           settingSave.children[0].children[1].textContent = "Once you select your options, you can save them here.";
+          settingSave.children[1].textContent = "Change Admit Terms";
           settingSave.children[1].classList.remove("active");
-          settingSave.children[1].disabled = true;
+          settingSave.children[1].disabled = false;
         }
         else if (invalidChoices) {
           settingSave.children[0].children[0].textContent = "Select a major first";
           settingSave.children[0].children[1].textContent = "You can save when you select a major for your level of study.";
+          settingSave.children[1].textContent = "Save Changes";
           settingSave.children[1].classList.remove("active");
           settingSave.children[1].disabled = true;
         }
         else {
           settingSave.children[0].children[0].textContent = "You have unsaved changes";
           settingSave.children[0].children[1].textContent = "Click the save button to save your changes.";
+          settingSave.children[1].textContent = "Save Changes";
           settingSave.children[1].classList.add("active");
           settingSave.children[1].disabled = false;
         }
@@ -669,6 +726,15 @@
     });
     dialog.querySelector(".close").addEventListener("click", () => {
       dialog.hide();
+      setTimeout(() => {
+        dialog.remove();
+      }, 200);
+    });
+    if (dialog.querySelector(".modalHide")) dialog.querySelector(".modalHide").addEventListener("click", () => {
+      dialog.hide();
+      setTimeout(() => {
+        dialog.remove();
+      }, 200);
     });
     document.body.appendChild(dialog);
     return dialog;
@@ -951,25 +1017,21 @@
 
 
     const entered = await new Promise(resolve => {
-        const dialog = createDialog("Create new schedule", `<p>Enter a name for the new schedule.</p>
+      const dialog = createDialog("Create new schedule", `<p>Enter a name for the new schedule.</p>
           <input type="text" value="${esc(defaultName)}" placeholder="${esc(defaultName)}">
           <button class="btn active">Create</button><button class="btn modalHide">Cancel</button>
         `);
-        dialog.initialize = () => {
-          const input = dialog.querySelector("input");
-          input.focus();
-          input.select();
-        }
-        dialog.querySelector("button.active").addEventListener("click", () => {
-          const input = dialog.querySelector("input");
-          resolve(input.value);
-          dialog.hide();
-        });
-        dialog.querySelector("button.modalHide").addEventListener("click", () => {
-          resolve(null);
-          dialog.hide();
-        });
-        dialog.show();
+      dialog.initialize = () => {
+        const input = dialog.querySelector("input");
+        input.focus();
+        input.select();
+      }
+      dialog.querySelector("button.active").addEventListener("click", () => {
+        const input = dialog.querySelector("input");
+        resolve(input.value);
+        dialog.hide();
+      });
+      dialog.show();
     });
 
     if (entered === null) return;
@@ -1652,7 +1714,7 @@
       creditValues.map(value =>
         `<option value="${value}">${esc(formatCredits(value))} credit${value === 1 ? "" : "s"}</option>`
       ).join("") +
-      `<option value="basic">Basic science</option>` +  
+      `<option value="basic">Basic science</option>` +
       `<option value="unknown">Unknown credits</option>`;
   }
 
@@ -2282,7 +2344,7 @@
       )
     );
     const knownTotal = courses.reduce(
-      (sum, course) => sum + (course.credits.SU || 0),0
+      (sum, course) => sum + (course.credits.SU || 0), 0
     );
     const unknownCount = courses.filter(course => course.credits.SU === null).length;
     const totalText =
@@ -2699,7 +2761,7 @@
           const hours = Math.floor(timeLeft / (60 * 60 * 1000));
           const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
           const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
-          attemptDiv.children[1].children[1].textContent = "Starting in "+ (hours > 0 ? hours + ":" : "") + (minutes > 0 ? (hours > 0 && minutes < 10 ? "0" : "") + minutes + ":" : "") + (minutes > 0 && seconds < 10 ? "0" : "") + seconds;
+          attemptDiv.children[1].children[1].textContent = "Starting in " + (hours > 0 ? hours + ":" : "") + (minutes > 0 ? (hours > 0 && minutes < 10 ? "0" : "") + minutes + ":" : "") + (minutes > 0 && seconds < 10 ? "0" : "") + seconds;
         }, 100);
         attemptDiv.style.display = "flex";
         attemptDiv.children[0].textContent = "Waiting for registration hours";
@@ -2965,7 +3027,7 @@
     if (window.suDesktop) {
       state.selected.clear();
       for (let i = 0; i < registeredSchedule.length; i++) {
-        state.selected.add("CRN:"+registeredSchedule[i]);
+        state.selected.add("CRN:" + registeredSchedule[i]);
       }
       autosaveCurrentSelection();
       renderAll();
