@@ -1678,6 +1678,7 @@
     renderCourseList();
     renderSelectedSummary();
     renderSchedule();
+    renderSaveChanges();
   }
 
   function auxiliaryKind(section) {
@@ -2737,6 +2738,7 @@
       usermenubutton.querySelector("span").textContent = data.user.name;
       usermenubutton.querySelector("div").style.backgroundImage = `url(${data.user.image})`;
       registeredSchedule = data.user.schedule;
+      renderSaveChanges();
       usermenubutton.style.display = "flex";
       signinbutton.style.display = "none";
       document.querySelector("#attemptsdiv").children[0].style.display = "flex";
@@ -2799,6 +2801,7 @@
       if (!adds.length && !drops.length) {
         modaldisplay.innerHTML = '<h2>No changes to save</h2><p>Your schedule is already up to date.</p><button class="btn active">OK</button>';
         modaldisplay.querySelector("button").addEventListener("click", () => { savemodal.hide(); });
+        return;
       }
       modaldisplay.innerHTML = `<h2 style="display: none;opacity: 0;">Confirm changes</h2><div><h3>Before you start, make sure:</h3><div class="warning"><h3>You are <u>${$("usermenubutton").children[0].textContent}</u></h3><p>We will send this form on this user's behalf.</p></div><div class="warning"><h3>You're <u>comfortable</u> with this</h3><p>No joke, this will send an add-drop form to Banner on your behalf.</p></div><div class="warning"><h3>You picked the <u>correct</u> sections</h3><p>Take a look at the add/drop changes below before confirming.</p></div></div><div class="bannergenericerrors" style="display: none;width: 100%;"><p>General Errors by Banner:</p><div style="background: #ff000033;"><div></div></div></div><div><div style="background: #00ff0033;"><div></div></div><div style="background: #ff000033;"><div></div></div></div><button style="width: 100%;" class="btn">Return to Safety</button><button style="width: 100%;" class="btn active red">Confirm Registration</button><button style="width:100%;display:none;" class="btn">See Error Details</button>`;
       modaldisplay.children[4].addEventListener("click", () => { savemodal.hide(); });
@@ -2839,6 +2842,7 @@
             }
           });
           registeredSchedule = result.newschedule;
+          renderSaveChanges();
           while (!loadingAnimationDone) {
             await new Promise(resolve => setTimeout(resolve, 1));
           }
@@ -2933,6 +2937,36 @@
     })();
     savemodal.show();
   });
+  resetButton.addEventListener("click", () => {
+    $("resetDialog").show();
+  });
+  $("resetCancelBtn").addEventListener("click", () => {
+    $("resetDialog").hide();
+  });
+  $("resetConfirmBtn").addEventListener("click", async () => {
+    $("resetDialog").hide();
+    if (window.suDesktop) {
+      state.selected.clear();
+      for (let i = 0; i < registeredSchedule.length; i++) {
+        state.selected.add("CRN:"+registeredSchedule[i]);
+      }
+      autosaveCurrentSelection();
+      renderAll();
+    }
+  });
+  function renderSaveChanges() {
+    const chosen = state.sections.filter(section => state.selected.has(section.key)).map(section => section.crn);
+    const registered = state.sections.filter(section => registeredSchedule.includes(section.crn)).map(section => section.crn);
+    const adds = chosen.filter(section => !registered.some(registeredSection => registeredSection === section));
+    const drops = registered.filter(section => !chosen.some(chosenSection => chosenSection === section));
+    const changesToSave = adds.length + drops.length;
+    if (changesToSave > 0) {
+      saveButton.innerText = `Save Changes (${changesToSave})`;
+    }
+    else {
+      saveButton.innerText = "Up to Date";
+    }
+  }
   $("usermenu").children[4].addEventListener("click", async () => {
     if (window.suDesktop) {
       $("usermenu").classList.remove("show");

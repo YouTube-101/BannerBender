@@ -108,7 +108,7 @@
   </section>
 </main>
 
-<dialog id="updateDialog" class="update-dialog">
+<dialog id="updateDialog" class="update-dialog notmaximized">
   <div class="update-dialog-body">
     <h2>New version available</h2>
     <p>
@@ -118,6 +118,25 @@
     <div class="update-dialog-actions">
       <button class="btn" id="updateLaterBtn" type="button">Later</button>
       <button class="btn primary" id="updateNowBtn" type="button">Update now</button>
+    </div>
+  </div>
+</dialog>
+<dialog id="resetDialog" class="modal notmaximized">
+  <div>
+    <section class="modal-header">
+      <h2>Reset Courses</h2>
+      <button class="btn close"></button>
+    </section>
+    <div>
+      <p>
+        This will select only the courses that you are officially registered to.<br>
+        If you did not register for any courses yet, this will clear all selected courses.<br>
+        This action cannot be undone.
+      </p>
+      <div class="modal-actions">
+        <button class="btn" id="resetCancelBtn" type="button">Cancel</button>
+        <button class="btn primary" id="resetConfirmBtn" type="button">Reset</button>
+      </div>
     </div>
   </div>
 </dialog>
@@ -141,7 +160,7 @@
     </div>
   </div>
 </dialog>
-<dialog id="savedialog" class="modal">
+<dialog id="savedialog" class="modal notmaximized">
   <div>
     <section class="modal-header">
       <h2>Save Changes</h2>
