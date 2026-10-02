@@ -874,6 +874,7 @@ button.active.red {
   display: grid;
   gap: 5px;
   min-height: 100%;
+  align-content: start;
 }
 .event.adddropitem > span:first-child > span:first-child::before {
   content: "▶";
