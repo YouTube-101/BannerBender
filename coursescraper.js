@@ -374,6 +374,20 @@ async function generateCSV() {
           }
           const description = $$("i")[0] && $$("i")[0].next ? $$("i")[0].next.data.trim().replaceAll("\n", " ").replaceAll("  ", " ") : null;
           const descriptionTR = $$("b")[0] && $$("b")[0].next ? $$("b")[0].next.data.substring(0, $$("b")[0].next.data.indexOf("\n")).trim().replaceAll("\n", " ").replaceAll("  ", " ") : null;
+          
+          const catalogAttributes = $$("span.fieldlabeltext:contains('Course Attributes:')")[0] ? $$("span.fieldlabeltext:contains('Course Attributes:')")[0].next.data.trim() : null;
+          let creditsOverride = null;
+
+          if (catalogAttributes.includes("ENGINEERING:") || catalogAttributes.includes("BASIC:")) {
+            creditsOverride = {
+              eng: catalogAttributes.substring(catalogAttributes.indexOf("ENGINEERING:") + 12, catalogAttributes.indexOf("/") - 1).trim(),
+              bsc: catalogAttributes.substring(catalogAttributes.indexOf("BASIC:") + 6, catalogAttributes.indexOf(")")).trim()
+            }
+            if (creditsOverride.eng === "") creditsOverride.eng = 0;
+            if (creditsOverride.bsc === "") creditsOverride.bsc = 0;
+            creditsOverride.eng = parseInt(creditsOverride.eng);
+            creditsOverride.bsc = parseInt(creditsOverride.bsc);
+          }
           const restrictions = $$("span.fieldlabeltext:contains('Restrictions:')")[0] ? $$("span.fieldlabeltext:contains('Restrictions:')")[0].next.data.trim().split("\n").map(x => { x = x.trim(); if (x === "Must be enrolled in one of the following Levels:") return "MUSTBE:allowedLevels"; else if (x === "Must be enrolled in one of the following Colleges:") return "MUSTBE:allowedFaculties"; else if (x === "Must be enrolled in one of the following Programs:") return "MUSTBE:allowedPrograms"; else if (x === "Must be enrolled in one of the following Classifications:") return "MUSTBE:allowedClasses"; else if (x === "May not be enrolled in one of the following Colleges:") return "MUSTBE:deniedFaculties"; else return x }).filter(x => x.length > 0) : null;
           const getSectionText = (startLabel, endLabel) => {
             const $start = $$(`span.fieldlabeltext:contains('${startLabel}')`);
@@ -427,7 +441,8 @@ async function generateCSV() {
             restrictions,
             prerequisites: prereqText,
             coreqText,
-            generalText
+            generalText,
+            creditsOverride
           }
         }
         if (obj.restrictions && obj.restrictions.length === 0) delete obj.restrictions;
@@ -477,6 +492,10 @@ async function generateCSV() {
           prerequisites: catalog.prerequisites,
           corequisites: ["Lab", "Recitation", "Discussion"].includes(course.scheduleType) ? coreqs[course.subject + " " + course.course] : catalog.coreqText,
           enrollment: catalog.restrictions
+        }
+        if (catalog.creditsOverride) {
+          course.credits.ECTS.eng = catalog.creditsOverride.eng;
+          course.credits.ECTS.bsc = catalog.creditsOverride.bsc;
         }
         courses[i] = course;
       }
