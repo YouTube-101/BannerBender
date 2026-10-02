@@ -38,6 +38,7 @@ async function saveCookies() {
 
 async function requestToBanner(URL, method = "GET", body = null, extraHeaders = {}, bypassCookieJar = false) {
   const headers = {
+    "connection": "keep-alive",
     "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
     "accept-language": app.getLocale() + ",en;q=0.9",
     "cache-control": "no-cache",
@@ -52,8 +53,8 @@ async function requestToBanner(URL, method = "GET", body = null, extraHeaders = 
     "sec-fetch-user": "?1",
     "upgrade-insecure-requests": "1",
   }
-  if (bannerSession.lastURL === undefined) {
-    headers.referrer = bannerSession.lastURL;
+  if (bannerSession.lastURL !== undefined) {
+    headers.referer = bannerSession.lastURL;
   }
   if (method === "POST" || method === "PUT" || method === "PATCH" || method === "DELETE") {
     headers["content-type"] = "application/x-www-form-urlencoded";
