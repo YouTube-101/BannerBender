@@ -9,6 +9,10 @@
     <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://suis.sabanciuniv.edu 'unsafe-inline';">
     <style>
+        :root {
+            --dotfile: url("loadingbg.svg");
+        }
+
         body {
             margin: 0;
             background-color: white;
@@ -28,11 +32,13 @@
             transition: opacity 0.5s;
             overflow: hidden;
         }
+
         * {
-            font-family:Nexa,Roboto,Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+            font-family: Nexa, Roboto, Inter, system-ui, -apple-system, Segoe UI, Arial, sans-serif;
             line-height: 1.2;
             margin: 0;
         }
+
         #loadingbg {
             position: absolute;
             top: 0;
@@ -47,40 +53,49 @@
             --angle: 30deg;
             --uptime: 4s;
         }
-        #loadingbg > div {
-            background-image: url("loadingbg.svg");
+
+        #loadingbg>div {
+            background-image: var(--dotfile);
             background-size: var(--size);
             background-position: center;
             background-repeat: repeat;
             min-height: var(--size);
             width: calc(100% + (100% * cos(var(--angle))));
         }
-        #loadingbg > div:nth-child(odd) {
+
+        #loadingbg>div:nth-child(odd) {
             animation: bgscrollleft var(--time) linear infinite, bgscrollup var(--uptime) linear infinite;
         }
-        #loadingbg > div:nth-child(even) {
+
+        #loadingbg>div:nth-child(even) {
             animation: bgscrollright var(--time) linear infinite, bgscrollup var(--uptime) linear infinite;
         }
+
         @keyframes bgscrollleft {
             0% {
                 background-position: 0px center;
             }
+
             100% {
                 background-position: var(--size) center;
             }
         }
+
         @keyframes bgscrollright {
             0% {
                 background-position: var(--size) center;
             }
+
             100% {
                 background-position: 0px center;
             }
         }
+
         @keyframes bgscrollup {
             0% {
                 transform: rotate(var(--angle)) translateY(0px);
             }
+
             100% {
                 transform: rotate(var(--angle)) translateY(calc(var(--size) * -2 * (cos(var(--angle)))));
             }
@@ -110,9 +125,13 @@
     <div id="genericloading">
         <h1>Loading...</h1>
     </div>
-    <div id="loginloading" style="opacity: 0;flex-direction: row;gap: 20px;justify-content: flex-start;padding: 0px 40px;width: calc(100vw - 80px);">
-        <div style="width: 100px;height: 100px;border: 10px solid #ccc;border-radius: 50%;background-size: cover;background-position: top center;"></div>
-        <div style="display: flex;flex-direction: column;align-items: flex-start;justify-content: center; text-align: left;">
+    <div id="loginloading"
+        style="opacity: 0;flex-direction: row;gap: 20px;justify-content: flex-start;padding: 0px 40px;width: calc(100vw - 80px);">
+        <div
+            style="width: 100px;height: 100px;border: 10px solid #ccc;border-radius: 50%;background-size: cover;background-position: top center;">
+        </div>
+        <div
+            style="display: flex;flex-direction: column;align-items: flex-start;justify-content: center; text-align: left;">
             <h4>Welcome back</h4>
             <h1>User</h1>
             <span>Grabbing your courses...</span>
@@ -121,9 +140,34 @@
     <div id="scraperloading" style="opacity: 0;">
         <h1>Scraping...</h1>
         <span>Starting...</span>
-        <div style="position:absolute; bottom: 0px; left: 0px; width: 0%; height: 15px; background-color: #007bff;"></div>
+        <div style="position:absolute; bottom: 0px; left: 0px; width: 0%; height: 15px; background-color: #007bff;">
+        </div>
     </div>
     <script>
+        function setToDarkMode() {
+            document.body.style.backgroundColor = "black";
+            document.body.style.color = "white";
+            document.documentElement.style.setProperty("--dotfile", "url('loadingbgw.svg')");
+        }
+        function setToLightMode() {
+            document.body.style.backgroundColor = "white";
+            document.body.style.color = "black";
+            document.documentElement.style.setProperty("--dotfile", "url('loadingbg.svg')");
+        }
+
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            console.log("System color scheme changed:", e.matches ? "dark" : "light", localStorage.getItem("darkMode"));
+            if (localStorage.getItem("darkMode") === null) {
+                if (e.matches) setToDarkMode();
+                else setToLightMode();
+            }
+        });
+
+        if (localStorage.getItem("darkMode") === "true") setToDarkMode();
+        else if (localStorage.getItem("darkMode") === null && window.matchMedia("(prefers-color-scheme: dark)").matches) setToDarkMode();
+
+
         const genericLoading = document.getElementById("genericloading");
         const loginLoading = document.getElementById("loginloading");
         const scraperLoading = document.getElementById("scraperloading");
@@ -151,7 +195,7 @@
             scraperLoading.style.opacity = 1;
             if (data.h) scraperLoading.querySelector("h1").textContent = data.h;
             if (data.t) scraperLoading.querySelector("span").textContent = data.t;
-            if (data.p !== undefined) scraperLoading.querySelector("div").style.width = (data.p*100) + "%";
+            if (data.p !== undefined) scraperLoading.querySelector("div").style.width = (data.p * 100) + "%";
         });
     </script>
 </body>

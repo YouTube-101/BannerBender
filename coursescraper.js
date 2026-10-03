@@ -119,483 +119,481 @@ function parseGeneralRequirements(text) {
 }
 async function generateCSV() {
   const thisterm = banner.getCurrentTerm();
-  if (true) {
-    const listOfSubjects = await banner.requestToPublicBanner("bwckgens.p_proc_term_date", "POST", "p_calling_proc=bwckschd.p_disp_dyn_sched&p_term=" + thisterm);
-    let $ = listOfSubjects.dom;
-    const subjects = [];
-    $("select[name='sel_subj']").find("option").each((index, element) => {
-      // if (element.attribs.value === "HUM")
-      subjects.push("sel_subj=" + element.attribs.value);
-    });
-    broadcastToAllWindows("scraper-information", { h: subjects.length + " subjects found", t: "Fetching course list..." });
-    const listOfCourses = await banner.requestToPublicBanner("bwckschd.p_get_crse_unsec", "POST", "term_in=" + thisterm + "&sel_subj=dummy&sel_day=dummy&sel_schd=dummy&sel_insm=dummy&sel_camp=dummy&sel_levl=dummy&sel_sess=dummy&sel_instr=dummy&sel_ptrm=dummy&sel_attr=dummy&" + subjects.join("&") + "&sel_crse=&sel_title=&sel_from_cred=&sel_to_cred=&begin_hh=0&begin_mi=0&begin_ap=a&end_hh=0&end_mi=0&end_ap=a");
-    $ = listOfCourses.dom;
-    const courses = [];
-    let pendingCourse = null;
-    $("table[summary='This layout table is used to present the sections found']").find("tbody").eq(0).children().each((index, element) => {
-      const firstChild = $(element).children().first()[0];
-      if (firstChild.name === "th") {
-        const header = $(firstChild).find("a").eq(0)
-        if (pendingCourse) {
-          console.warn("Pending course not null when starting new course. This may indicate a parsing error.");
-        }
-        else {
-          const detailLink = header.attr("href").substring(1);
-          pendingCourse = {
-            header: header.text().trim(),
-            link: detailLink.substring(detailLink.indexOf("/") + 1),
-            body: null
-          }
-        }
+  const listOfSubjects = await banner.requestToPublicBanner("bwckgens.p_proc_term_date", "POST", "p_calling_proc=bwckschd.p_disp_dyn_sched&p_term=" + thisterm);
+  let $ = listOfSubjects.dom;
+  const subjects = [];
+  $("select[name='sel_subj']").find("option").each((index, element) => {
+    // if (element.attribs.value === "HUM")
+    subjects.push("sel_subj=" + element.attribs.value);
+  });
+  broadcastToAllWindows("scraper-information", { h: subjects.length + " subjects found", t: "Fetching course list..." });
+  const listOfCourses = await banner.requestToPublicBanner("bwckschd.p_get_crse_unsec", "POST", "term_in=" + thisterm + "&sel_subj=dummy&sel_day=dummy&sel_schd=dummy&sel_insm=dummy&sel_camp=dummy&sel_levl=dummy&sel_sess=dummy&sel_instr=dummy&sel_ptrm=dummy&sel_attr=dummy&" + subjects.join("&") + "&sel_crse=&sel_title=&sel_from_cred=&sel_to_cred=&begin_hh=0&begin_mi=0&begin_ap=a&end_hh=0&end_mi=0&end_ap=a");
+  $ = listOfCourses.dom;
+  const courses = [];
+  let pendingCourse = null;
+  $("table[summary='This layout table is used to present the sections found']").find("tbody").eq(0).children().each((index, element) => {
+    const firstChild = $(element).children().first()[0];
+    if (firstChild.name === "th") {
+      const header = $(firstChild).find("a").eq(0)
+      if (pendingCourse) {
+        console.warn("Pending course not null when starting new course. This may indicate a parsing error.");
       }
       else {
-        if (pendingCourse) {
-          pendingCourse.body = $(firstChild).html();
-          //if (pendingCourse.header.includes("HUM 2"))
-          courses.push(pendingCourse);
-          pendingCourse = null;
-        }
-        else {
-          console.warn("No pending course when trying to parse a course body. This may indicate a parsing error.", $(firstChild).html());
+        const detailLink = header.attr("href").substring(1);
+        pendingCourse = {
+          header: header.text().trim(),
+          link: detailLink.substring(detailLink.indexOf("/") + 1),
+          body: null
         }
       }
+    }
+    else {
+      if (pendingCourse) {
+        pendingCourse.body = $(firstChild).html();
+        //if (pendingCourse.header.includes("HUM 2"))
+        courses.push(pendingCourse);
+        pendingCourse = null;
+      }
+      else {
+        console.warn("No pending course when trying to parse a course body. This may indicate a parsing error.", $(firstChild).html());
+      }
+    }
+  });
+  broadcastToAllWindows("scraper-information", { h: courses.length + " sections found", t: "Processing each section...", p: 0 });
+  const allCourseCodes = [];
+  for (let i = 0; i < courses.length; i++) {
+    const course = courses[i];
+    broadcastToAllWindows("scraper-information", { p: ((i + 1) / courses.length) });
+    course.section = course.header.substring(course.header.lastIndexOf(" - ") + 3);
+    course.header = course.header.substring(0, course.header.lastIndexOf(" - "));
+    course.subject = course.header.substring(course.header.lastIndexOf(" - ") + 3);
+    course.course = course.subject.substring(course.subject.indexOf(" ")).trim();
+    course.subject = course.subject.substring(0, course.subject.indexOf(" ")).trim();
+    course.header = course.header.substring(0, course.header.lastIndexOf(" - "));
+    course.crn = course.header.substring(course.header.lastIndexOf(" - ") + 3);
+    course.header = course.header.substring(0, course.header.lastIndexOf(" - "));
+    course.title = course.header;
+    delete course.header;
+    const $$ = cheerio.load(course.body);
+    $$("span.fieldlabeltext").each((index, element) => {
+      const key = $$(element).text().trim();
+      const value = $$(element)[0].next.data.trim();
+      if (key && value) {
+        course[key.substring(0, key.length - 1)] = value;
+      }
+      $$(element)[0].next.data = "";
+      $$(element).remove();
     });
-    broadcastToAllWindows("scraper-information", { h: courses.length + " sections found", t: "Processing each section...", p: 0 });
-    const allCourseCodes = [];
-    for (let i = 0; i < courses.length; i++) {
-      const course = courses[i];
-      broadcastToAllWindows("scraper-information", { p: ((i + 1) / courses.length) });
-      course.section = course.header.substring(course.header.lastIndexOf(" - ") + 3);
-      course.header = course.header.substring(0, course.header.lastIndexOf(" - "));
-      course.subject = course.header.substring(course.header.lastIndexOf(" - ") + 3);
-      course.course = course.subject.substring(course.subject.indexOf(" ")).trim();
-      course.subject = course.subject.substring(0, course.subject.indexOf(" ")).trim();
-      course.header = course.header.substring(0, course.header.lastIndexOf(" - "));
-      course.crn = course.header.substring(course.header.lastIndexOf(" - ") + 3);
-      course.header = course.header.substring(0, course.header.lastIndexOf(" - "));
-      course.title = course.header;
-      delete course.header;
-      const $$ = cheerio.load(course.body);
-      $$("span.fieldlabeltext").each((index, element) => {
-        const key = $$(element).text().trim();
-        const value = $$(element)[0].next.data.trim();
-        if (key && value) {
-          course[key.substring(0, key.length - 1)] = value;
-        }
-        $$(element)[0].next.data = "";
-        $$(element).remove();
+    if ($$("a:contains('View Catalog Entry')").length > 0) {
+      course.catalog = $$("a:contains('View Catalog Entry')").attr("href").substring(1);
+      course.catalog = course.catalog.substring(course.catalog.indexOf("/") + 1);
+      $$("a:contains('View Catalog Entry')").remove();
+    }
+    if (course.Attributes) course.Attributes = course.Attributes.split(", ");
+    const timetablekeys = [];
+    $$("table.datadisplaytable").find("tr").each((index, element) => {
+      $$(element).find("th").each((i, e) => {
+        timetablekeys.push($$(e).text().trim());
       });
-      if ($$("a:contains('View Catalog Entry')").length > 0) {
-        course.catalog = $$("a:contains('View Catalog Entry')").attr("href").substring(1);
-        course.catalog = course.catalog.substring(course.catalog.indexOf("/") + 1);
-        $$("a:contains('View Catalog Entry')").remove();
-      }
-      if (course.Attributes) course.Attributes = course.Attributes.split(", ");
-      const timetablekeys = [];
-      $$("table.datadisplaytable").find("tr").each((index, element) => {
-        $$(element).find("th").each((i, e) => {
-          timetablekeys.push($$(e).text().trim());
-        });
-        $$(element).find("td").each((i, e) => {
-          const key = timetablekeys[i];
-          const value = $$(e).text().trim().replaceAll("   ", " ").replaceAll("  ", " ").replaceAll(" (P)", "").replaceAll(" , ", ", ").replaceAll(" ,", ", ");
-          if (!course.timetable) course.timetable = [];
-          if (!course.timetable[index - 1]) course.timetable[index - 1] = {};
-          course.timetable[index - 1][key] = value;
-        });
+      $$(element).find("td").each((i, e) => {
+        const key = timetablekeys[i];
+        const value = $$(e).text().trim().replaceAll("   ", " ").replaceAll("  ", " ").replaceAll(" (P)", "").replaceAll(" , ", ", ").replaceAll(" ,", ", ");
+        if (!course.timetable) course.timetable = [];
+        if (!course.timetable[index - 1]) course.timetable[index - 1] = {};
+        course.timetable[index - 1][key] = value;
       });
-      course.credits = { "SU": 0, "ECTS": { base: 0, eng: 0, bsc: 0, exception: null } };
-      $$("table.datadisplaytable").remove();
-      course.remains = [];
-      if ($$("span")) {
-        const span = $$("span").text().trim();
-        if (span.includes("for students admitted before")) {
-          course.credits.ECTS.exception = {
-            admit: parseInt(span.substring(span.indexOf("for students admitted before") + 28, span.indexOf("for students admitted before") + 33).trim()),
-            base: parseInt(span.substring(span.indexOf("ECTS") - 2, span.indexOf("ECTS")).trim()),
-            eng: parseInt(span.substring(span.indexOf("ENGINEERING:") + 12, span.indexOf("/") - 1).trim()),
-            bsc: parseInt(span.substring(span.indexOf("BASIC:") + 6, span.indexOf(")")).trim())
-          }
-          if (!course.credits.ECTS.exception.eng) course.credits.ECTS.exception.eng = 0;
-          if (!course.credits.ECTS.exception.bsc) course.credits.ECTS.exception.bsc = 0;
+    });
+    course.credits = { "SU": 0, "ECTS": { base: 0, eng: 0, bsc: 0, exception: null } };
+    $$("table.datadisplaytable").remove();
+    course.remains = [];
+    if ($$("span")) {
+      const span = $$("span").text().trim();
+      if (span.includes("for students admitted before")) {
+        course.credits.ECTS.exception = {
+          admit: parseInt(span.substring(span.indexOf("for students admitted before") + 28, span.indexOf("for students admitted before") + 33).trim()),
+          base: parseInt(span.substring(span.indexOf("ECTS") - 2, span.indexOf("ECTS")).trim()),
+          eng: parseInt(span.substring(span.indexOf("ENGINEERING:") + 12, span.indexOf("/") - 1).trim()),
+          bsc: parseInt(span.substring(span.indexOf("BASIC:") + 6, span.indexOf(")")).trim())
         }
-        $$("span").remove();
+        if (!course.credits.ECTS.exception.eng) course.credits.ECTS.exception.eng = 0;
+        if (!course.credits.ECTS.exception.bsc) course.credits.ECTS.exception.bsc = 0;
       }
-      course.remains.push(...($$("body").html().replaceAll("<br>", "").trim().split("\n").map(s => s.trim()).filter(s => s.length > 0)));
-      if (course.Attributes) {
-        course.Attributes = course.Attributes.map(attr => {
-          if (attr.startsWith("Course Offered by ")) {
-            if (!course.Faculty) course.Faculty = attr.substring("Course Offered by ".length);
-            return null;
-          }
-          else if (attr.includes("ECTS")) {
-            course.credits.ECTS.base = parseInt(attr.substring(attr.indexOf("ECTS") - 2, attr.indexOf("ECTS")).trim())
-            if (attr.includes("ENGINEERING:")) course.credits.ECTS.eng = parseInt(attr.substring(attr.indexOf("ENGINEERING:") + 12, attr.indexOf("/") - 1).trim())
-            if (!course.credits.ECTS.eng) course.credits.ECTS.eng = 0;
-            if (attr.includes("BASIC:")) course.credits.ECTS.bsc = parseInt(attr.substring(attr.indexOf("BASIC:") + 6, attr.indexOf(")")).trim())
-            if (!course.credits.ECTS.bsc) course.credits.ECTS.bsc = 0;
-          }
+      $$("span").remove();
+    }
+    course.remains.push(...($$("body").html().replaceAll("<br>", "").trim().split("\n").map(s => s.trim()).filter(s => s.length > 0)));
+    if (course.Attributes) {
+      course.Attributes = course.Attributes.map(attr => {
+        if (attr.startsWith("Course Offered by ")) {
+          if (!course.Faculty) course.Faculty = attr.substring("Course Offered by ".length);
           return null;
-        }).filter(attr => attr !== null);
-      }
-      if (course.Faculty) {
-        course.Faculty = course.Faculty.replace("Course Offered by ", "").trim().replace("SBS", "FMAN");
-      }
-      if (course.remains.length > 0) {
-        course.remains = course.remains.map(line => {
-          line = line.replace("(), ", "").trim();
-          if (line.startsWith("Course Offered by ")) {
-            if (!course.Faculty) course.Faculty = line.substring("Course Offered by ".length);
-            return null;
-          }
-          if (line.endsWith("Credits")) {
-            course.credits.SU = parseFloat(line.substring(0, line.indexOf("Credits")).trim());
-            return null;
-          }
-          if (line.endsWith("Campus")) {
-            course.campus = line.substring(0, line.indexOf("Campus")).trim();
-            return null;
-          }
-          if (line.endsWith("Instructional Method")) {
-            course.instructionalMethod = line.substring(0, line.indexOf("Instructional Method")).trim();
-            return null;
-          }
-          if (line.endsWith("Schedule Type")) {
-            course.scheduleType = line.substring(0, line.indexOf("Schedule Type")).trim();
-            return null;
-          }
-          if (line.startsWith("Lang. of Instruction:")) {
-            course.language = line.substring("Lang. of Instruction:".length).trim();
-            return null;
-          }
-          if (line.includes("Syllabus Available")) {
-            return null;
-          }
-          return line;
-        }).filter(line => line !== null);
-        if (!allCourseCodes.includes(course.subject + " " + course.course) && !["Lab", "Recitation", "Discussion"].includes(course.scheduleType)) {
-          allCourseCodes.push(course.subject + " " + course.course);
         }
-        if (((course.subject === "TLL" && ["101", "102"].includes(course.course)) || course.subject === "HIST" && ["191", "192"].includes(course.course))) {
-          if (course.section.endsWith("Y")) {
-            course.language = "English";
-            course.restriction = "NO_TURKISH_CITIZENS";
-          } else {
-            course.restriction = "TURKISH_CITIZENS_ONLY";
-          }
+        else if (attr.includes("ECTS")) {
+          course.credits.ECTS.base = parseInt(attr.substring(attr.indexOf("ECTS") - 2, attr.indexOf("ECTS")).trim())
+          if (attr.includes("ENGINEERING:")) course.credits.ECTS.eng = parseInt(attr.substring(attr.indexOf("ENGINEERING:") + 12, attr.indexOf("/") - 1).trim())
+          if (!course.credits.ECTS.eng) course.credits.ECTS.eng = 0;
+          if (attr.includes("BASIC:")) course.credits.ECTS.bsc = parseInt(attr.substring(attr.indexOf("BASIC:") + 6, attr.indexOf(")")).trim())
+          if (!course.credits.ECTS.bsc) course.credits.ECTS.bsc = 0;
         }
-        else if (course.subject === "TUR") {
-          course.language = "Turkish";
-          course.restrictions = "NO_TURKISH_CITIZENS";
+        return null;
+      }).filter(attr => attr !== null);
+    }
+    if (course.Faculty) {
+      course.Faculty = course.Faculty.replace("Course Offered by ", "").trim().replace("SBS", "FMAN");
+    }
+    if (course.remains.length > 0) {
+      course.remains = course.remains.map(line => {
+        line = line.replace("(), ", "").trim();
+        if (line.startsWith("Course Offered by ")) {
+          if (!course.Faculty) course.Faculty = line.substring("Course Offered by ".length);
+          return null;
+        }
+        if (line.endsWith("Credits")) {
+          course.credits.SU = parseFloat(line.substring(0, line.indexOf("Credits")).trim());
+          return null;
+        }
+        if (line.endsWith("Campus")) {
+          course.campus = line.substring(0, line.indexOf("Campus")).trim();
+          return null;
+        }
+        if (line.endsWith("Instructional Method")) {
+          course.instructionalMethod = line.substring(0, line.indexOf("Instructional Method")).trim();
+          return null;
+        }
+        if (line.endsWith("Schedule Type")) {
+          course.scheduleType = line.substring(0, line.indexOf("Schedule Type")).trim();
+          return null;
+        }
+        if (line.startsWith("Lang. of Instruction:")) {
+          course.language = line.substring("Lang. of Instruction:".length).trim();
+          return null;
+        }
+        if (line.includes("Syllabus Available")) {
+          return null;
+        }
+        return line;
+      }).filter(line => line !== null);
+      if (!allCourseCodes.includes(course.subject + " " + course.course) && !["Lab", "Recitation", "Discussion"].includes(course.scheduleType)) {
+        allCourseCodes.push(course.subject + " " + course.course);
+      }
+      if (((course.subject === "TLL" && ["101", "102"].includes(course.course)) || course.subject === "HIST" && ["191", "192"].includes(course.course))) {
+        if (course.section.endsWith("Y")) {
+          course.language = "English";
+          course.restriction = "NO_TURKISH_CITIZENS";
+        } else {
+          course.restriction = "TURKISH_CITIZENS_ONLY";
         }
       }
-      if (course.remains.length === 0) delete course.remains;
-      if (course.Attributes && course.Attributes.length === 0) delete course.Attributes;
-      if (course.Levels) course.Levels = course.Levels.split(", ").map(level => level.trim());
-      delete course.body;
+      else if (course.subject === "TUR") {
+        course.language = "Turkish";
+        course.restrictions = "NO_TURKISH_CITIZENS";
+      }
+    }
+    if (course.remains.length === 0) delete course.remains;
+    if (course.Attributes && course.Attributes.length === 0) delete course.Attributes;
+    if (course.Levels) course.Levels = course.Levels.split(", ").map(level => level.trim());
+    delete course.body;
+    courses[i] = course;
+  }
+  broadcastToAllWindows("scraper-information", { h: allCourseCodes.length + " courses found", t: "Fetching prerequisites...", p: 0 });
+  let completeCount = 0;
+  let ongoingCount = 0;
+  const catalogs = [];
+  const MAX_CONCURRENT_REQUESTS = 5;
+  const coreqs = {};
+  for (let i = 0; i < allCourseCodes.length; i++) {
+    await new Promise(async r => { while (ongoingCount >= MAX_CONCURRENT_REQUESTS) { await new Promise(o => setTimeout(o, 1)); }; r(); });
+    ongoingCount++;
+    broadcastToAllWindows("scraper-information", { p: ((completeCount + 1) / allCourseCodes.length) });
+    new Promise(async r => {
+      const catalogData = await banner.requestToPublicBanner("bwckctlg.p_disp_course_detail?cat_term_in=202601&subj_code_in=" + allCourseCodes[i].split(" ")[0] + "&crse_numb_in=" + allCourseCodes[i].split(" ")[1], "GET");
+      let obj;
+      if (catalogData.dom(".errortext").length > 0) {
+        const isUndergrad = (parseInt(allCourseCodes[i].split(" ")[1].substring(0, 1)) < 5) ? "U" : "";
+        const offers = await banner.requestToPublicBanner("sabanci_www.p_get_courses?levl_code=" + isUndergrad + "G&subj_code=" + allCourseCodes[i].split(" ")[0] + "&crse_numb=" + allCourseCodes[i].split(" ")[1] + "&lang=eng");
+        const $$ = cheerio.load(offers.dom.html());
+        if (!$$("tbody")) {
+          console.error("Error fetching catalog for course " + allCourseCodes[i] + ": No tbody found in HTML");
+          process.exit(1);
+        }
+        let rawPrereqText = $$("tbody").eq(0).children().eq(3).children().eq(0).text().substring("Prerequisite: ".length).trim();
+        let prepping = 4;
+        while (!$$("tbody").eq(0).children().eq(prepping).children().eq(0).text().includes("Corequisite: ")) {
+          rawPrereqText += " " + $$("tbody").eq(0).children().eq(prepping).children().eq(0).text().trim();
+          prepping++;
+        }
+        if (rawPrereqText === "__") rawPrereqText = null;
+        let rawCoreqText = $$("tbody").eq(0).children().eq(prepping).children().eq(0).text().substring("Corequisite: ".length).trim();
+        if (rawCoreqText === "__") rawCoreqText = null;
+        else rawCoreqText = [rawCoreqText.trim()];
+        prepping++;
+        while (!$$("tbody").eq(0).children().eq(prepping).children().eq(0).text().includes("ECTS Credit: ")) {
+          rawCoreqText.push($$("tbody").eq(0).children().eq(prepping).children().eq(0).text().trim());
+          prepping++;
+        }
+        prepping++;
+        let rawGeneralText = $$("tbody").eq(0).children().eq(prepping).children().eq(0).text().substring("General Requirements: ".length).trim();
+        prepping++;
+        while (prepping < $$("tbody").eq(0).children().length) {
+          rawGeneralText += " " + $$("tbody").eq(0).children().eq(prepping).children().eq(0).text().trim();
+          prepping++;
+        }
+        rawGeneralText = rawGeneralText.trim();
+        if (rawGeneralText === "") rawGeneralText = null;
+        const generalText = rawGeneralText ? parseGeneralRequirements(rawGeneralText) : null;
+        if (generalText && generalText.prerequisites) {
+          if (rawPrereqText && !rawPrereqText.includes(">")) {
+            rawPrereqText += " and (" + generalText.prerequisites + ")";
+          }
+          else {
+            rawPrereqText = generalText.prerequisites;
+          }
+          delete generalText.prerequisites;
+        }
+        const turkish = await banner.requestToPublicBanner("sabanci_www.p_get_courses?levl_code=" + isUndergrad + "G&subj_code=" + allCourseCodes[i].split(" ")[0] + "&crse_numb=" + allCourseCodes[i].split(" ")[1] + "&lang=tur");
+        const $$tr = cheerio.load(turkish.dom.html());
+        obj = {
+          subject: allCourseCodes[i].split(" ")[0],
+          course: allCourseCodes[i].split(" ")[1],
+          description: $$("tbody").eq(0).children().eq(1).children().eq(0).text().replaceAll("\n", " ").replaceAll("  ", " ").trim(),
+          descriptionTR: $$tr("tbody").eq(0).children().eq(1).children().eq(0).text().replaceAll("\n", " ").replaceAll("  ", " ").trim(),
+          restrictions: null,
+          prerequisites: rawPrereqText ? parsePrerequisites(rawPrereqText) : null,
+          coreqText: rawCoreqText,
+          generalText: generalText
+        }
+        console.log(obj);
+      }
+      else {
+        const $$ = cheerio.load(catalogData.dom("td.ntdefault").html().replaceAll("\n", " ").replaceAll("<br>", "\n"));
+        try {
+        } catch (error) {
+          console.log(catalogData, catalogData.dom.html());
+          console.error("Error loading catalog data for course " + allCourseCodes[i] + ": " + error);
+          process.exit(1);
+        }
+        const description = $$("i")[0] && $$("i")[0].next ? $$("i")[0].next.data.trim().replaceAll("\n", " ").replaceAll("  ", " ") : null;
+        const descriptionTR = $$("b")[0] && $$("b")[0].next ? $$("b")[0].next.data.substring(0, $$("b")[0].next.data.indexOf("\n")).trim().replaceAll("\n", " ").replaceAll("  ", " ") : null;
+
+        const catalogAttributes = $$("span.fieldlabeltext:contains('Course Attributes:')")[0] ? $$("span.fieldlabeltext:contains('Course Attributes:')")[0].next.data.trim() : null;
+        let creditsOverride = null;
+
+        if (catalogAttributes.includes("ENGINEERING:") || catalogAttributes.includes("BASIC:")) {
+          creditsOverride = {
+            eng: catalogAttributes.substring(catalogAttributes.indexOf("ENGINEERING:") + 12, catalogAttributes.indexOf("/") - 1).trim(),
+            bsc: catalogAttributes.substring(catalogAttributes.indexOf("BASIC:") + 6, catalogAttributes.indexOf(")")).trim()
+          }
+          if (creditsOverride.eng === "") creditsOverride.eng = 0;
+          if (creditsOverride.bsc === "") creditsOverride.bsc = 0;
+          creditsOverride.eng = parseInt(creditsOverride.eng);
+          creditsOverride.bsc = parseInt(creditsOverride.bsc);
+        }
+        const restrictions = $$("span.fieldlabeltext:contains('Restrictions:')")[0] ? $$("span.fieldlabeltext:contains('Restrictions:')")[0].next.data.trim().split("\n").map(x => { x = x.trim(); if (x === "Must be enrolled in one of the following Levels:") return "MUSTBE:allowedLevels"; else if (x === "Must be enrolled in one of the following Colleges:") return "MUSTBE:allowedFaculties"; else if (x === "Must be enrolled in one of the following Programs:") return "MUSTBE:allowedPrograms"; else if (x === "Must be enrolled in one of the following Classifications:") return "MUSTBE:allowedClasses"; else if (x === "May not be enrolled in one of the following Colleges:") return "MUSTBE:deniedFaculties"; else return x }).filter(x => x.length > 0) : null;
+        const getSectionText = (startLabel, endLabel) => {
+          const $start = $$(`span.fieldlabeltext:contains('${startLabel}')`);
+          if ($start.length === 0) return null;
+          let rawText = '';
+          let currentNode = $start[0].next;
+          const endSelector = endLabel ? `span.fieldlabeltext:contains('${endLabel}')` : null;
+          while (currentNode) {
+            if (endSelector && currentNode.type === 'tag' && $$(currentNode).is(endSelector)) {
+              break;
+            }
+            if (currentNode.type === 'text') {
+              rawText += currentNode.data;
+            }
+            else if (currentNode.type === 'tag') {
+              rawText += $$(currentNode).text();
+            }
+            currentNode = currentNode.next;
+          }
+          return rawText.trim();
+        };
+
+        const rawCoreqText = getSectionText('Corequisites:', 'Prerequisites:');
+        const coreqText = rawCoreqText ? rawCoreqText.split("\n").map(x => x.trim()).filter(x => x.length > 0) : null;
+        if (coreqText && coreqText.length > 0) {
+          for (let j = 0; j < coreqText.length; j++) {
+            coreqs[coreqText[j]] = [allCourseCodes[i], ...coreqText.filter(x => x !== coreqText[j])].filter(x => x !== undefined);
+          }
+        }
+
+        let rawPrereqText = getSectionText('Prerequisites:', 'General Requirements:');
+        const rawGeneralText = getSectionText('General Requirements:', null);
+
+        const generalText = rawGeneralText ? parseGeneralRequirements(rawGeneralText) : null;
+        if (generalText && generalText.prerequisites) {
+          if (rawPrereqText && !rawPrereqText.includes(">")) {
+            rawPrereqText += " and (" + generalText.prerequisites + ")";
+          }
+          else {
+            rawPrereqText = generalText.prerequisites;
+          }
+          delete generalText.prerequisites;
+        }
+        const prereqText = rawPrereqText ? parsePrerequisites(rawPrereqText) : null;
+
+        obj = {
+          subject: allCourseCodes[i].split(" ")[0],
+          course: allCourseCodes[i].split(" ")[1],
+          description,
+          descriptionTR,
+          restrictions,
+          prerequisites: prereqText,
+          coreqText,
+          generalText,
+          creditsOverride
+        }
+      }
+      if (obj.restrictions && obj.restrictions.length === 0) delete obj.restrictions;
+      else if (obj.restrictions) {
+        const restrictionsObj = {};
+        let currentKey = null;
+        obj.restrictions.forEach(line => {
+          if (line.startsWith("MUSTBE:")) {
+            currentKey = line.substring(7);
+            restrictionsObj[currentKey] = [];
+          }
+          else if (currentKey) {
+            restrictionsObj[currentKey].push(line);
+          }
+        });
+        obj.restrictions = restrictionsObj;
+      }
+      catalogs.push(obj);
+      completeCount++;
+      ongoingCount--;
+      r();
+    }).catch(err => {
+      console.error("Error fetching catalog for course " + allCourseCodes[i] + ": " + err);
+      process.exit(1);
+    });
+  }
+  await new Promise(async r => { while (completeCount < allCourseCodes.length) { await new Promise(o => setTimeout(o, 1)); }; r(); });
+
+  broadcastToAllWindows("scraper-information", { h: "Almost there", t: "Applying prerequisites to courses", p: 0 });
+
+  for (let i = 0; i < courses.length; i++) {
+    broadcastToAllWindows("scraper-information", { p: ((i + 1) / courses.length) });
+    const course = courses[i];
+    const coursecode = (() => {
+      if (["Lab", "Recitation", "Discussion"].includes(course.scheduleType)) {
+        return coreqs[course.subject + " " + course.course][0];
+      }
+      return course.subject + " " + course.course;
+    })();
+
+    const catalog = catalogs.find(c => c.subject === coursecode.split(" ")[0] && c.course === coursecode.split(" ")[1]);
+    if (catalog) {
+      course.description = catalog.description;
+      course.descriptionTR = catalog.descriptionTR;
+      course.restrictions = {
+        general: catalog.generalText,
+        prerequisites: catalog.prerequisites,
+        corequisites: ["Lab", "Recitation", "Discussion"].includes(course.scheduleType) ? coreqs[course.subject + " " + course.course] : catalog.coreqText,
+        enrollment: catalog.restrictions
+      }
+      if (catalog.creditsOverride) {
+        course.credits.ECTS.eng = catalog.creditsOverride.eng;
+        course.credits.ECTS.bsc = catalog.creditsOverride.bsc;
+      }
       courses[i] = course;
     }
-    broadcastToAllWindows("scraper-information", { h: allCourseCodes.length + " courses found", t: "Fetching prerequisites...", p: 0 });
-    let completeCount = 0;
-    let ongoingCount = 0;
-    const catalogs = [];
-    const MAX_CONCURRENT_REQUESTS = 5;
-    const coreqs = {};
-    for (let i = 0; i < allCourseCodes.length; i++) {
-      await new Promise(async r => { while (ongoingCount >= MAX_CONCURRENT_REQUESTS) { await new Promise(o => setTimeout(o, 1)); }; r(); });
-      ongoingCount++;
-      broadcastToAllWindows("scraper-information", { p: ((completeCount + 1) / allCourseCodes.length) });
-      new Promise(async r => {
-        const catalogData = await banner.requestToPublicBanner("bwckctlg.p_disp_course_detail?cat_term_in=202601&subj_code_in=" + allCourseCodes[i].split(" ")[0] + "&crse_numb_in=" + allCourseCodes[i].split(" ")[1], "GET");
-        let obj;
-        if (catalogData.dom(".errortext").length > 0) {
-          const isUndergrad = (parseInt(allCourseCodes[i].split(" ")[1].substring(0,1))<5)?"U":"";
-          const offers = await banner.requestToPublicBanner("sabanci_www.p_get_courses?levl_code="+isUndergrad+"G&subj_code=" + allCourseCodes[i].split(" ")[0] + "&crse_numb=" + allCourseCodes[i].split(" ")[1] + "&lang=eng");
-          const $$ = cheerio.load(offers.dom.html());
-          if (!$$("tbody")) {
-            console.error("Error fetching catalog for course " + allCourseCodes[i] + ": No tbody found in HTML");
-            process.exit(1);
-          }
-          let rawPrereqText = $$("tbody").eq(0).children().eq(3).children().eq(0).text().substring("Prerequisite: ".length).trim();
-          let prepping = 4;
-          while (!$$("tbody").eq(0).children().eq(prepping).children().eq(0).text().includes("Corequisite: ")) {
-            rawPrereqText += " " + $$("tbody").eq(0).children().eq(prepping).children().eq(0).text().trim();
-            prepping++;
-          }
-          if (rawPrereqText === "__") rawPrereqText = null;
-          let rawCoreqText = $$("tbody").eq(0).children().eq(prepping).children().eq(0).text().substring("Corequisite: ".length).trim();
-          if (rawCoreqText === "__") rawCoreqText = null;
-          else rawCoreqText = [rawCoreqText.trim()];
-          prepping++;
-          while (!$$("tbody").eq(0).children().eq(prepping).children().eq(0).text().includes("ECTS Credit: ")) {
-            rawCoreqText.push($$("tbody").eq(0).children().eq(prepping).children().eq(0).text().trim());
-            prepping++;
-          }
-          prepping++;
-          let rawGeneralText = $$("tbody").eq(0).children().eq(prepping).children().eq(0).text().substring("General Requirements: ".length).trim();
-          prepping++;
-          while (prepping < $$("tbody").eq(0).children().length) {
-            rawGeneralText += " " + $$("tbody").eq(0).children().eq(prepping).children().eq(0).text().trim();
-            prepping++;
-          }
-          rawGeneralText = rawGeneralText.trim();
-          if (rawGeneralText === "") rawGeneralText = null;
-          const generalText = rawGeneralText ? parseGeneralRequirements(rawGeneralText) : null;
-          if (generalText && generalText.prerequisites) {
-            if (rawPrereqText && !rawPrereqText.includes(">")) {
-              rawPrereqText += " and (" + generalText.prerequisites + ")";
-            }
-            else {
-              rawPrereqText = generalText.prerequisites;
-            }
-            delete generalText.prerequisites;
-          }
-          const turkish = await banner.requestToPublicBanner("sabanci_www.p_get_courses?levl_code="+isUndergrad+"G&subj_code=" + allCourseCodes[i].split(" ")[0] + "&crse_numb=" + allCourseCodes[i].split(" ")[1] + "&lang=tur");
-          const $$tr = cheerio.load(turkish.dom.html());
-          obj = {
-            subject: allCourseCodes[i].split(" ")[0],
-            course: allCourseCodes[i].split(" ")[1],
-            description: $$("tbody").eq(0).children().eq(1).children().eq(0).text().replaceAll("\n", " ").replaceAll("  ", " ").trim(),
-            descriptionTR: $$tr("tbody").eq(0).children().eq(1).children().eq(0).text().replaceAll("\n", " ").replaceAll("  ", " ").trim(),
-            restrictions: null,
-            prerequisites: rawPrereqText ? parsePrerequisites(rawPrereqText) : null,
-            coreqText: rawCoreqText,
-            generalText: generalText
-          }
-          console.log(obj);
-        }
-        else {
-          const $$ = cheerio.load(catalogData.dom("td.ntdefault").html().replaceAll("\n", " ").replaceAll("<br>", "\n"));
-          try {
-          } catch (error) {
-            console.log(catalogData, catalogData.dom.html());
-            console.error("Error loading catalog data for course " + allCourseCodes[i] + ": " + error);
-            process.exit(1);
-          }
-          const description = $$("i")[0] && $$("i")[0].next ? $$("i")[0].next.data.trim().replaceAll("\n", " ").replaceAll("  ", " ") : null;
-          const descriptionTR = $$("b")[0] && $$("b")[0].next ? $$("b")[0].next.data.substring(0, $$("b")[0].next.data.indexOf("\n")).trim().replaceAll("\n", " ").replaceAll("  ", " ") : null;
-          
-          const catalogAttributes = $$("span.fieldlabeltext:contains('Course Attributes:')")[0] ? $$("span.fieldlabeltext:contains('Course Attributes:')")[0].next.data.trim() : null;
-          let creditsOverride = null;
-
-          if (catalogAttributes.includes("ENGINEERING:") || catalogAttributes.includes("BASIC:")) {
-            creditsOverride = {
-              eng: catalogAttributes.substring(catalogAttributes.indexOf("ENGINEERING:") + 12, catalogAttributes.indexOf("/") - 1).trim(),
-              bsc: catalogAttributes.substring(catalogAttributes.indexOf("BASIC:") + 6, catalogAttributes.indexOf(")")).trim()
-            }
-            if (creditsOverride.eng === "") creditsOverride.eng = 0;
-            if (creditsOverride.bsc === "") creditsOverride.bsc = 0;
-            creditsOverride.eng = parseInt(creditsOverride.eng);
-            creditsOverride.bsc = parseInt(creditsOverride.bsc);
-          }
-          const restrictions = $$("span.fieldlabeltext:contains('Restrictions:')")[0] ? $$("span.fieldlabeltext:contains('Restrictions:')")[0].next.data.trim().split("\n").map(x => { x = x.trim(); if (x === "Must be enrolled in one of the following Levels:") return "MUSTBE:allowedLevels"; else if (x === "Must be enrolled in one of the following Colleges:") return "MUSTBE:allowedFaculties"; else if (x === "Must be enrolled in one of the following Programs:") return "MUSTBE:allowedPrograms"; else if (x === "Must be enrolled in one of the following Classifications:") return "MUSTBE:allowedClasses"; else if (x === "May not be enrolled in one of the following Colleges:") return "MUSTBE:deniedFaculties"; else return x }).filter(x => x.length > 0) : null;
-          const getSectionText = (startLabel, endLabel) => {
-            const $start = $$(`span.fieldlabeltext:contains('${startLabel}')`);
-            if ($start.length === 0) return null;
-            let rawText = '';
-            let currentNode = $start[0].next;
-            const endSelector = endLabel ? `span.fieldlabeltext:contains('${endLabel}')` : null;
-            while (currentNode) {
-              if (endSelector && currentNode.type === 'tag' && $$(currentNode).is(endSelector)) {
-                break;
-              }
-              if (currentNode.type === 'text') {
-                rawText += currentNode.data;
-              }
-              else if (currentNode.type === 'tag') {
-                rawText += $$(currentNode).text();
-              }
-              currentNode = currentNode.next;
-            }
-            return rawText.trim();
-          };
-
-          const rawCoreqText = getSectionText('Corequisites:', 'Prerequisites:');
-          const coreqText = rawCoreqText ? rawCoreqText.split("\n").map(x => x.trim()).filter(x => x.length > 0) : null;
-          if (coreqText && coreqText.length > 0) {
-            for (let j = 0; j < coreqText.length; j++) {
-              coreqs[coreqText[j]] = [allCourseCodes[i], ...coreqText.filter(x => x !== coreqText[j])].filter(x => x !== undefined);
-            }
-          }
-
-          let rawPrereqText = getSectionText('Prerequisites:', 'General Requirements:');
-          const rawGeneralText = getSectionText('General Requirements:', null);
-
-          const generalText = rawGeneralText ? parseGeneralRequirements(rawGeneralText) : null;
-          if (generalText && generalText.prerequisites) {
-            if (rawPrereqText && !rawPrereqText.includes(">")) {
-              rawPrereqText += " and (" + generalText.prerequisites + ")";
-            }
-            else {
-              rawPrereqText = generalText.prerequisites;
-            }
-            delete generalText.prerequisites;
-          }
-          const prereqText = rawPrereqText ? parsePrerequisites(rawPrereqText) : null;
-
-          obj = {
-            subject: allCourseCodes[i].split(" ")[0],
-            course: allCourseCodes[i].split(" ")[1],
-            description,
-            descriptionTR,
-            restrictions,
-            prerequisites: prereqText,
-            coreqText,
-            generalText,
-            creditsOverride
-          }
-        }
-        if (obj.restrictions && obj.restrictions.length === 0) delete obj.restrictions;
-        else if (obj.restrictions) {
-          const restrictionsObj = {};
-          let currentKey = null;
-          obj.restrictions.forEach(line => {
-            if (line.startsWith("MUSTBE:")) {
-              currentKey = line.substring(7);
-              restrictionsObj[currentKey] = [];
-            }
-            else if (currentKey) {
-              restrictionsObj[currentKey].push(line);
-            }
-          });
-          obj.restrictions = restrictionsObj;
-        }
-        catalogs.push(obj);
-        completeCount++;
-        ongoingCount--;
-        r();
-      }).catch(err => {
-        console.error("Error fetching catalog for course " + allCourseCodes[i] + ": " + err);
-        process.exit(1);
-      });
+    else {
+      console.warn(course.subject + " " + course.course + ": No catalog entry found for course", coursecode);
     }
-    await new Promise(async r => { while (completeCount < allCourseCodes.length) { await new Promise(o => setTimeout(o, 1)); }; r(); });
-
-    broadcastToAllWindows("scraper-information", { h: "Almost there", t: "Applying prerequisites to courses", p: 0 });
-
-    for (let i = 0; i < courses.length; i++) {
-      broadcastToAllWindows("scraper-information", { p: ((i + 1) / courses.length) });
-      const course = courses[i];
-      const coursecode = (() => {
-        if (["Lab", "Recitation", "Discussion"].includes(course.scheduleType)) {
-          return coreqs[course.subject + " " + course.course][0];
-        }
-        return course.subject + " " + course.course;
-      })();
-
-      const catalog = catalogs.find(c => c.subject === coursecode.split(" ")[0] && c.course === coursecode.split(" ")[1]);
-      if (catalog) {
-        course.description = catalog.description;
-        course.descriptionTR = catalog.descriptionTR;
-        course.restrictions = {
-          general: catalog.generalText,
-          prerequisites: catalog.prerequisites,
-          corequisites: ["Lab", "Recitation", "Discussion"].includes(course.scheduleType) ? coreqs[course.subject + " " + course.course] : catalog.coreqText,
-          enrollment: catalog.restrictions
-        }
-        if (catalog.creditsOverride) {
-          course.credits.ECTS.eng = catalog.creditsOverride.eng;
-          course.credits.ECTS.bsc = catalog.creditsOverride.bsc;
-        }
-        courses[i] = course;
-      }
-      else {
-        console.warn(course.subject + " " + course.course + ": No catalog entry found for course", coursecode);
-      }
-    }
-    const allSchedules = [];
-    for (let i = 0; i < courses.length; i++) {
-      const course = courses[i];
-      const c = { CRN: course.crn, Subject: course.subject, Course: course.course, Section: course.section, Title: course.title, MeetingType: course.scheduleType, ...course };
-      delete c.crn;
-      delete c.subject;
-      delete c.course;
-      delete c.section;
-      delete c.title;
-      c.Levels = course.Levels ? course.Levels.join(":") : null;
-      delete c["Associated Term"];
-      c.AssociatedTerm = thisterm;
-      c.Credits = course.credits.SU;
-      c.CreditsECTS = course.credits.ECTS.base;
-      c.EngnrECTS = course.credits.ECTS.eng;
-      c.BasicECTS = course.credits.ECTS.bsc;
-      if (course.credits.ECTS.exception !== null) {
-        c.ECTSExceptionAdmitBefore = course.credits.ECTS.exception.admit;
-        c.ECTSException = course.credits.ECTS.exception.base;
-        c.ECTSExceptionEngnr = course.credits.ECTS.exception.eng;
-        c.ECTSExceptionBasic = course.credits.ECTS.exception.bsc;
-      }
-      else {
-        c.ECTSExceptionAdmitBefore = null;
-        c.ECTSException = null;
-        c.ECTSExceptionEngnr = null;
-        c.ECTSExceptionBasic = null;
-      }
-      delete c.credits;
-      delete c.catalog;
-      delete c.link;
-      if (course.restrictions.general !== null && course.restrictions.general.credits !== undefined) c.CreditLimit = course.restrictions.general.credits;
-      else c.CreditLimit = null;
-      c.Prerequisites = null;
-      c.Corequisites = null;
-      c.AllowedLevels = null;
-      c.DeniedLevels = null;
-      c.AllowedFaculties = null;
-      c.DeniedFaculties = null;
-      c.AllowedPrograms = null;
-      c.DeniedPrograms = null;
-      c.AllowedClasses = null;
-      c.DeniedClasses = null;
-      if (course.restrictions.prerequisites) c.Prerequisites = JSON.stringify(course.restrictions.prerequisites);
-      if (course.restrictions.corequisites) c.Corequisites = course.restrictions.corequisites.join(":");
-      if (course.restrictions.enrollment) {
-        if (course.restrictions.enrollment.allowedLevels) c.AllowedLevels = course.restrictions.enrollment.allowedLevels.join(":");
-        if (course.restrictions.enrollment.deniedLevels) c.DeniedLevels = course.restrictions.enrollment.deniedLevels.join(":");
-        if (course.restrictions.enrollment.allowedFaculties) c.AllowedFaculties = course.restrictions.enrollment.allowedFaculties.join(":");
-        if (course.restrictions.enrollment.deniedFaculties) c.DeniedFaculties = course.restrictions.enrollment.deniedFaculties.join(":");
-        if (course.restrictions.enrollment.allowedPrograms) c.AllowedPrograms = course.restrictions.enrollment.allowedPrograms.join(":");
-        if (course.restrictions.enrollment.deniedPrograms) c.DeniedPrograms = course.restrictions.enrollment.deniedPrograms.join(":");
-        if (course.restrictions.enrollment.allowedClasses) c.AllowedClasses = course.restrictions.enrollment.allowedClasses.join(":");
-        if (course.restrictions.enrollment.deniedClasses) c.DeniedClasses = course.restrictions.enrollment.deniedClasses.join(":");
-      }
-      if (course.restrictions) {
-        delete c.restrictions;
-      }
-
-      if (course.timetable === undefined || course.timetable.length === 0) {
-        console.log("No timetable found for course", course.subject + " " + course.course + " - " + course.section);
-        allSchedules.push(c);
-      }
-      else for (const meeting of course.timetable) {
-        const schedule = { ...c };
-        schedule.timetable = meeting;
-        Object.keys(meeting).forEach(key => {
-          if (key !== "Type") schedule[key.replaceAll(" ", "")] = meeting[key];
-        });
-        delete schedule.timetable;
-        allSchedules.push(schedule);
-      }
-    }
-
-    broadcastToAllWindows("scraper-information", { h: "Saving...", t: "Saving as JSON", p: 0 });
-    if (!fs.existsSync("scrapeResults")) fs.mkdirSync("scrapeResults");
-    //fs.writeFileSync("scrapeResults/courses.json", JSON.stringify(allSchedules, null, 2));
-    broadcastToAllWindows("scraper-information", { h: "Saving...", t: "Saving as CSV", p: 0 });
-    const csv = [];
-    const headers = Object.keys(allSchedules[0]);
-    csv.push(headers.join(","));
-    for (let i = 0; i < allSchedules.length; i++) {
-      const row = [];
-      for (let j = 0; j < headers.length; j++) {
-        let value = allSchedules[i][headers[j]];
-        if (value === null || value === undefined) value = "";
-        else if (typeof value === "string" && value.includes(",")) value = "\"" + value.replaceAll("\"", "\"\"") + "\"";
-        row.push(value);
-      }
-      csv.push(row.join(","));
-    }
-    fs.writeFileSync("scrapeResults/courses.csv", csv.join("\n"));
   }
+  const allSchedules = [];
+  for (let i = 0; i < courses.length; i++) {
+    const course = courses[i];
+    const c = { CRN: course.crn, Subject: course.subject, Course: course.course, Section: course.section, Title: course.title, MeetingType: course.scheduleType, ...course };
+    delete c.crn;
+    delete c.subject;
+    delete c.course;
+    delete c.section;
+    delete c.title;
+    c.Levels = course.Levels ? course.Levels.join(":") : null;
+    delete c["Associated Term"];
+    c.AssociatedTerm = thisterm;
+    c.Credits = course.credits.SU;
+    c.CreditsECTS = course.credits.ECTS.base;
+    c.EngnrECTS = course.credits.ECTS.eng;
+    c.BasicECTS = course.credits.ECTS.bsc;
+    if (course.credits.ECTS.exception !== null) {
+      c.ECTSExceptionAdmitBefore = course.credits.ECTS.exception.admit;
+      c.ECTSException = course.credits.ECTS.exception.base;
+      c.ECTSExceptionEngnr = course.credits.ECTS.exception.eng;
+      c.ECTSExceptionBasic = course.credits.ECTS.exception.bsc;
+    }
+    else {
+      c.ECTSExceptionAdmitBefore = null;
+      c.ECTSException = null;
+      c.ECTSExceptionEngnr = null;
+      c.ECTSExceptionBasic = null;
+    }
+    delete c.credits;
+    delete c.catalog;
+    delete c.link;
+    if (course.restrictions.general !== null && course.restrictions.general.credits !== undefined) c.CreditLimit = course.restrictions.general.credits;
+    else c.CreditLimit = null;
+    c.Prerequisites = null;
+    c.Corequisites = null;
+    c.AllowedLevels = null;
+    c.DeniedLevels = null;
+    c.AllowedFaculties = null;
+    c.DeniedFaculties = null;
+    c.AllowedPrograms = null;
+    c.DeniedPrograms = null;
+    c.AllowedClasses = null;
+    c.DeniedClasses = null;
+    if (course.restrictions.prerequisites) c.Prerequisites = JSON.stringify(course.restrictions.prerequisites);
+    if (course.restrictions.corequisites) c.Corequisites = course.restrictions.corequisites.join(":");
+    if (course.restrictions.enrollment) {
+      if (course.restrictions.enrollment.allowedLevels) c.AllowedLevels = course.restrictions.enrollment.allowedLevels.join(":");
+      if (course.restrictions.enrollment.deniedLevels) c.DeniedLevels = course.restrictions.enrollment.deniedLevels.join(":");
+      if (course.restrictions.enrollment.allowedFaculties) c.AllowedFaculties = course.restrictions.enrollment.allowedFaculties.join(":");
+      if (course.restrictions.enrollment.deniedFaculties) c.DeniedFaculties = course.restrictions.enrollment.deniedFaculties.join(":");
+      if (course.restrictions.enrollment.allowedPrograms) c.AllowedPrograms = course.restrictions.enrollment.allowedPrograms.join(":");
+      if (course.restrictions.enrollment.deniedPrograms) c.DeniedPrograms = course.restrictions.enrollment.deniedPrograms.join(":");
+      if (course.restrictions.enrollment.allowedClasses) c.AllowedClasses = course.restrictions.enrollment.allowedClasses.join(":");
+      if (course.restrictions.enrollment.deniedClasses) c.DeniedClasses = course.restrictions.enrollment.deniedClasses.join(":");
+    }
+    if (course.restrictions) {
+      delete c.restrictions;
+    }
+
+    if (course.timetable === undefined || course.timetable.length === 0) {
+      console.log("No timetable found for course", course.subject + " " + course.course + " - " + course.section);
+      allSchedules.push(c);
+    }
+    else for (const meeting of course.timetable) {
+      const schedule = { ...c };
+      schedule.timetable = meeting;
+      Object.keys(meeting).forEach(key => {
+        if (key !== "Type") schedule[key.replaceAll(" ", "")] = meeting[key];
+      });
+      delete schedule.timetable;
+      allSchedules.push(schedule);
+    }
+  }
+
+  broadcastToAllWindows("scraper-information", { h: "Saving...", t: "Saving as JSON", p: 0 });
+  if (!fs.existsSync("scrapeResults")) fs.mkdirSync("scrapeResults");
+  //fs.writeFileSync("scrapeResults/courses.json", JSON.stringify(allSchedules, null, 2));
+  broadcastToAllWindows("scraper-information", { h: "Saving...", t: "Saving as CSV", p: 0 });
+  const csv = [];
+  const headers = Object.keys(allSchedules[0]);
+  csv.push(headers.join(","));
+  for (let i = 0; i < allSchedules.length; i++) {
+    const row = [];
+    for (let j = 0; j < headers.length; j++) {
+      let value = allSchedules[i][headers[j]];
+      if (value === null || value === undefined) value = "";
+      else if (typeof value === "string" && value.includes(",")) value = "\"" + value.replaceAll("\"", "\"\"") + "\"";
+      row.push(value);
+    }
+    csv.push(row.join(","));
+  }
+  fs.writeFileSync("scrapeResults/courses.csv", csv.join("\n"));
   const allMajors = [];
   const allMasterMajors = [];
   const allPHDMajors = [];

@@ -1,10 +1,10 @@
 @charset "UTF-8";
 :root{
-  --bg:#f5f7fb;
-  --panel:#ffffff;
-  --text:#18212f;
-  --muted:#667085;
-  --line:#d9e0ea;
+  --bg:#202020;
+  --panel:#000;
+  --text:#ffffff;
+  --muted:#d3e1ff;
+  --line:#323232;
   --brand:#1f5eff;
   --danger:#d92d20;
   --danger-bg:#fff1f0;
@@ -88,8 +88,9 @@ main{
 .csv-status.ok{color:var(--ok)}
 .csv-status.error{color:var(--danger)}
 .btn{
-  border:1px solid var(--line);
-  background:#fff;
+  border:1px solid #fff;
+  background:#111111;
+  color: #fff;
   border-radius:9px;
   padding:9px 12px;
   cursor:pointer;
@@ -220,9 +221,11 @@ main{
 input[type="search"]{
   width:100%;
   padding:10px 12px;
-  border:1px solid var(--line);
+  border: 1px solid white;
   border-radius:9px;
   height: 43px;
+  background: #111111;
+  color: white;
 }
 .filter-row{
   display:grid;
@@ -251,10 +254,10 @@ input[type="search"]{
   height: 100%;
 }
 .course-group{
-  border-bottom:1px solid #edf0f4;
-  background:#fff;
+  border-bottom: 1px solid #343434;
+  background: #000;
 }
-.course-group[open]{background:#fbfcff}
+.course-group[open]{background:#1e1e1e}
 .course-group summary{
   cursor:pointer;
   list-style:none;
@@ -265,7 +268,7 @@ input[type="search"]{
   align-items:center;
 }
 .course-group summary::-webkit-details-marker{display:none}
-.course-group summary:hover{background:#fafcff}
+.course-group summary:hover{background:#1e1e1e}
 .course-heading{min-width:0}
 .course-code{font-size:14px;font-weight:800}
 .course-name{
@@ -345,7 +348,7 @@ input[type="search"]{
 .expand-label::after{content:"▾";transition:transform .15s ease}
 .course-group[open] .expand-label::after{transform:rotate(180deg)}
 .section-list{
-  border-top:1px solid #e8edf3;
+  border-top:1px solid #616263;
   padding:7px 10px 10px;
 }
 .lecture-heading,
@@ -381,10 +384,10 @@ input[type="search"]{
   margin-top:5px;
   border:1px solid #e5eaf1;
   border-radius:10px;
-  background:#fff;
+  background: #000;
 }
 .section-option.selected-section{border-color:#94b3ff;background:#f7f9ff}
-.section-option.conflicting-section{border-color:#fda29b;background:#fffafa}
+.section-option.conflicting-section{border-color:#fda29b;background: #230000;}
 .section-option input{margin-top:3px}
 .section-main{min-width:0}
 .section-top{
@@ -433,7 +436,7 @@ input[type="search"]{
 .selected-summary{
   border:1px solid var(--line);
   border-radius:10px;
-  background:#fbfcff;
+  background:#1e1e1e;
   overflow:hidden;
 }
 .selected-summary summary{
@@ -512,7 +515,7 @@ input[type="search"]{
   align-items:center;
   justify-content:center;
   font-weight:700;
-  background:#f9fafb;
+  background:#1e1e1e;
   position:sticky;
   top:0;
   z-index:6;
@@ -521,7 +524,7 @@ input[type="search"]{
 .time-col{
   position: sticky;
   border-right:1px solid var(--line);
-  background:#fbfcfe;
+  background:#323232;
   z-index:3;
   height: 100%;
   left: 0;
@@ -535,10 +538,10 @@ input[type="search"]{
   border-right:1px solid var(--line);
   background: repeating-linear-gradient(
     to bottom,
-    #fff,
-    #fff calc(var(--slot-height) - 1px),
-    #e8edf3 calc(var(--slot-height) - 1px),
-    #e8edf3 var(--slot-height)
+    #000,
+    #000 calc(var(--slot-height) - 1px),
+    #323232 calc(var(--slot-height) - 1px),
+    #323232 var(--slot-height)
   );
   min-height: calc(var(--total-slots) * var(--min-slot-height));
 }
@@ -546,7 +549,7 @@ input[type="search"]{
   font-size:11px;
   color:var(--muted);
   text-align:center;
-  border-bottom:1px solid #e8edf3;
+  border-bottom:1px solid #616263;
   height: 100%;
   min-height: var(--min-slot-height);
 }
@@ -563,7 +566,7 @@ input[type="search"]{
   box-shadow:0 2px 5px rgba(0,0,0,.12);
   z-index:4;
   cursor:pointer;
-  background-color: hsl(var(--hue), 78%, 84%);
+  background-color: hsl(var(--hue), 38%, 42%);
   top: calc((var(--row) * var(--slot-height)) + 5px);
   height: calc((var(--duration) * var(--slot-height)) - 10px);
 }
@@ -716,6 +719,7 @@ input[type="search"]{
   gap: 10px;
   padding: 10px;
   height: calc(100% - 49px);
+  color: white;
 }
 .modal > div > div > section {
   padding: 10px;
@@ -731,7 +735,8 @@ input[type="search"]{
 .sidebar > button {
   text-align: left;
   border:1px solid var(--line);
-  background: #f0f0f0;
+  background: #111111;
+  color: white;
   border-radius:9px;
   padding:9px 12px;
   cursor:pointer;
@@ -925,7 +930,7 @@ button.active.red {
   100% { transform: rotate(360deg); }
 }
 .response {
-  background: #f0f0f0;
+  background: #010101;
   padding: 5px;
   border-radius: 5px;
   border: 1px solid var(--line);

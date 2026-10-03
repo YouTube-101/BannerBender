@@ -382,7 +382,16 @@
       label: "In registration submission forms, Banner usually fills out unnecessary fields with default values. This setting allows the app to omit those unnecessary fields and only fill out the required fields. This is slightly faster and more efficient. However, turning this off tries to prevent Banner from thinking that the app is a bot by simulating user behavior.",
     }
   ]
-
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    console.log("System color scheme changed:", e.matches ? "dark" : "light", localStorage.getItem("darkMode"));
+    if (localStorage.getItem("darkMode") === null) {
+      if (e.matches) {
+        $("styleSheet").href = "dark.css";
+      } else {
+        $("styleSheet").href = "style.css";
+      }
+    }
+  });
   $("settings").loadSetting = async (index) => {
     Array.from($("settings").querySelector(".sidebar").children).forEach(button => {
       button.classList.remove("active");
@@ -430,6 +439,47 @@
           }
           $("settings").querySelector(".settings").appendChild(switchLabel);
         }
+      });
+    }
+    else if (index === 4) {
+      const settingSave = document.createElement("div");
+      settingSave.classList.add("settingsSwitch");
+      settingSave.innerHTML = '<div><h3>Theme</h3><p>Change the theme of the application.</p></div><div style="flex-direction: row;"><button class="btn">Automatic</button><button class="btn">Light</button><button class="btn">Dark</button></div>'
+      $("settings").querySelector(".settings").appendChild(settingSave)
+      if (localStorage.getItem("darkMode") === "false") {
+        settingSave.children[1].children[1].classList.add("active");
+      }
+      else if (localStorage.getItem("darkMode") === "true") {
+        settingSave.children[1].children[2].classList.add("active");
+      }
+      else {
+        settingSave.children[1].children[0].classList.add("active");
+      }
+      settingSave.children[1].children[0].addEventListener("click", () => {
+        localStorage.removeItem("darkMode");
+        settingSave.children[1].children[0].classList.add("active");
+        settingSave.children[1].children[1].classList.remove("active");
+        settingSave.children[1].children[2].classList.remove("active");
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          $("styleSheet").href = "dark.css";
+        }
+        else {
+          $("styleSheet").href = "style.css";
+        }
+      });
+      settingSave.children[1].children[1].addEventListener("click", () => {
+        localStorage.setItem("darkMode", "false");
+        settingSave.children[1].children[0].classList.remove("active");
+        settingSave.children[1].children[1].classList.add("active");
+        settingSave.children[1].children[2].classList.remove("active");
+        $("styleSheet").href = "style.css";
+      });
+      settingSave.children[1].children[2].addEventListener("click", () => {
+        localStorage.setItem("darkMode", "true");
+        settingSave.children[1].children[0].classList.remove("active");
+        settingSave.children[1].children[1].classList.remove("active");
+        settingSave.children[1].children[2].classList.add("active");
+        $("styleSheet").href = "dark.css";
       });
     }
     else if (index === 3) {
@@ -1213,6 +1263,21 @@
   }
 
   async function loadCSVFromGitHub() {
+    let setToDarkMode = false;
+    if (localStorage.getItem("darkMode") === "true") {
+      setToDarkMode = true;
+    }
+    else if (localStorage.getItem("darkMode") === "false") {
+      setToDarkMode = false;
+    }
+    else {
+      setToDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+
+    if (setToDarkMode) {
+      $("styleSheet").href = "dark.css";
+    }
+
     if (localStorage.getItem("registeredMajors")) {
       const json = JSON.parse(localStorage.getItem("registeredMajors"));
       registeredMajors.level = json.level;
@@ -2530,7 +2595,7 @@
             data-section-key="${esc(section.key)}"
             tabindex="0"
             role="button"
-            style="--row:${top};--duration:${height};background:${colorFor(`${section.subject}:${section.course}`)}"
+            style="--row:${top};--duration:${height};--hue:${colorFor(`${section.subject}:${section.course}`)}")}"
             title="${esc(`${section.subject} ${section.course}-${section.section} · ${formatMinutes(meeting.start)}–${formatMinutes(meeting.end)} · Click to open course`)}"
           >
             <strong>${esc(section.subject)} ${esc(section.course)}-${esc(section.section)}</strong>
@@ -2712,7 +2777,7 @@
     }
 
     const hue = Math.abs(hash) % 360;
-    return `hsl(${hue} 78% 84%)`;
+    return hue;
   }
 
   function esc(value) {
@@ -2957,7 +3022,7 @@
               item.classList.add("event");
               item.classList.add("adddropitem");
               item.classList.add("erroritem");
-              item.style.backgroundColor = "#ff9595";
+              item.style.setProperty("--hue", "0");
               item.innerHTML = `<span><span></span> <strong>${section.title}</strong></span><span class="response">${section.desc}</span>`;
               modaldisplay.children[2].children[1].children[0].appendChild(item);
             });
@@ -3041,7 +3106,7 @@
         item.classList.add("event");
         item.classList.add("adddropitem");
         item.setAttribute("data-crn", section.crn);
-        item.style.backgroundColor = colorFor(section.code.replaceAll(" ", ":"));
+        item.style.setProperty("--hue", colorFor(section.code.replaceAll(" ", ":")));
         item.innerHTML = `<span><span></span> <strong>${section.crn}</strong> · ${section.code}-${section.section}</span><span class="response">To be added</span>`;
         addsList.children[0].appendChild(item);
       });
@@ -3055,7 +3120,7 @@
         item.classList.add("event");
         item.classList.add("adddropitem");
         item.setAttribute("data-crn", section.crn);
-        item.style.backgroundColor = colorFor(section.code.replaceAll(" ", ":"));
+        item.style.setProperty("--hue", colorFor(section.code.replaceAll(" ", ":")));
         item.innerHTML = `<span><span></span> <strong>${section.crn}</strong> · ${section.code}-${section.section}</span><span class="response">To be dropped</span>`;
         dropsList.children[0].appendChild(item);
       });

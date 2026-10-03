@@ -4,6 +4,32 @@ if (!window.suDesktop) {
     }, 100);
     document.body.innerHTML = "<span>This page is only accessible from the BannerBender application. Redirecting you to the website...</span>";
 }
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    console.log("System color scheme changed:", e.matches ? "dark" : "light", localStorage.getItem("darkMode"));
+    if (localStorage.getItem("darkMode") === null) {
+        if (e.matches) {
+            document.getElementById("styleSheet").href = "darksetup.css";
+        } else {
+            document.getElementById("styleSheet").href = "setup.css";
+        }
+    }
+});
+
+if (localStorage.getItem("darkMode") === "true") {
+    document.getElementById("styleSheet").href = "darksetup.css";
+}
+else if (localStorage.getItem("darkMode") === "false") {
+    document.getElementById("styleSheet").href = "setup.css";
+}
+else {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.getElementById("styleSheet").href = "darksetup.css";
+    } else {
+        document.getElementById("styleSheet").href = "setup.css";
+    }
+}
+
 function initializeAttemptsDiv() {
     const attemptsDiv = document.querySelector("#attemptsdiv");
     attemptsDiv.innerHTML = '<div><p>Session attempts:</p><div id="attemptscontainer"></div></div>';
@@ -133,7 +159,7 @@ window.suDesktop.onMessageFromMain("login-details", (data) => {
         if (data.user.pfp) {
             const pfp = document.createElement("div");
             pfp.style.backgroundSize = "cover";
-            pfp.style.backgroundImage = "url("+data.user.pfp+")";
+            pfp.style.backgroundImage = "url(" + data.user.pfp + ")";
             pfp.style.width = "100px";
             pfp.style.height = "100px";
             pfp.style.borderRadius = "50%";
