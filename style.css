@@ -929,7 +929,7 @@ button.active.red {
   border-radius: 5px;
   border: 1px solid var(--line);
 }
-#savedialog>div>div>div>.warning {
+#savedialog>div>div>div>.warning, .warning {
     background: #ff00002e;
     padding: 2px 6px;
     border-radius: 10px;

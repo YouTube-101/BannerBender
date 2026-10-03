@@ -294,6 +294,7 @@ ipcMain.handle("loadfinished", async () => {
 ipcMain.handle("getPopulation", (event, subject, course, crns) => banner.getPopulation(subject, course, crns));
 ipcMain.handle("submitRegistration", (event, adds, drops) => banner.submitRegistration(adds, drops));
 ipcMain.handle("signOut", (event) => banner.signOut());
+ipcMain.handle("testNetwork", (event) => banner.testNetwork());
 ipcMain.handle("launchBanner", (event,url) => {
   banner.launchBanner(url);
 });

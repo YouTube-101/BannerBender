@@ -40,6 +40,7 @@ contextBridge.exposeInMainWorld("suDesktop", {
   scrapeCourses: () => ipcRenderer.invoke("scrapeCourses"),
   requestSignIn: () => ipcRenderer.invoke("requestSignIn"),
   signOut: () => ipcRenderer.invoke("signOut"),
+  testNetwork: () => ipcRenderer.invoke("testNetwork"),
   openExternal: (url) => ipcRenderer.invoke("openExternal", url),
   launchBanner: (url) => ipcRenderer.invoke("launchBanner", url),
   submitRegistration: (add,drop) => ipcRenderer.invoke("submitRegistration", add, drop),

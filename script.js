@@ -305,11 +305,53 @@
       }
     },
   ]
+  function bannerTestLatency() {
+    const dialog = createDialog("Latency Test", `<p>Contacting Banner...</p><div class="warning" style="display:none;"><h3>You are on campus network</h3><p>Your request was routed internally.<br>Response time may vary even more in case of heavy traffic<br>from other users on campus.</p></div><div style="display: flex; justify-content: space-between;gap: 20px;"><div><h3>Connection Time</h3><p>Time to establish a connection</p></div><h1>-ms</h1></div><div style="display: flex; justify-content: space-between;gap: 20px;"><div><h3>Response Time</h3><p>Time for Banner's response to arrive (Round-trip)</p></div><h1>-ms</h1></div>`);
+    dialog.initialize = async () => {
+      console.log("Dialog initialized");
+      if (window.suDesktop) {
+        try {
+          const result = await window.suDesktop.testNetwork();
+          dialog.querySelector("p").innerText = "These are the results of the network test. Lower numbers are better.\nIf the connection time is too high, it may be due to your network or Banner's server being busy.\nThis is NOT the same as the time it takes to load the registration page.\nThis is just the time it takes to establish a connection and get a basic response from Banner's server.";
+          if (result.connectTime !== undefined) {
+            dialog.querySelectorAll("div>h1")[0].textContent = result.connectTime.toFixed(2) + "ms";
+          }
+          if (result.totalTime !== undefined) {
+            dialog.querySelectorAll("div>h1")[1].textContent = result.totalTime.toFixed(2) + "ms";
+          }
+          if (result.isLocal) {
+            dialog.querySelector("div.warning").style.display = "block";
+          }
+          console.log("Network test result:", result);
+        }
+        catch (e) {
+          dialog.querySelector("p").textContent = "An error occured while testing the network. Please try again.";
+          dialog.querySelector("div.warning").children[0].textContent = "An error occured";
+          dialog.querySelector("div.warning").children[1].textContent = e.message || "An unknown error occured";
+          dialog.querySelector("div.warning").style.display = "block";
+          dialog.querySelectorAll("div>h1")[0].textContent = "ERR";
+          dialog.querySelectorAll("div>h1")[1].textContent = "ERR";
+        }
+      }
+      else {
+        dialog.querySelectorAll("div>h1")[0].textContent = "ERR";
+        dialog.querySelectorAll("div>h1")[1].textContent = "ERR";
+      }
+    }
+    dialog.show();
+  }
   const networkSettings = [
     {
       type: "header",
       head: "Banner Contact Settings",
       label: "These settings are for how the app contacts Banner.",
+    },
+    {
+      type: "button",
+      head: "Test Banner Latency",
+      label: "Test the connection to Banner and see its access to Banner.",
+      button: "Test Latency",
+      click: bannerTestLatency
     },
     {
       type: "checkbox",
@@ -368,17 +410,24 @@
             </div>
             `: ''}
           </div>
-          <input type="checkbox" id="bannerPrivacy${setting.id}" ${(setting.forced ? 'disabled checked' : setting.default ? 'checked' : '')}>`;
+          ${setting.type === "button" ? `<button class="btn active">${setting.button}</button>` : `<input type="checkbox" id="bannerPrivacy${setting.id}" ${(setting.forced ? 'disabled checked' : setting.default ? 'checked' : '')}>`}`;
           switchLabel.classList.add("settingsSwitch");
           switchLabel.setAttribute("for", `bannerPrivacy${setting.id}`);
           switchLabel.children[0].children[0].textContent = setting.head;
           switchLabel.children[0].children[1].textContent = setting.label;
-          switchLabel.children[0].children[2].children[0].addEventListener("click", () => {
-            createDialog(setting.why.title, `<p style="width: 600px;">${setting.why.description}</p>${setting.why.image ? `<img src="${setting.why.image}" style="width: 600px;">` : ''}`).show();
-          });
-          switchLabel.children[0].children[2].children[1].addEventListener("click", () => {
-            createDialog(setting.how.title, `<p style="width: 600px;">${setting.how.description}</p>${setting.how.image ? `<img src="${setting.how.image}" style="width: 600px;">` : ''}`).show();
-          });
+          if (setting.type === "button") {
+            switchLabel.children[1].addEventListener("click", async () => {
+              setting.click();
+            });
+          }
+          if (setting.why || setting.how) {
+            switchLabel.children[0].children[2].children[0].addEventListener("click", () => {
+              createDialog(setting.why.title, `<p style="width: 600px;">${setting.why.description}</p>${setting.why.image ? `<img src="${setting.why.image}" style="width: 600px;">` : ''}`).show();
+            });
+            switchLabel.children[0].children[2].children[1].addEventListener("click", () => {
+              createDialog(setting.how.title, `<p style="width: 600px;">${setting.how.description}</p>${setting.how.image ? `<img src="${setting.how.image}" style="width: 600px;">` : ''}`).show();
+            });
+          }
           $("settings").querySelector(".settings").appendChild(switchLabel);
         }
       });
@@ -722,19 +771,22 @@
     dialog.addEventListener("click", event => {
       if (event.target === dialog) {
         dialog.hide();
+        dialog.onceOnClose(() => {
+          dialog.remove();
+        });
       }
     });
     dialog.querySelector(".close").addEventListener("click", () => {
       dialog.hide();
-      setTimeout(() => {
+      dialog.onceOnClose(() => {
         dialog.remove();
-      }, 200);
+      });
     });
     if (dialog.querySelector(".modalHide")) dialog.querySelector(".modalHide").addEventListener("click", () => {
       dialog.hide();
-      setTimeout(() => {
+      dialog.onceOnClose(() => {
         dialog.remove();
-      }, 200);
+      });
     });
     document.body.appendChild(dialog);
     return dialog;

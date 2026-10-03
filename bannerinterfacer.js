@@ -1,5 +1,6 @@
 const save = require("./save.js");
 const path = require("path");
+const https = require("https");
 const { app, ipcMain, BrowserWindow, WebContentsView, session } = require("electron");
 const { CookieJar } = require('tough-cookie'); // To save cookies in memory
 const cheerio = require('cheerio'); // For parsing HTML
@@ -34,6 +35,36 @@ async function saveCookies() {
     return;
   }
   save.set("bannerCookies", encrypted.d);
+}
+
+function testNetwork() {
+  const startTime = performance.now();
+  let connectTime = 0;
+  return new Promise((resolve, reject) => {
+    const req = https.get(domain, (res) => {
+      const ip = res.socket.remoteAddress;
+      const isLocal = /^(10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[0-1])\.|127\.0\.0\.1)/.test(ip);
+      res.on('data', () => { });
+
+      res.on('end', () => {
+        const totalTime = (performance.now() - startTime);
+        console.log(`Routing: ${ip} (${isLocal ? 'Internal College Wi-Fi' : 'Remote Public IP'})`);
+        console.log(`Connect time: ${connectTime.toFixed(3)}ms`);
+        console.log(`Total time: ${totalTime.toFixed(3)}ms`);
+        console.log(`HTTP Status: ${res.statusCode}`);
+        resolve({ ip, isLocal, connectTime, totalTime, statusCode: res.statusCode });
+      });
+    });
+    req.on('socket', (socket) => {
+      socket.on('secureConnect', () => {
+        connectTime = (performance.now() - startTime);
+      });
+    });
+    req.on('error', (err) => {
+      console.error('Request failed:', err.message);
+      reject(err);
+    });
+  });
 }
 
 async function requestToBanner(URL, method = "GET", body = null, extraHeaders = {}, bypassCookieJar = false) {
@@ -497,17 +528,17 @@ async function getUsersPFP() {
 }
 
 async function resetRememberedDetails() {
-    rememberedDetails.username = null;
-    rememberedDetails.password = null;
-    rememberedDetails.name = null;
-    rememberedDetails.pfp = null;
-    rememberedDetails.key = null;
-    try {
-      await save.del("rememberDetails");
-    }
-    catch (error) {
-      console.error("Failed to reset remembered details:", error);
-    }
+  rememberedDetails.username = null;
+  rememberedDetails.password = null;
+  rememberedDetails.name = null;
+  rememberedDetails.pfp = null;
+  rememberedDetails.key = null;
+  try {
+    await save.del("rememberDetails");
+  }
+  catch (error) {
+    console.error("Failed to reset remembered details:", error);
+  }
 }
 
 async function signIn(form) {
@@ -812,4 +843,4 @@ async function launchBanner(url = "twbkwbis.P_GenMenu?name=bmenu.P_MainMnu") {
   });
   view.webContents.loadURL('https://suis.sabanciuniv.edu/' + (testenvironment ? 'dolly' : 'prod') + '/' + url);
 }
-module.exports = { initInterface, getBannerSession, signIn, getSessionDetails, resetCookies, getInformation, requestToPublicBanner, getCurrentTerm, printAllAttempts, getPopulation, submitRegistration, signOut, launchBanner };
+module.exports = { initInterface, testNetwork, getBannerSession, signIn, getSessionDetails, resetCookies, getInformation, requestToPublicBanner, getCurrentTerm, printAllAttempts, getPopulation, submitRegistration, signOut, launchBanner };
