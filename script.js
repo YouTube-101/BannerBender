@@ -2904,7 +2904,6 @@
         }
         for (const attempt in data.attempts) {
           const status = data.attempts[attempt].status;
-          let symbol = status == "pending" ? "⛶" : status == "accepted" ? "✔" : status == "busy" ? "⛝" : "?";
           let attemptDiv = container.querySelector(`.attempt-${attempt}`);
           if (!attemptDiv) {
             attemptDiv = document.createElement("div");
