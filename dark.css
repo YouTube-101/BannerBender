@@ -386,7 +386,7 @@ input[type="search"]{
   border-radius:10px;
   background: #000;
 }
-.section-option.selected-section{border-color:#94b3ff;background:#f7f9ff}
+.section-option.selected-section{border-color: #94b3ff;background: #00071b;}
 .section-option.conflicting-section{border-color:#fda29b;background: #230000;}
 .section-option input{margin-top:3px}
 .section-main{min-width:0}
