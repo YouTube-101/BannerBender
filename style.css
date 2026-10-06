@@ -263,11 +263,14 @@ input[type="search"]{
   grid-template-columns:minmax(0,1fr) auto;
   gap:12px;
   align-items:center;
+  grid-template-areas:
+    "header tags"
+    "res res";
 }
 .course-group summary::-webkit-details-marker{display:none}
 .course-group summary:hover{background:#fafcff}
-.course-heading{min-width:0}
-.course-code{font-size:14px;font-weight:800}
+.course-heading{min-width:0;grid-area:header}
+.course-code{font-size:18px;font-weight:800}
 .course-name{
   font-size:12px;
   color:var(--muted);
@@ -276,7 +279,10 @@ input[type="search"]{
   white-space:nowrap;
   margin-top:2px;
 }
-.course-summary-side{text-align:right}
+.course-summary-side{text-align:right;grid-area:tags}
+.course-restrictions{grid-area:res;border: 1px solid var(--line);padding: 5px;margin-top: -10px;border-radius: 8px;}
+summary:has(span.course-issue.warn) {background: #ffac0030}
+summary:has(span.course-issue.error) {background: #ff000030 !important}
 .course-credit{font-size:12px;font-weight:700}
 .section-count{font-size:11px;color:var(--muted);margin-top:3px}
 .course-fit-summary{

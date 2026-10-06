@@ -507,7 +507,7 @@
         const majorNames = await majorText.text()
         majorNames.split("\n").filter(x => x.trim() !== "").forEach(x => {
           const idx = x.indexOf(",");
-          const line = { k: x.substring(0, idx), n: x.substring(idx + 1).replaceAll("\"", "") };
+          const line = { k: x.substring(0, idx), n: x.substring(idx + 1, x.indexOf(",", idx + 1)).replaceAll("\"", ""), f: x.substring(x.indexOf(",", idx + 1) + 1).replaceAll("\"", "") };
           if (line.k.endsWith("-MINOR") && !allMajors.MN.includes(line)) allMajors.MN.push(line);
           else if (line.k.endsWith("-DM") && !allMajors.DM.includes(line)) allMajors.DM.push(line);
           else if (line.k.startsWith("PHD") && !allMajors.PD.includes(line)) allMajors.PD.push(line);
@@ -644,6 +644,24 @@
             registeredMajors.major = setMajors.major;
             registeredMajors.double = setMajors.double;
             registeredMajors.minors = [...setMajors.minors];
+            registeredMajors.faculties = 0;
+            const facultyOfMajor = allMajors[setMajors.level].find(major => major.k === setMajors.major).f;
+            if (facultyOfMajor === "FENS") registeredMajors.faculties |= 1;
+            else if (facultyOfMajor === "FMAN") registeredMajors.faculties |= 2;
+            else if (facultyOfMajor === "FASS") registeredMajors.faculties |= 4;
+            if (setMajors.double && setMajors.double !== "none") {
+              const facultyOfDouble = allMajors.DM.find(major => major.k === setMajors.double)?.f;
+              if (facultyOfDouble === "FENS") registeredMajors.faculties |= 1;
+              else if (facultyOfDouble === "FMAN") registeredMajors.faculties |= 2;
+              else if (facultyOfDouble === "FASS") registeredMajors.faculties |= 4;
+            }
+            for (const minor of setMajors.minors) {
+              const facultyOfMinor = allMajors.MN.find(major => major.k === minor)?.f;
+              if (facultyOfMinor === "FENS") registeredMajors.faculties |= 1;
+              else if (facultyOfMinor === "FMAN") registeredMajors.faculties |= 2;
+              else if (facultyOfMinor === "FASS") registeredMajors.faculties |= 4;
+            }
+            console.log("Saved majors and minors:", registeredMajors);
             localStorage.setItem("registeredMajors", JSON.stringify(registeredMajors));
             await loadMajorData();
             renderCourseList();
@@ -1285,6 +1303,7 @@
       registeredMajors.double = json.double;
       registeredMajors.minors = json.minors;
       registeredMajors.admits = json.admits || {};
+      registeredMajors.faculties = json.faculties || 0;
       await loadMajorData();
     }
     if (window.suDesktop) {
@@ -2010,14 +2029,90 @@
 
   function renderCourseRestrictionSummary(course) {
     const restrictions = course.restrictions || {};
-    const parts = [];
-    if (restrictions.creditLimit) {
-      parts.push({ c: "creditneeded", t: `${restrictions.creditLimit} credits needed` });
+    const issues = [];
+    if (restrictions.enrollment) {
+      if (restrictions.enrollment.allowedLevels) {
+        if (registeredMajors.level === "UG" && !restrictions.enrollment.allowedLevels.includes("Undergraduate")) {
+          issues.push({ e: 1, s: "Level Restricted", f: "This course is not available for Undergraduate students" });
+        }
+        else if (registeredMajors.level === "MX" && !restrictions.enrollment.allowedLevels.includes("Masters")) {
+          issues.push({ e: 1, s: "Level Restricted", f: "This course is not available for Masters students" });
+        }
+        else if (registeredMajors.level === "PHD" && !restrictions.enrollment.allowedLevels.includes("PhD")) {
+          issues.push({ e: 1, s: "Level Restricted", f: "This course is not available for PhD students" });
+        }
+      }
+      if (restrictions.enrollment.allowedFaculties) {
+        const faculties = [];
+        if (restrictions.enrollment.allowedFaculties.includes("Faculty of Eng. & Natural Sci.") && !faculties.includes("FENS")) faculties.push("FENS");
+        if (restrictions.enrollment.allowedFaculties.includes("Sabancı Business School") && !faculties.includes("FMAN")) faculties.push("FMAN");
+        if (restrictions.enrollment.allowedFaculties.includes("Faculty of Arts & Social Sci.") && !faculties.includes("FASS")) faculties.push("FASS");
+        if (registeredMajors.faculties === 0) {
+          if (faculties.length > 1) issues.push({ e: 0, s: faculties.join(" and ") + " only", f: "This course is only available for students in faculties" + faculties.join(" and ") });
+          else issues.push({ e: 0, s: faculties[0] + " students only", f: "This course is only available for students in the " + faculties[0] + " faculty" });
+        }
+        else {
+          let cleared = false;
+          if (faculties.includes("FENS") && registeredMajors.faculties & 1) cleared = true;
+          if (faculties.includes("FMAN") && registeredMajors.faculties & 2) cleared = true;
+          if (faculties.includes("FASS") && registeredMajors.faculties & 4) cleared = true;
+          if (!cleared) issues.push({ e: 1, s: faculties.join(" and ") + " only", f: "This course is only available for students in faculties" + faculties.join(" and ") });
+        }
+      }
+      if (restrictions.enrollment.deniedFaculties) {
+        const faculties = [];
+        if (restrictions.enrollment.deniedFaculties.includes("Faculty of Eng. & Natural Sci.") && !faculties.includes("FENS")) faculties.push("FENS");
+        if (restrictions.enrollment.deniedFaculties.includes("Sabancı Business School") && !faculties.includes("FMAN")) faculties.push("FMAN");
+        if (restrictions.enrollment.deniedFaculties.includes("Faculty of Arts & Social Sci.") && !faculties.includes("FASS")) faculties.push("FASS");
+        if (registeredMajors.faculties === 0) {
+          if (faculties.length > 1) issues.push({ e: 0, s: faculties.join(" and ") + " not allowed", f: "This course is not available for students in faculties" + faculties.join(" and ") });
+          else issues.push({ e: 0, s: faculties[0] + " not allowed", f: "This course is not available for students in the " + faculties[0] + " faculty" });
+        }
+        else {
+          let cleared = true;
+          if (faculties.includes("FENS") && registeredMajors.faculties & 1) cleared = false;
+          if (faculties.includes("FMAN") && registeredMajors.faculties & 2) cleared = false;
+          if (faculties.includes("FASS") && registeredMajors.faculties & 4) cleared = false;
+          if (!cleared) issues.push({ e: 1, s: faculties.join(" and ") + " not allowed", f: "This course is not available for students in faculties" + faculties.join(" and ") });
+        }
+      }
+      if (restrictions.enrollment.allowedClasses) {
+        if (restrictions.enrollment.allowedClasses.includes("Senior")) restrictions.creditLimit = 94;
+        if (restrictions.enrollment.allowedClasses.includes("Junior")) restrictions.creditLimit = 64;
+        if (restrictions.enrollment.allowedClasses.includes("Sophomore")) restrictions.creditLimit = 34;
+        if (restrictions.enrollment.allowedClasses.includes("Freshman")) restrictions.creditLimit = 0;
+        let atMost = 9999;
+        if (!restrictions.enrollment.allowedClasses.includes("Senior")) {
+          atMost = Math.min(atMost, 94);
+          if (!restrictions.enrollment.allowedClasses.includes("Junior")) {
+            atMost = Math.min(atMost, 64);
+            if (!restrictions.enrollment.allowedClasses.includes("Sophomore")) {
+              atMost = Math.min(atMost, 34);
+              if (restrictions.enrollment.allowedClasses.includes("FDY Basic") || restrictions.enrollment.allowedClasses.includes("FDY Intermediate") || restrictions.enrollment.allowedClasses.includes("FDY Upper")) {
+                atMost = 9999;  
+              }
+            }
+          }
+        }
+        if (atMost < 9999) {
+          console.log(course.key, restrictions.enrollment.allowedClasses, atMost);
+          issues.push({ e: 0, s: `Under ${atMost} credits`, f: `This course is only available for students with at most ${atMost-1} credits` });
+        }
+      }
+      if (restrictions.enrollment.allowedPrograms) {
+        for (const program of restrictions.enrollment.allowedPrograms) {
+          issues.push({ e: 0, s: `${program} allowed`, f: `This course is available for students in the ${program} program` });
+        }
+      }
     }
-    return '<div class="course-fit-summary">' +
-      parts.map((part) => {
-        return '<span class="course-major-pill requirement ' + part.c + '">' + part.t + '</span>'
-      }).join('') + '</div>';
+    if (restrictions.creditLimit > 0) {
+      issues.push({ e: 0, s: `${restrictions.creditLimit} credits needed`, f: `${restrictions.creditLimit} credits needed to take this course` });
+    }
+    const fitSummary = courseFitSummary(course).map((category) => category.kind);
+    if (fitSummary.includes("bad")) issues.push({ e: 1, s: "Complete Time Conflict", f: "None of the sections fit your schedule" });
+    else if (fitSummary.includes("unknown")) issues.push({ e: 0, s: "Time Unspecified", f: "The time for this course is not specified." });
+    if (issues.length > 0) return `<span class="course-issue ${(issues.some((issue) => issue.e == 1)) ? "error" : "warn"}">${issues.sort((a, b) => b.e - a.e).map((issue) => `${issue.e ? "🛑" : "⚠️"} ${issue.s}`).join(', ')}</span>`;
+    else return "";
   }
 
   function renderCourseCreditsSummary(course) {
@@ -2174,8 +2269,10 @@
       ).length;
       const open = state.expandedCourses.has(course.key) ? " open" : "";
 
+      const fitStatus = renderCourseRestrictionSummary(course);
+
       return `<details class="course-group" data-course-key="${esc(course.key)}"${open}>
-        <summary>
+        <summary ${fitStatus.length ? "" : 'style="grid-template-areas: \'header tags\';"'}>
           <div class="course-heading">
             <div class="course-code">${esc(course.subject)} ${esc(course.course)}</div>
             <div class="course-name">${esc(course.title)}</div>
@@ -2188,10 +2285,11 @@
           </div>
           <div class="course-summary-side">
             ${renderCourseMajorRequirementSummary(course)}
-            ${renderCourseRestrictionSummary(course)}
             ${renderCourseCreditsSummary(course)}
-            ${renderCourseFitSummary(course)}
             <div class="expand-label">Select sections</div>
+          </div>
+          <div class="course-restrictions" ${fitStatus.length ? "" : 'style="display:none;"'}>
+            ${fitStatus}
           </div>
         </summary>
 

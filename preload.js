@@ -87,7 +87,7 @@ contextBridge.exposeInMainWorld("suDesktop", {
     }
     const majorNames = fs.readFileSync(path.join(__dirname, "scrapeResults/majorNames.csv"), "utf8").split("\n").filter(x => x.trim() !== "").forEach(x => {
       const idx = x.indexOf(",");
-      const line = { k: x.substring(0, idx), n: x.substring(idx + 1).replaceAll("\"", "") };
+      const line = { k: x.substring(0, idx), n: x.substring(idx + 1, x.indexOf(",", idx + 1)).replaceAll("\"", ""), f: x.substring(x.indexOf(",", idx + 1) + 1).replaceAll("\"", "") };
       if (line.k.endsWith("-MINOR") && !obj.MN.includes(line)) obj.MN.push(line);
       else if (line.k.endsWith("-DM") && !obj.DM.includes(line)) obj.DM.push(line);
       else if (line.k.startsWith("PHD") && !obj.PD.includes(line)) obj.PD.push(line);
